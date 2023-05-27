@@ -1,7 +1,11 @@
-package firstProject.board.web.controller;
+package firstProject.board.web.post;
 
+import firstProject.board.SessionConst;
+import firstProject.board.domain.member.Member;
+import firstProject.board.domain.member.MemberRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -19,6 +23,7 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     @GetMapping
     public String posts(Model model){
@@ -35,20 +40,25 @@ public class PostController {
     }
 
     @GetMapping("/add")
-    public String addForm(Model model){
+    public String addForm(HttpServletRequest request, Model model){
+
         model.addAttribute("post", new Post());
         return "posts/addForm";
     }
+
     @PostMapping("/add")
-    public String addPost(@Validated @ModelAttribute Post post, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){
+    public String addPost(@Validated @ModelAttribute Post post, BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "posts/addForm";
         }
 
         //성공 로직
+        log.info("loginMember name = {}", member.getName());
+        post.setName(member.getName());
         Post savePost = postRepository.save(post);
-        redirectAttributes.addAttribute("id" , savePost.getId());
+        redirectAttributes.addAttribute("id", savePost.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";
     }

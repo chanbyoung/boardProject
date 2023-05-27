@@ -1,4 +1,4 @@
-package firstProject.board.login;
+package firstProject.board.domain.login;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.member.MemberRepository;
