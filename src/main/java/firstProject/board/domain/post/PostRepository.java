@@ -11,9 +11,11 @@ import java.util.Map;
 public class PostRepository {
     private static final Map<Long, Post> store = new HashMap<>();
     private static long sequence = 0L;
+    private static Long readCount =0L;
 
     public Post save(Post post){
         post.setId(++sequence);
+        post.setReadCount(readCount);
         store.put(post.getId(), post);
         return post;
     }
@@ -28,6 +30,10 @@ public class PostRepository {
         Post findPost = findById(id);
         findPost.setPostName(updateParam.getPostName());
         findPost.setContent(updateParam.getContent());
+    }
+    public void updateReadCount(Long id){
+        Post updatePost = findById(id);
+        updatePost.setReadCount(updatePost.getReadCount()+1);
     }
 
 }

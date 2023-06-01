@@ -2,6 +2,9 @@ package firstProject.board.domain.post;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @Data
 public class Post {
@@ -11,15 +14,19 @@ public class Post {
     private String postName; // 글 이름
     @NotBlank
     private String content;  // 글 내용
-    private Integer readCount; //조회수
+    private Long readCount; //조회수
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime localDateTime;
 
     public Post() {
     }
 
-    public Post(String name, String postName, String content, Integer readCount) {
+    public Post(String name, String postName, String content) {
         this.name = name;
         this.postName = postName;
         this.content = content;
-        this.readCount = readCount;
+        this.localDateTime = LocalDateTime.now();
     }
+
 }

@@ -2,12 +2,12 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.member.MemberRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -22,8 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
+    @Value("${file.dir}")
+    private String fileDir;
+
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
 
     @GetMapping
     public String posts(Model model){
@@ -35,6 +38,7 @@ public class PostController {
     @GetMapping("/{id}")
     public String post(@PathVariable long id, Model model){
         Post post = postRepository.findById(id);
+        postRepository.updateReadCount(id);
         model.addAttribute("post", post);
         return "posts/post";
     }
@@ -47,7 +51,8 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public String addPost(@Validated @ModelAttribute Post post, BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) {
+    public String addPost(@Validated @ModelAttribute Post post,
+                          BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -57,16 +62,24 @@ public class PostController {
         //성공 로직
         log.info("loginMember name = {}", member.getName());
         post.setName(member.getName());
+        post.setLocalDateTime(LocalDateTime.now());
         Post savePost = postRepository.save(post);
         redirectAttributes.addAttribute("id", savePost.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";
     }
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model){
+    public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember)
+    {
         Post post = postRepository.findById(id);
         model.addAttribute("post", post);
-        return "posts/editForm";
+        if(loginMember.getName().equals(post.getName())){
+            return "posts/editForm";
+        }
+        model.addAttribute("status2", true);
+        log.info("잘못된 요청입니다");
+       return "/posts/post";
+
     }
 
     @PostMapping("/{id}/edit")
