@@ -2,6 +2,7 @@ package firstProject.board.domain;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.member.MemberRepository;
+import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
 import jakarta.annotation.PostConstruct;
@@ -15,7 +16,10 @@ public class TestDataInt {
     private final MemberRepository memberRepository;
     @PostConstruct
     public void init(){
-        postRepository.save(new Post("박찬병","안녕하세요","안녕하세요"));
+        Post post = new Post("박찬병", "안녕하세요", "안녕하세요");
+        postRepository.save(post);
+        Comment comment = new Comment("박찬병", "하이");
+        postRepository.saveComment(post, comment);
         postRepository.save(new Post("김성민","안녕못해요","안녕못해요"));
 
         Member member = new Member();

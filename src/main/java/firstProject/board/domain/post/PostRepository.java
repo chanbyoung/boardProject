@@ -10,6 +10,7 @@ import java.util.Map;
 @Repository
 public class PostRepository {
     private static final Map<Long, Post> store = new HashMap<>();
+    private static long seqCmt = 0L;
     private static long sequence = 0L;
     private static Long readCount =0L;
 
@@ -19,6 +20,13 @@ public class PostRepository {
         store.put(post.getId(), post);
         return post;
     }
+
+    public Map saveComment(Post post, Comment comment) {
+        Map<Long, Comment> commentList = post.getCommentList();
+        commentList.put(++seqCmt, comment);
+        return commentList;
+    }
+
     public Post findById(Long id){
         return store.get(id);
     }

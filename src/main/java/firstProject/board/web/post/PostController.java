@@ -2,12 +2,11 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,14 +16,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
-    @Value("${file.dir}")
-    private String fileDir;
 
     private final PostRepository postRepository;
 
@@ -38,13 +36,17 @@ public class PostController {
     @GetMapping("/{id}")
     public String post(@PathVariable long id, Model model){
         Post post = postRepository.findById(id);
+
+
         postRepository.updateReadCount(id);
         model.addAttribute("post", post);
+        Map<Long, Comment> commentList = post.getCommentList();
+        model.addAttribute("comment", new Comment());
         return "posts/post";
     }
 
     @GetMapping("/add")
-    public String addForm(HttpServletRequest request, Model model){
+    public String addForm(Model model){
 
         model.addAttribute("post", new Post());
         return "posts/addForm";
@@ -77,10 +79,12 @@ public class PostController {
             return "posts/editForm";
         }
         model.addAttribute("status2", true);
+        model.addAttribute("comment", new Comment());
         log.info("잘못된 요청입니다");
-       return "/posts/post";
+        return "/posts/post";
 
     }
+
 
     @PostMapping("/{id}/edit")
     public String edit(@PathVariable Long id, @Validated @ModelAttribute Post editInf){
@@ -88,6 +92,13 @@ public class PostController {
         postParam.setPostName(editInf.getPostName());
         postParam.setContent(editInf.getContent());
         postRepository.update(id, postParam);
+        return "redirect:/posts/{id}";
+    }
+    @PostMapping("/{id}/comment")
+    public String addComment(@PathVariable Long id, @ModelAttribute Comment comment, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+        Post post = postRepository.findById(id);
+        comment.setName(member.getName());
+        postRepository.saveComment(post, comment);
         return "redirect:/posts/{id}";
     }
 }

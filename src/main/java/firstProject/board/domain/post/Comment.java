@@ -10,5 +10,11 @@ public class Comment {
     @NotBlank
     private String content; // 댓글 내용
 
+    public Comment( String name, String content) {
+        this.name = name;
+        this.content = content;
+    }
 
+    public Comment() {
+    }
 }
