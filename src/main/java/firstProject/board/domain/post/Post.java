@@ -24,6 +24,7 @@ public class Post {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime localDateTime;
 
+
     public Post() {
     }
 

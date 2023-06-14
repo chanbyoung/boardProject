@@ -5,6 +5,7 @@ import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
+import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +25,11 @@ import java.util.Map;
 public class PostController {
 
     private final PostRepository postRepository;
+    private final BoardService boardService;
 
     @GetMapping
     public String posts(Model model){
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = boardService.getPosts();
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
@@ -63,9 +64,7 @@ public class PostController {
 
         //성공 로직
         log.info("loginMember name = {}", member.getName());
-        post.setName(member.getName());
-        post.setLocalDateTime(LocalDateTime.now());
-        Post savePost = postRepository.save(post);
+        Post savePost = boardService.savePost(post, member);
         redirectAttributes.addAttribute("id", savePost.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";
@@ -88,10 +87,7 @@ public class PostController {
 
     @PostMapping("/{id}/edit")
     public String edit(@PathVariable Long id, @Validated @ModelAttribute Post editInf){
-        Post postParam = new Post();
-        postParam.setPostName(editInf.getPostName());
-        postParam.setContent(editInf.getContent());
-        postRepository.update(id, postParam);
+        boardService.editPost(id, editInf);
         return "redirect:/posts/{id}";
     }
     @PostMapping("/{id}/comment")
@@ -101,4 +97,5 @@ public class PostController {
         postRepository.saveComment(post, comment);
         return "redirect:/posts/{id}";
     }
+
 }
