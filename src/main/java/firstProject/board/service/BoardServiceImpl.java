@@ -3,6 +3,7 @@ package firstProject.board.service;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
+import firstProject.board.domain.post.PostSearchCond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,8 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
     private final PostRepository postRepository;
     @Override
-    public List<Post> getPosts() {
-        List<Post> posts = postRepository.findAll();
+    public List<Post> getPosts(PostSearchCond cond) {
+        List<Post> posts = postRepository.findAll(cond);
         return posts;
     }
 

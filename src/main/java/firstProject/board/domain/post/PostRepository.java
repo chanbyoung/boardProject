@@ -10,7 +10,7 @@ public interface PostRepository {
 
     Post findById(Long id);
 
-    List<Post> findAll();
+    List<Post> findAll(PostSearchCond cond);
 
     void update(Long id, Post updateParam);
 

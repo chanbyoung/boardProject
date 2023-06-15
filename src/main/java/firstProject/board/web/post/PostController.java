@@ -5,6 +5,7 @@ import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostRepository;
+import firstProject.board.domain.post.PostSearchCond;
 import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +29,8 @@ public class PostController {
     private final BoardService boardService;
 
     @GetMapping
-    public String posts(Model model){
-        List<Post> posts = boardService.getPosts();
+    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model){
+        List<Post> posts = boardService.getPosts(postSearch);
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
