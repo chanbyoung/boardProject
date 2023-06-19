@@ -1,10 +1,9 @@
-package firstProject.board.domain;
+package firstProject.board;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.member.MemberRepository;
-import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.PostRepository;
+import firstProject.board.domain.post.repository.PostRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,8 @@ public class TestDataInt {
     public void init(){
         Post post = new Post("박찬병", "안녕하세요", "안녕하세요");
         postRepository.save(post);
-        Comment comment = new Comment("박찬병", "하이");
-        postRepository.saveComment(post, comment);
+//        Comment comment = new Comment("박찬병", "하이");
+//        postRepository.saveComment(post, comment);
         postRepository.save(new Post("김성민","안녕못해요","안녕못해요"));
 
         Member member = new Member();

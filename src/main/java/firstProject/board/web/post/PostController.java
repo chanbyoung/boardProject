@@ -2,10 +2,10 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.PostRepository;
-import firstProject.board.domain.post.PostSearchCond;
+import firstProject.board.domain.post.repository.PostRepository;
+import firstProject.board.domain.post.repository.PostSearchCond;
+import firstProject.board.domain.post.repository.PostUpdateDto;
 import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Slf4j
@@ -40,10 +39,10 @@ public class PostController {
         Post post = postRepository.findById(id);
 
 
-        postRepository.updateReadCount(id);
+//        postRepository.updateReadCount(id);
         model.addAttribute("post", post);
-        Map<Long, Comment> commentList = post.getCommentList();
-        model.addAttribute("comment", new Comment());
+//        Map<Long, Comment> commentList = post.getCommentList();
+//        model.addAttribute("comment", new Comment());
         return "posts/post";
     }
 
@@ -79,7 +78,7 @@ public class PostController {
             return "posts/editForm";
         }
         model.addAttribute("status2", true);
-        model.addAttribute("comment", new Comment());
+//        model.addAttribute("comment", new Comment());
         log.info("잘못된 요청입니다");
         return "/posts/post";
 
@@ -87,16 +86,27 @@ public class PostController {
 
 
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Long id, @Validated @ModelAttribute Post editInf){
-        boardService.editPost(id, editInf);
+    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto){
+        boardService.editPost(id, postUpdateDto);
         return "redirect:/posts/{id}";
     }
-    @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable Long id, @ModelAttribute Comment comment, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
-        Post post = postRepository.findById(id);
-        comment.setName(member.getName());
-        postRepository.saveComment(post, comment);
-        return "redirect:/posts/{id}";
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember){
+        Post findPost = postRepository.findById(id);
+        if(loginMember.getName().equals(findPost.getName())){
+            boardService.deletePost(id);
+            return "redirect:/posts";
+        }
+        return "/posts/post";
+
     }
+//    @PostMapping("/{id}/comment")
+//    public String addComment(@PathVariable Long id, @ModelAttribute Comment comment, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+//        Post post = postRepository.findById(id);
+//        comment.setName(member.getName());
+////        postRepository.saveComment(post, comment);
+//        return "redirect:/posts/{id}";
+//    }
 
 }

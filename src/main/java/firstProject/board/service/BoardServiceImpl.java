@@ -2,8 +2,9 @@ package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.PostRepository;
-import firstProject.board.domain.post.PostSearchCond;
+import firstProject.board.domain.post.repository.PostRepository;
+import firstProject.board.domain.post.repository.PostSearchCond;
+import firstProject.board.domain.post.repository.PostUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,12 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void editPost(Long id, Post editParam) {
+    public void deletePost(Long id) {
+        postRepository.delete(id);
+    }
+
+    @Override
+    public void editPost(Long id, PostUpdateDto editParam) {
         postRepository.update(id,editParam);
     }
 }

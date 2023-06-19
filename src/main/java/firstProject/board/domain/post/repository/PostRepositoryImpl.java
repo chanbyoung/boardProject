@@ -1,6 +1,6 @@
-package firstProject.board.domain.post;
+package firstProject.board.domain.post.repository;
 
-import org.springframework.stereotype.Repository;
+import firstProject.board.domain.post.Post;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository
+//@Repository
 public class PostRepositoryImpl implements PostRepository {
     private static final Map<Long, Post> store = new HashMap<>();
     private static long sequence = 0L;
@@ -22,13 +22,12 @@ public class PostRepositoryImpl implements PostRepository {
         return post;
     }
 
-    @Override
-    public Map saveComment(Post post, Comment comment) {
-        Map<Long, Comment> commentList = post.getCommentList();
-        int size = commentList.size();
-        commentList.put((long) ++size, comment);
-        return commentList;
-    }
+//    @Override
+//    public void saveComment(Post post, Comment comment) {
+//        Map<Long, Comment> commentList = post.getCommentList();
+//        int size = commentList.size();
+//        commentList.put((long) ++size, comment);
+//    }
 
     @Override
     public Post findById(Long id) {
@@ -57,7 +56,7 @@ public class PostRepositoryImpl implements PostRepository {
 
 
     @Override
-    public void update(Long id, Post updateParam){
+    public void update(Long id, PostUpdateDto updateParam){
         Post findPost = findById(id);
         findPost.setPostName(updateParam.getPostName());
         findPost.setContent(updateParam.getContent());
@@ -68,4 +67,8 @@ public class PostRepositoryImpl implements PostRepository {
         updatePost.setReadCount(updatePost.getReadCount()+1);
     }
 
+    @Override
+    public void delete(Long id) {
+
+    }
 }

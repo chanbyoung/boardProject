@@ -1,4 +1,4 @@
-package firstProject.board.domain.post;
+package firstProject.board.domain.post.repository;
 
 import lombok.Data;
 

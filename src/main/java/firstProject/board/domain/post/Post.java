@@ -5,8 +5,6 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Data
 public class Post {
@@ -17,7 +15,7 @@ public class Post {
     @NotBlank
     private String content;  // 글 내용
 
-    private Map<Long, Comment> commentList= new HashMap<>();
+//    private Map<Long, Comment> commentList= new HashMap<>();
 
     private Long readCount; //조회수
 
@@ -35,7 +33,7 @@ public class Post {
         this.localDateTime = LocalDateTime.now();
     }
 
-    public Post(Map<Long, Comment> commentList) {
-        this.commentList = commentList;
-    }
+//    public Post(Map<Long, Comment> commentList) {
+//        this.commentList = commentList;
+//    }
 }

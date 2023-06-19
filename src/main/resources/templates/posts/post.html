@@ -31,6 +31,15 @@
                     th:onclick="|location.href='@{/posts}'|"
                     type="button" th:text="#{button.cancel}">목록으로</button>
         </div>
+        <div class="col">
+            <form action="post.html" th:action="@{'/posts/{id}/delete'(id=${post.id})}" method="post">
+                <div>
+                    <form>
+                        <button class="w-100 btn btn-secondary btn-lg" type="submit" th:text="#{button.delete}">삭제</button>
+                    </form>
+                </div>
+            </form>
+        </div>
     </div>
     <hr class="my-4">
 
@@ -52,31 +61,31 @@
     </div>
 
     <hr class="my-4">
-    <h6>댓글</h6>
-    <form action="post.html" th:action="@{'/posts/{id}/comment'(id=${post.id})}" th:object="${comment}" method="post">
-        <div>
-            <form>
-                <input type="text" id="comment" th:field="*{content}"class="form-control" placeholder="댓글을 입력하세요">
-                <button class="w-100 btn btn-secondary btn-lg"
-                        type="submit">댓글 작성</button>
-            </form>
-        </div>
-    </form>
-    <hr class="my-4">
-    <div>
-        <table class="table">
-            <tr>
-                <th>댓글 번호</th>
-                <th>작성자 id</th>
-                <th>내용</th>
-            </tr>
-            <tr th:each="comment : ${post.commentList}">
-                <td th:text="${comment.key}">댓글 번호</td>
-                <td th:text="${comment.value.name}">작성자 id</td>
-                <td th:text="${comment.value.content}">내용</td>
-            </tr>
-        </table>
-    </div>
+<!--    <h6>댓글</h6>-->
+<!--    <form action="post.html" th:action="@{'/posts/{id}/comment'(id=${post.id})}" th:object="${comment}" method="post">-->
+<!--        <div>-->
+<!--            <form>-->
+<!--                <input type="text" id="comment" th:field="*{content}"class="form-control" placeholder="댓글을 입력하세요">-->
+<!--                <button class="w-100 btn btn-secondary btn-lg"-->
+<!--                        type="submit">댓글 작성</button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--    <hr class="my-4">-->
+<!--    <div>-->
+<!--        <table class="table">-->
+<!--            <tr>-->
+<!--                <th>댓글 번호</th>-->
+<!--                <th>작성자 id</th>-->
+<!--                <th>내용</th>-->
+<!--            </tr>-->
+<!--            <tr th:each="comment : ${post.commentList}">-->
+<!--                <td th:text="${comment.key}">댓글 번호</td>-->
+<!--                <td th:text="${comment.value.name}">작성자 id</td>-->
+<!--                <td th:text="${comment.value.content}">내용</td>-->
+<!--            </tr>-->
+<!--        </table>-->
+<!--    </div>-->
 
 </div> <!-- /container -->
 </body>

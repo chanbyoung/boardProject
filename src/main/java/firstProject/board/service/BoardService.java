@@ -2,7 +2,8 @@ package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.PostSearchCond;
+import firstProject.board.domain.post.repository.PostSearchCond;
+import firstProject.board.domain.post.repository.PostUpdateDto;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public interface BoardService {
     Post savePost(Post post, Member member);
 
     //게시글 수정
-    void editPost(Long id, Post editParam);
+    void editPost(Long id, PostUpdateDto editParam);
 
+    void deletePost(Long id);
 }
