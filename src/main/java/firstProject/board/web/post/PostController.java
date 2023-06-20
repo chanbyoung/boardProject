@@ -39,7 +39,7 @@ public class PostController {
         Post post = postRepository.findById(id);
 
 
-//        postRepository.updateReadCount(id);
+        postRepository.updateReadCount(id);
         model.addAttribute("post", post);
 //        Map<Long, Comment> commentList = post.getCommentList();
 //        model.addAttribute("comment", new Comment());

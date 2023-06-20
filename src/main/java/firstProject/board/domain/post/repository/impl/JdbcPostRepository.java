@@ -1,6 +1,9 @@
-package firstProject.board.domain.post.repository;
+package firstProject.board.domain.post.repository.impl;
 
 import firstProject.board.domain.post.Post;
+import firstProject.board.domain.post.repository.PostRepository;
+import firstProject.board.domain.post.repository.PostSearchCond;
+import firstProject.board.domain.post.repository.PostUpdateDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 @Slf4j
 @Repository
-public class JdbcPostRepository implements PostRepository{
+public class JdbcPostRepository implements PostRepository {
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -30,10 +33,10 @@ public class JdbcPostRepository implements PostRepository{
 
     @Override
     public Post save(Post post) {
+        post.setReadCount(0L);
         SqlParameterSource param = new BeanPropertySqlParameterSource(post);
         Number key = jdbcInsert.executeAndReturnKey(param);
         post.setId(key.longValue());
-        post.setReadCount(0L);
         return post;
     }
 
@@ -94,7 +97,7 @@ public class JdbcPostRepository implements PostRepository{
 
     @Override
     public void updateReadCount(Long id) {
-        String sql = "update post set readCount=:readCount where=:id";
+        String sql = "update post set read_count=:readCount where id=:id";
         Post updatePost = findById(id);
         MapSqlParameterSource param = new MapSqlParameterSource().addValue(
                         "readCount", updatePost.getReadCount() + 1)

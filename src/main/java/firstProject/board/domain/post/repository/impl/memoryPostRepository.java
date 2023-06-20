@@ -1,6 +1,9 @@
-package firstProject.board.domain.post.repository;
+package firstProject.board.domain.post.repository.impl;
 
 import firstProject.board.domain.post.Post;
+import firstProject.board.domain.post.repository.PostRepository;
+import firstProject.board.domain.post.repository.PostSearchCond;
+import firstProject.board.domain.post.repository.PostUpdateDto;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
@@ -9,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 //@Repository
-public class PostRepositoryImpl implements PostRepository {
+public class memoryPostRepository implements PostRepository {
     private static final Map<Long, Post> store = new HashMap<>();
     private static long sequence = 0L;
     private static Long readCount = 0L;

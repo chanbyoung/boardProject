@@ -1,6 +1,5 @@
 package firstProject.board;
 
-import firstProject.board.domain.member.Member;
 import firstProject.board.domain.member.MemberRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.repository.PostRepository;
@@ -21,11 +20,11 @@ public class TestDataInt {
 //        postRepository.saveComment(post, comment);
         postRepository.save(new Post("김성민","안녕못해요","안녕못해요"));
 
-        Member member = new Member();
-        member.setLoginId("test");
-        member.setPassword("test!");
-        member.setName("테스터");
-        memberRepository.save(member);
+//        Member member = new Member();
+//        member.setLoginId("test");
+//        member.setPassword("test!");
+//        member.setName("테스터");
+//        memberRepository.save(member);
 
 
     }
