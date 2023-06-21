@@ -9,14 +9,13 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 @Slf4j
-@Repository
+//@Repository
 public class JdbcMemberRepository implements MemberRepository {
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
@@ -29,11 +28,11 @@ public class JdbcMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member save(Member member) {
+    public void save(Member member) {
         BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(member);
         Number key = jdbcInsert.executeAndReturnKey(param);
         member.setId(key.longValue());
-        return member;
+//        return member;
     }
 
     @Override

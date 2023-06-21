@@ -98,7 +98,7 @@ public class PostController {
             boardService.deletePost(id);
             return "redirect:/posts";
         }
-        return "/posts/post";
+        return "redirect:/posts/{id}";
 
     }
 //    @PostMapping("/{id}/comment")

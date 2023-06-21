@@ -47,7 +47,7 @@ public class memoryPostRepository implements PostRepository {
                         return true;
                     }
                     if (type.equals("name")) {
-                        return post.getName().contains(searchContent);
+//                        return post.getName().contains(searchContent);
                     }
                     if (type.equals("postName"))
                         return post.getPostName().contains(searchContent);

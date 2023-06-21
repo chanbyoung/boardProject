@@ -12,11 +12,11 @@ public class memoryMemberRepository implements MemberRepository {
     private static Map<Long, Member> store = new HashMap<>();
     private static Long sequence = 0L;
 
-    public Member save(Member member){
+    public void save(Member member){
         member.setId(++sequence);
         log.info("save: member = {}", member);
         store.put(sequence, member);
-        return member;
+//        return member;
     }
 
     public Member findById(Long id){
