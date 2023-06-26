@@ -2,10 +2,9 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.repository.PostRepository;
-import firstProject.board.domain.post.repository.PostSearchCond;
-import firstProject.board.domain.post.repository.PostUpdateDto;
+import firstProject.board.domain.post.repository.*;
 import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +24,7 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final BoardService boardService;
 
     @GetMapping
@@ -37,12 +37,9 @@ public class PostController {
     @GetMapping("/{id}")
     public String post(@PathVariable long id, Model model){
         Post post = postRepository.findById(id);
-
-
         postRepository.updateReadCount(id);
         model.addAttribute("post", post);
-//        Map<Long, Comment> commentList = post.getCommentList();
-//        model.addAttribute("comment", new Comment());
+        model.addAttribute("commentDto",new PostCommentDto());
         return "posts/post";
     }
 
@@ -78,7 +75,7 @@ public class PostController {
             return "posts/editForm";
         }
         model.addAttribute("status2", true);
-//        model.addAttribute("comment", new Comment());
+        model.addAttribute("comment", new Comment());
         log.info("잘못된 요청입니다");
         return "/posts/post";
 
@@ -101,12 +98,12 @@ public class PostController {
         return "redirect:/posts/{id}";
 
     }
-//    @PostMapping("/{id}/comment")
-//    public String addComment(@PathVariable Long id, @ModelAttribute Comment comment, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
-//        Post post = postRepository.findById(id);
-//        comment.setName(member.getName());
-////        postRepository.saveComment(post, comment);
-//        return "redirect:/posts/{id}";
-//    }
+    @PostMapping("/{id}/comment")
+    public String addComment(@PathVariable Long id, @ModelAttribute PostCommentDto commentDto, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+        Post findPost = postRepository.findById(id);
+        Comment comment = new Comment(member.getName(), commentDto.getContent(), findPost);
+        commentRepository.save(comment);
+        return "redirect:/posts/{id}";
+    }
 
 }

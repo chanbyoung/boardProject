@@ -6,12 +6,13 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
 public class Post {
-//    @Column(name = "post_id")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private Long id; // 글 번호, 데이터 베이스에 관리되는 id
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
@@ -19,10 +20,12 @@ public class Post {
     @NotBlank
 //    @Column(name = "post_name")
     private String postName; // 글 이름
+
     @NotBlank
     private String content;  // 글 내용
 
-//    private Map<Long, Comment> commentList= new HashMap<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 //    @Column(name = "read_count")
     private Long readCount; //조회수
 
@@ -43,5 +46,10 @@ public class Post {
 
 //    public Post(Map<Long, Comment> commentList) {
 //        this.commentList = commentList;
+//    }
+
+//    public void addComments(Comment comment){
+//        comments.add(comment);
+//        comment.setPost(this);
 //    }
 }

@@ -1,7 +1,6 @@
-package firstProject.board.domain.post.repository.impl;
+package firstProject.board.domain.post.repository.impl.old;
 
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.repository.PostRepository;
 import firstProject.board.domain.post.repository.PostSearchCond;
 import firstProject.board.domain.post.repository.PostUpdateDto;
 import org.springframework.util.ObjectUtils;
@@ -12,12 +11,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 //@Repository
-public class memoryPostRepository implements PostRepository {
+public class memoryPostRepository {
     private static final Map<Long, Post> store = new HashMap<>();
     private static long sequence = 0L;
     private static Long readCount = 0L;
 
-    @Override
+//    @Override
     public Post save(Post post) {
         post.setId(++sequence);
         post.setReadCount(readCount);
@@ -32,12 +31,12 @@ public class memoryPostRepository implements PostRepository {
 //        commentList.put((long) ++size, comment);
 //    }
 
-    @Override
+//    @Override
     public Post findById(Long id) {
         return store.get(id);
     }
 
-    @Override
+//    @Override
     public List<Post> findAll(PostSearchCond cond) {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
@@ -58,19 +57,19 @@ public class memoryPostRepository implements PostRepository {
     }
 
 
-    @Override
+//    @Override
     public void update(Long id, PostUpdateDto updateParam){
         Post findPost = findById(id);
         findPost.setPostName(updateParam.getPostName());
         findPost.setContent(updateParam.getContent());
     }
-    @Override
+//    @Override
     public void updateReadCount(Long id){
         Post updatePost = findById(id);
         updatePost.setReadCount(updatePost.getReadCount()+1);
     }
 
-    @Override
+//    @Override
     public void delete(Long id) {
 
     }

@@ -34,6 +34,7 @@ public class JpaPostRepository implements PostRepository {
         return post;
     }
 
+
     @Override
     public Post findById(Long id) {
         Post post = em.find(Post.class, id);
@@ -66,6 +67,7 @@ public class JpaPostRepository implements PostRepository {
                 .select(post)
                 .from(post)
                 .where(builder)
+                .orderBy(post.id.desc())
                 .fetch();
         return result;
     }

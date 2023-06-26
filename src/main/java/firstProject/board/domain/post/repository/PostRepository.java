@@ -7,7 +7,6 @@ import java.util.List;
 public interface PostRepository {
     Post save(Post post);
 
-//    void saveComment(Post post, Comment comment);
 
     Post findById(Long id);
 

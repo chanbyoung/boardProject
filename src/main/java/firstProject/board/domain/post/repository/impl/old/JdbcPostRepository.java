@@ -1,7 +1,6 @@
-package firstProject.board.domain.post.repository.impl;
+package firstProject.board.domain.post.repository.impl.old;
 
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.repository.PostRepository;
 import firstProject.board.domain.post.repository.PostSearchCond;
 import firstProject.board.domain.post.repository.PostUpdateDto;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 @Slf4j
 //@Repository
-public class JdbcPostRepository implements PostRepository {
+public class JdbcPostRepository {
     private final NamedParameterJdbcTemplate template;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -30,7 +29,7 @@ public class JdbcPostRepository implements PostRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
-    @Override
+//    @Override
     public Post save(Post post) {
         post.setReadCount(0L);
         SqlParameterSource param = new BeanPropertySqlParameterSource(post);
@@ -51,7 +50,7 @@ public class JdbcPostRepository implements PostRepository {
 //        template.update(sql, param);
 //    }
 
-    @Override
+//    @Override
     public Post findById(Long id) {
         String sql = "select * from post where id= :id";
         Map<String, Long> param = Map.of("id",id);
@@ -62,7 +61,7 @@ public class JdbcPostRepository implements PostRepository {
         return BeanPropertyRowMapper.newInstance(Post.class);
     }
 
-    @Override
+//    @Override
     public List<Post> findAll(PostSearchCond cond) {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
@@ -84,7 +83,7 @@ public class JdbcPostRepository implements PostRepository {
         return template.query(sql, param, postRowMapper());
     }
 
-    @Override
+//    @Override
     public void update(Long id, PostUpdateDto updateParam) {
         String sql = "update post set post_name=:postName, content=:content where id=:id";
         MapSqlParameterSource param = new MapSqlParameterSource()
@@ -94,7 +93,7 @@ public class JdbcPostRepository implements PostRepository {
         template.update(sql, param);
     }
 
-    @Override
+//    @Override
     public void updateReadCount(Long id) {
         String sql = "update post set read_count=:readCount where id=:id";
         Post updatePost = findById(id);
@@ -104,7 +103,7 @@ public class JdbcPostRepository implements PostRepository {
         template.update(sql, param);
     }
 
-    @Override
+//    @Override
     public void delete(Long id) {
         String sql = "delete from post where id =:id";
         Map<String, Long> param = Map.of("id", id);
