@@ -83,7 +83,13 @@ public class PostController {
 
 
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto){
+    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto,BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            Post post = postRepository.findById(id);
+            model.addAttribute("post", post);
+            return "posts/editForm";
+        }
         boardService.editPost(id, postUpdateDto);
         return "redirect:/posts/{id}";
     }
@@ -99,7 +105,11 @@ public class PostController {
 
     }
     @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable Long id, @ModelAttribute PostCommentDto commentDto, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+    public String addComment(@PathVariable Long id, @Validated @ModelAttribute PostCommentDto commentDto,BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "redirect:/posts/{id}";
+        }
         Post findPost = postRepository.findById(id);
         Comment comment = new Comment(member.getName(), commentDto.getContent(), findPost);
         commentRepository.save(comment);
@@ -107,3 +117,7 @@ public class PostController {
     }
 
 }
+
+
+
+

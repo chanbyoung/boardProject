@@ -1,4 +1,4 @@
-package firstProject.board.domain.member.impl;
+package firstProject.board.domain.member.impl.old;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.member.MemberRepository;
