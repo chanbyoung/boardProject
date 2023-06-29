@@ -4,6 +4,7 @@ import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
+import firstProject.board.domain.post.PostAddDto;
 import firstProject.board.domain.post.repository.*;
 import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -46,19 +47,19 @@ public class PostController {
     @GetMapping("/add")
     public String addForm(Model model){
 
-        model.addAttribute("post", new Post());
+        model.addAttribute("postAddDto", new PostAddDto());
         return "posts/addForm";
     }
 
     @PostMapping("/add")
-    public String addPost(@Validated @ModelAttribute Post post,
+    public String addPost(@Validated @ModelAttribute PostAddDto postAddDto,
                           BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "posts/addForm";
         }
-
+        Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
         //성공 로직
         log.info("loginMember name = {}", member.getName());
         Post savePost = boardService.savePost(post, member);
@@ -70,7 +71,8 @@ public class PostController {
     public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember)
     {
         Post post = postRepository.findById(id);
-        model.addAttribute("post", post);
+        model.addAttribute("postUpdateDto" ,new PostUpdateDto(post.getPostName(), post.getContent()) );
+        model.addAttribute("id", id);
         if(loginMember.getName().equals(post.getName())){
             return "posts/editForm";
         }
@@ -83,11 +85,9 @@ public class PostController {
 
 
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto,BindingResult bindingResult, Model model){
+    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto,BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            Post post = postRepository.findById(id);
-            model.addAttribute("post", post);
             return "posts/editForm";
         }
         boardService.editPost(id, postUpdateDto);

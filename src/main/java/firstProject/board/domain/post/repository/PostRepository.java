@@ -7,7 +7,6 @@ import java.util.List;
 public interface PostRepository {
     Post save(Post post);
 
-
     Post findById(Long id);
 
     List<Post> findAll(PostSearchCond cond);

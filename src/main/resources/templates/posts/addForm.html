@@ -22,11 +22,8 @@
         <h2 th:text="#{page.addPage}">등록</h2>
     </div>
 
-    <form action="post.html" th:action th:object="${post}" method="post">
+    <form action="post.html" th:action enctype="multipart/form-data" th:object="${postAddDto}" method="post">
 
-        <div th:if="${#fields.hasGlobalErrors()}">
-            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
-        </div>
 
         <div>
             <label for="postName" th:text="#{label.post.postName}">글 제목</label>

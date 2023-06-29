@@ -9,4 +9,9 @@ public class PostUpdateDto {
     private String postName;
     @NotBlank
     private String content;
+
+    public PostUpdateDto(String postName, String content) {
+        this.postName = postName;
+        this.content = content;
+    }
 }
