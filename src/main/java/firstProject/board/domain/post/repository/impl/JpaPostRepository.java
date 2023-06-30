@@ -29,7 +29,6 @@ public class JpaPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        post.setReadCount(0L);
         em.persist(post);
         return post;
     }
@@ -75,8 +74,7 @@ public class JpaPostRepository implements PostRepository {
     @Override
     public void update(Long id, PostUpdateDto updateParam) {
         Post post = em.find(Post.class, id);
-        post.setPostName(updateParam.getPostName());
-        post.setContent(updateParam.getContent());
+        post.updatePost(updateParam.getPostName(), updateParam.getContent());
     }
 
     @Override
@@ -89,6 +87,6 @@ public class JpaPostRepository implements PostRepository {
     public void delete(Long id) {
         Post post = em.find(Post.class, id);
         repository.delete(post);
-//        repository.deleteById(id);
+
     }
 }

@@ -11,10 +11,11 @@ import java.util.List;
 @Data
 @Entity
 public class Post {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id; // 글 번호, 데이터 베이스에 관리되는 id
-//    @ManyToOne(fetch = FetchType.LAZY)
+    //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
     private String name;  //작성자의 이름
     @NotBlank
@@ -26,11 +27,8 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
-//    @Column(name = "read_count")
     private Long readCount; //조회수
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    @Column(name = "local_date_time")
     private LocalDateTime localDateTime;
 
 
@@ -38,18 +36,15 @@ public class Post {
     }
 
     public Post(String postName, String content) {
-//        this.name = name;
         this.postName = postName;
         this.content = content;
         this.localDateTime = LocalDateTime.now();
+        this.readCount = 0L;
     }
 
-//    public Post(Map<Long, Comment> commentList) {
-//        this.commentList = commentList;
-//    }
+    public void updatePost(String postName, String content) {
+        this.postName = postName;
+        this.content = content;
+    }
 
-//    public void addComments(Comment comment){
-//        comments.add(comment);
-//        comment.setPost(this);
-//    }
 }

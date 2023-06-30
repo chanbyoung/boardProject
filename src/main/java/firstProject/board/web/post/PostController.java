@@ -40,7 +40,7 @@ public class PostController {
         Post post = postRepository.findById(id);
         postRepository.updateReadCount(id);
         model.addAttribute("post", post);
-        model.addAttribute("commentDto",new PostCommentDto());
+        model.addAttribute("commentDto",new CommentDto());
         return "posts/post";
     }
 
@@ -105,14 +105,19 @@ public class PostController {
 
     }
     @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable Long id, @Validated @ModelAttribute PostCommentDto commentDto,BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+    public String addComment(@PathVariable Long id, @Validated @ModelAttribute CommentDto commentDto,BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "redirect:/posts/{id}";
         }
-        Post findPost = postRepository.findById(id);
-        Comment comment = new Comment(member.getName(), commentDto.getContent(), findPost);
-        commentRepository.save(comment);
+        boardService.saveComment(id,member,commentDto);
+        return "redirect:/posts/{id}";
+    }
+
+    @GetMapping("/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable Long commentId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,RedirectAttributes redirectAttributes ){
+        Long postId = boardService.deleteComment(commentId);
+        redirectAttributes.addAttribute("id", postId);
         return "redirect:/posts/{id}";
     }
 

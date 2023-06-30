@@ -1,9 +1,11 @@
 package firstProject.board.domain.post.repository;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PostUpdateDto {
     @NotBlank
     private String postName;
