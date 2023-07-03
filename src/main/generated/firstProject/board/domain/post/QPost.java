@@ -24,6 +24,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath content = createString("content");
 
+    public final ListPath<UploadFile, QUploadFile> files = this.<UploadFile, QUploadFile>createList("files", UploadFile.class, QUploadFile.class, PathInits.DIRECT2);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> localDateTime = createDateTime("localDateTime", java.time.LocalDateTime.class);

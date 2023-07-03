@@ -34,6 +34,9 @@
             </div>
         </div>
         <div>
+            <input type="file" name ="file">
+        </div>
+        <div>
             <label for="content" th:text="#{label.post.content}">본문</label>
             <input type="text" id="content" th:style="${'width:600px; height:200px'}" th:field="*{content}"
                    th:errorclass="field-error" class="form-control" placeholder="내용을 입력하세요">

@@ -11,4 +11,5 @@ public class PostAddDto {
     private String postName;
     @NotBlank
     private String content;
+
 }

@@ -5,7 +5,9 @@ import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.repository.CommentDto;
 import firstProject.board.domain.post.repository.PostSearchCond;
 import firstProject.board.domain.post.repository.PostUpdateDto;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface BoardService {
@@ -22,6 +24,8 @@ public interface BoardService {
     void deletePost(Long id);
 
     void saveComment(Long id, Member member, CommentDto commentDto);
+
+    void saveFile(Post post, MultipartFile file) throws IOException;
 
     Long deleteComment(Long commentId);
 }

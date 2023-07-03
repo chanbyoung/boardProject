@@ -21,7 +21,6 @@ import static firstProject.board.domain.post.QPost.post;
 @RequiredArgsConstructor
 public class JpaPostRepository implements PostRepository {
 
-
     private final EntityManager em;
     private final SpringDataJpaPostRepository repository;
     private final JPAQueryFactory query;

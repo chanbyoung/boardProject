@@ -15,12 +15,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id; // 글 번호, 데이터 베이스에 관리되는 id
+
     //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
     private String name;  //작성자의 이름
     @NotBlank
 //    @Column(name = "post_name")
     private String postName; // 글 이름
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<UploadFile> files;
 
     @NotBlank
     private String content;  // 글 내용
