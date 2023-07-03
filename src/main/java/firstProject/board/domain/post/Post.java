@@ -1,5 +1,6 @@
 package firstProject.board.domain.post;
 
+import firstProject.board.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -18,13 +19,17 @@ public class Post {
 
     //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "member_id")
-    private String name;  //작성자의 이름
+//    private String name;  //작성자의 이름
     @NotBlank
 //    @Column(name = "post_name")
     private String postName; // 글 이름
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<UploadFile> files;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name ="member_id")
+    private Member member;
 
     @NotBlank
     private String content;  // 글 내용
@@ -50,5 +55,6 @@ public class Post {
         this.postName = postName;
         this.content = content;
     }
+
 
 }

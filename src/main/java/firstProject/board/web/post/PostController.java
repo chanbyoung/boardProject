@@ -3,13 +3,9 @@ package firstProject.board.web.post;
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
-import firstProject.board.domain.post.FileRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostAddDto;
-import firstProject.board.domain.post.repository.CommentDto;
-import firstProject.board.domain.post.repository.PostRepository;
-import firstProject.board.domain.post.repository.PostSearchCond;
-import firstProject.board.domain.post.repository.PostUpdateDto;
+import firstProject.board.domain.post.repository.*;
 import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +28,6 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository postRepository;
-    private final FileRepository fileRepository;
     private final BoardService boardService;
 
     @GetMapping
@@ -85,7 +80,7 @@ public class PostController {
         Post post = postRepository.findById(id);
         model.addAttribute("postUpdateDto" ,new PostUpdateDto(post.getPostName(), post.getContent()) );
         model.addAttribute("id", id);
-        if(loginMember.getName().equals(post.getName())){
+        if(loginMember.getName().equals(post.getMember().getName())){
             return "posts/editForm";
         }
         model.addAttribute("status2", true);
@@ -109,7 +104,7 @@ public class PostController {
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember){
         Post findPost = postRepository.findById(id);
-        if(loginMember.getName().equals(findPost.getName())){
+        if(loginMember.getName().equals(findPost.getMember().getName())){
             boardService.deletePost(id);
             return "redirect:/posts";
         }

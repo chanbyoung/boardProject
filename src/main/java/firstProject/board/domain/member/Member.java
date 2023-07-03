@@ -1,8 +1,12 @@
 package firstProject.board.domain.member;
 
+import firstProject.board.domain.post.Comment;
+import firstProject.board.domain.post.Post;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -18,4 +22,10 @@ public class Member {
     private String loginId;
     @NotEmpty
     private String password;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 }

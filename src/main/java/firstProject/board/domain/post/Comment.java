@@ -1,5 +1,6 @@
 package firstProject.board.domain.post;
 
+import firstProject.board.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -13,8 +14,6 @@ public class Comment {
     @Column(name= "comment_id")
     private Long id;
 
-    private String name; //댓글 작성자
-
     @NotBlank
     private String content; // 댓글 내용
 
@@ -22,8 +21,12 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(String name, String content, Post post) {
-        this.name = name;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public Comment(Member member, String content, Post post) {
+        this.member = member;
         this.content = content;
         this.post = post;
     }

@@ -44,7 +44,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public Post savePost(Post post, Member member) {
-        post.setName(member.getName());
+        post.setMember(member);
         Post savePost = postRepository.save(post);
         return savePost;
     }
@@ -62,12 +62,12 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void saveComment(Long id, Member member, CommentDto commentDto) {
         Post findPost = postRepository.findById(id);
-        Comment comment = new Comment(member.getName(), commentDto.getContent(), findPost);
+        Comment comment = new Comment(member, commentDto.getContent(), findPost);
         commentRepository.save(comment);
     }
 
     @Override
-    public Long deleteComment(Long commentId) {
+    public Long deleteComment( Long commentId) {
         Comment comment = commentRepository.findById(commentId).get();
         Post post = comment.getPost();
         commentRepository.delete(comment);
