@@ -56,6 +56,10 @@
         <input type="text" id="name" name="name" class="form-control" value="10000" th:value="${post.member.name}" readonly>
     </div>
     <div>
+        <label for="files" th:text="첨부파일">파일</label>
+        <a th:if = "${post.files}" id=files th:href="|/posts/attach/${post.files.get(0).id}|" th:text="${post.getFiles().get(0).uploadFileName}"/>
+    </div>
+    <div>
     </div>
     <div>
         <label for="content" th:text="#{label.post.content}">내용</label>

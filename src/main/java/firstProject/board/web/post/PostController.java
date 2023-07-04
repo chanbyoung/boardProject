@@ -2,13 +2,15 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.post.Comment;
-import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.PostAddDto;
+import firstProject.board.domain.post.*;
 import firstProject.board.domain.post.repository.*;
 import firstProject.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -17,8 +19,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -29,6 +34,7 @@ public class PostController {
 
     private final PostRepository postRepository;
     private final BoardService boardService;
+    private final FileRepository fileRepository;
 
     @GetMapping
     public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model){
@@ -128,6 +134,20 @@ public class PostController {
         return "redirect:/posts/{id}";
     }
 
+    @GetMapping("/attach/{fileId}")
+    public ResponseEntity<Resource> downloadAttach(@PathVariable Long fileId) throws MalformedURLException {
+        log.info("file id = {}", fileId);
+        UploadFile file = fileRepository.findById(fileId).get();
+        String uploadFileName = file.getUploadFileName();
+        UrlResource resource = new UrlResource("file:" + file.getFullPath());
+        log.info("resource = {}", resource);
+        String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\""+encodedUploadFileName+"\"";
+        log.info("contentDisposition :{}", contentDisposition);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
+    }
 }
 
 

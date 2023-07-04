@@ -47,7 +47,7 @@ public class JpaPostRepository implements PostRepository {
         if(StringUtils.hasText(type)){
             if(type.equals("name")){
                 if (StringUtils.hasText(searchContent)){
-                    builder.and(post.name.like("%"+searchContent+"%"));
+                    builder.and(post.member.name.like("%"+searchContent+"%"));
                 }
             }
             if(type.equals("postName")){

@@ -16,6 +16,7 @@ public class UploadFile{
     private Post post;
     private String uploadFileName; //고객이 업로드한 파일명
     private String storeFileName; //서버 내부에서 관리하는 파일명
+    private String fullPath; //boardService 에서 저장
 
     public UploadFile(String uploadFileName) {
         this.uploadFileName = uploadFileName;
@@ -35,6 +36,7 @@ public class UploadFile{
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
     }
+
 
 
 }

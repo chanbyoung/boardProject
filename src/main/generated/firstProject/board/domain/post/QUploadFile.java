@@ -22,6 +22,8 @@ public class QUploadFile extends EntityPathBase<UploadFile> {
 
     public static final QUploadFile uploadFile = new QUploadFile("uploadFile");
 
+    public final StringPath fullPath = createString("fullPath");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final QPost post;
@@ -48,7 +50,7 @@ public class QUploadFile extends EntityPathBase<UploadFile> {
 
     public QUploadFile(Class<? extends UploadFile> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.post = inits.isInitialized("post") ? new QPost(forProperty("post")) : null;
+        this.post = inits.isInitialized("post") ? new QPost(forProperty("post"), inits.get("post")) : null;
     }
 
 }

@@ -22,6 +22,7 @@ public class BoardServiceImpl implements BoardService{
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final FileRepository fileRepository;
+
     @Value("${file.dir}")
     private String fileDir;
 
@@ -36,7 +37,8 @@ public class BoardServiceImpl implements BoardService{
         UploadFile uploadFile = new UploadFile(file.getOriginalFilename());
         uploadFile.setPost(post);
         fileRepository.save(uploadFile);
-        String fullPath = fileDir+ uploadFile.getStoreFileName();
+        String fullPath = fileDir+uploadFile.getStoreFileName();
+        uploadFile.setFullPath(fullPath);
         log.info("파일 저장 fullPath={}", fullPath);
         file.transferTo(new File(fullPath));
 
@@ -73,4 +75,6 @@ public class BoardServiceImpl implements BoardService{
         commentRepository.delete(comment);
         return post.getId();
     }
+
+
 }
