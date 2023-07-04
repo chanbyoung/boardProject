@@ -2,9 +2,13 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.post.*;
+import firstProject.board.domain.member.MemberRepository;
+import firstProject.board.domain.post.Post;
+import firstProject.board.domain.post.PostAddDto;
+import firstProject.board.domain.post.UploadFile;
 import firstProject.board.domain.post.repository.*;
 import firstProject.board.service.BoardService;
+import firstProject.board.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -12,7 +16,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +36,9 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
     private final BoardService boardService;
+    private final FileService fileService;
     private final FileRepository fileRepository;
 
     @GetMapping
@@ -47,6 +52,8 @@ public class PostController {
     public String post(@PathVariable long id, Model model){
         Post post = postRepository.findById(id);
         postRepository.updateReadCount(id);
+        UploadFile file = fileRepository.findByPostId(id);
+        model.addAttribute("file", file);
         model.addAttribute("post", post);
         model.addAttribute("commentDto",new CommentDto());
         return "posts/post";
@@ -60,7 +67,6 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    @Transactional
     public String addPost(@Validated @ModelAttribute PostAddDto postAddDto,
                           @RequestParam MultipartFile file,
                           BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) throws IOException {
@@ -72,7 +78,7 @@ public class PostController {
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
         //성공 로직
         if (!file.isEmpty()) {
-            boardService.saveFile(post,file);
+            fileService.saveFile(post,file);
         }
         log.info("loginMember name = {}", member.getName());
         Post savePost = boardService.savePost(post, member);
@@ -84,13 +90,12 @@ public class PostController {
     public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember)
     {
         Post post = postRepository.findById(id);
-        model.addAttribute("postUpdateDto" ,new PostUpdateDto(post.getPostName(), post.getContent()) );
+        model.addAttribute("postUpdateDto" ,new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("id", id);
         if(loginMember.getName().equals(post.getMember().getName())){
             return "posts/editForm";
         }
         model.addAttribute("status2", true);
-        model.addAttribute("comment", new Comment());
         log.info("잘못된 요청입니다");
         return "/posts/post";
 

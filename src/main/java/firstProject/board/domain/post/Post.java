@@ -3,13 +3,13 @@ package firstProject.board.domain.post;
 import firstProject.board.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
 @Entity
 public class Post {
     @Id
@@ -17,15 +17,8 @@ public class Post {
     @Column(name = "post_id")
     private Long id; // 글 번호, 데이터 베이스에 관리되는 id
 
-    //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id")
-//    private String name;  //작성자의 이름
     @NotBlank
-//    @Column(name = "post_name")
     private String postName; // 글 이름
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<UploadFile> files;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
@@ -36,6 +29,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+
     private Long readCount; //조회수
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime localDateTime;
@@ -56,5 +50,12 @@ public class Post {
         this.content = content;
     }
 
+    public void updateMember(Member member) {
+        this.member = member;
+        member.getPosts().add(this);
+    }
 
+    public void UpdateReadCount(long l) {
+        this.readCount = l;
+    }
 }

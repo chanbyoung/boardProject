@@ -79,7 +79,7 @@ public class JpaPostRepository implements PostRepository {
     @Override
     public void updateReadCount(Long id) {
         Post post = em.find(Post.class, id);
-        post.setReadCount(post.getReadCount()+1);
+        post.UpdateReadCount(post.getReadCount()+1);
     }
 
     @Override

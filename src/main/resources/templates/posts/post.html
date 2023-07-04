@@ -57,7 +57,7 @@
     </div>
     <div>
         <label for="files" th:text="첨부파일">파일</label>
-        <a th:if = "${post.files}" id=files th:href="|/posts/attach/${post.files.get(0).id}|" th:text="${post.getFiles().get(0).uploadFileName}"/>
+        <a th:if = "${file}" id=files th:href="|/posts/attach/${file.id}|" th:text="${file.uploadFileName}"/>
     </div>
     <div>
     </div>

@@ -1,19 +1,14 @@
 package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.member.MemberRepository;
 import firstProject.board.domain.post.Comment;
-import firstProject.board.domain.post.FileRepository;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.UploadFile;
 import firstProject.board.domain.post.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 @Service
 @RequiredArgsConstructor
@@ -21,10 +16,7 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService{
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
-    private final FileRepository fileRepository;
-
-    @Value("${file.dir}")
-    private String fileDir;
+    private final MemberRepository memberRepository;
 
     @Override
     public List<Post> getPosts(PostSearchCond cond) {
@@ -32,25 +24,13 @@ public class BoardServiceImpl implements BoardService{
         return posts;
     }
 
-    @Override
-    public void saveFile(Post post, MultipartFile file) throws IOException {
-        UploadFile uploadFile = new UploadFile(file.getOriginalFilename());
-        uploadFile.setPost(post);
-        fileRepository.save(uploadFile);
-        String fullPath = fileDir+uploadFile.getStoreFileName();
-        uploadFile.setFullPath(fullPath);
-        log.info("파일 저장 fullPath={}", fullPath);
-        file.transferTo(new File(fullPath));
-
-    }
 
     @Override
-    public Post savePost(Post post, Member member) {
-        post.setMember(member);
+    public Post savePost(Post post,Member member) {
+        post.updateMember(memberRepository.findById(member.getId()));
         Post savePost = postRepository.save(post);
         return savePost;
     }
-
     @Override
     public void deletePost(Long id) {
         postRepository.delete(id);

@@ -1,8 +1,8 @@
 package firstProject.board.web.login;
 
 import firstProject.board.SessionConst;
-import firstProject.board.domain.member.Member;
 import firstProject.board.domain.login.LoginService;
+import firstProject.board.domain.member.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @Controller
 public class LoginController {
+
     private final LoginService loginService;
 
     @GetMapping("/login")
@@ -38,7 +39,6 @@ public class LoginController {
             return "login/loginForm";
         }
         HttpSession session = request.getSession();
-
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
         return "redirect:"+ redirectURL;
     }
