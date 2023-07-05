@@ -2,7 +2,6 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.member.MemberRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.PostAddDto;
 import firstProject.board.domain.post.UploadFile;
@@ -36,7 +35,6 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
     private final BoardService boardService;
     private final FileService fileService;
     private final FileRepository fileRepository;
@@ -67,9 +65,9 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public String addPost(@Validated @ModelAttribute PostAddDto postAddDto,
+    public String addPost(@Validated @ModelAttribute PostAddDto postAddDto, BindingResult bindingResult,
                           @RequestParam MultipartFile file,
-                          BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) throws IOException {
+                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
@@ -91,10 +89,13 @@ public class PostController {
     {
         Post post = postRepository.findById(id);
         model.addAttribute("postUpdateDto" ,new PostUpdateDto(post.getPostName(), post.getContent()));
-        model.addAttribute("id", id);
+        model.addAttribute("post", post);
         if(loginMember.getName().equals(post.getMember().getName())){
             return "posts/editForm";
         }
+        UploadFile file = fileRepository.findByPostId(id);
+        model.addAttribute("file", file);
+        model.addAttribute("commentDto",new CommentDto());
         model.addAttribute("status2", true);
         log.info("잘못된 요청입니다");
         return "/posts/post";

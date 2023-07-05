@@ -1,7 +1,7 @@
 package firstProject.board.web.login;
 
 import firstProject.board.SessionConst;
-import firstProject.board.domain.login.LoginService;
+import firstProject.board.service.LoginService;
 import firstProject.board.domain.member.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

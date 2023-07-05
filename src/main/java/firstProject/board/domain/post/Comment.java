@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @Data
 @Entity
-@ToString(exclude = "post")
+@ToString(exclude = {"post", "member"})
 public class Comment {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "comment_id")

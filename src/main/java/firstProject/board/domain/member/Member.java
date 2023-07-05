@@ -4,12 +4,14 @@ import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Member {
 
