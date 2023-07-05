@@ -20,16 +20,12 @@ public class Post {
     @NotBlank
     private String postName; // 글 이름
 
-    @ManyToOne(fetch = FetchType.LAZY )
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")
     private Member member;
 
     @NotBlank
     private String content;  // 글 내용
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<UploadFile> files;
-
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;

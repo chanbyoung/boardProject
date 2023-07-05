@@ -51,6 +51,7 @@ public class PostController {
         Post post = postRepository.findById(id);
         postRepository.updateReadCount(id);
         UploadFile file = fileRepository.findByPostId(id);
+        log.info("file={}",file);
         model.addAttribute("file", file);
         model.addAttribute("post", post);
         model.addAttribute("commentDto",new CommentDto());
