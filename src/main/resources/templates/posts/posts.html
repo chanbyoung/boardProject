@@ -59,7 +59,13 @@
             <button type="submit" class="btn btn-secondary mb-2">검색</button>
         </form>
     </div>
-
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <button class="w-100 btn btn-dark btn-lg" type="submit">
+                로그아웃
+            </button>
+        </form>
+    </div>
 </div> <!-- /container -->
 
 </body>

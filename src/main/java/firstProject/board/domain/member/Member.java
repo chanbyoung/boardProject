@@ -19,12 +19,19 @@ public class Member {
     @Column(name = "member_id")
     private Long id; //데이터 베이스에 관리되는 id
     @NotEmpty
-    private String name; //사용자 이름
-    @NotEmpty
-//    @Column(name = "login_id")
     private String loginId;
     @NotEmpty
     private String password;
+    @NotEmpty
+    private String name; //사용자 이름
+    @NotEmpty
+    @Column(length = 8)
+    private String birth;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    @NotEmpty
+    private String address;
+
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();

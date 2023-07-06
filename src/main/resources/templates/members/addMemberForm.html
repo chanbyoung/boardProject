@@ -44,11 +44,29 @@
              th:errorclass="field-error">
       <div class="field-error" th:errors="*{name}" />
     </div>
+    <div>
+      <label for="birth">생년월일</label>
+      <input type="text" id="birth" th:field="*{birth}" class="formcontrol"
+             th:errorclass="field-error">
+      <div class="field-error" th:errors="*{birth}" />
+    </div>
+    <div>
+      성별
+      <select th:field="*{gender}" class="form-select">
+        <option value="">==성별 선택==</option>
+        <option th:each="gender: ${genders}" th:value="${gender}" th:text="${gender.getDescription()}"></option>
+      </select>
+    </div>
+    <div>
+      <label for="address">주소</label>
+      <input type="text" id="address" th:field="*{address}" class="formcontrol"
+             th:errorclass="field-error">
+      <div class="field-error" th:errors="*{address}" />
+    </div>
     <hr class="my-4">
     <div class="row">
       <div class="col">
-        <button class="w-100 btn btn-primary btn-lg" type="submit">회원
-          가입</button>
+        <button class="w-100 btn btn-primary btn-lg" type="submit">회원 가입</button>
       </div>
       <div class="col">
         <button class="w-100 btn btn-secondary btn-lg"

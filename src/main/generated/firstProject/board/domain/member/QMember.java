@@ -20,7 +20,13 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final StringPath address = createString("address");
+
+    public final StringPath birth = createString("birth");
+
     public final ListPath<firstProject.board.domain.post.Comment, firstProject.board.domain.post.QComment> comments = this.<firstProject.board.domain.post.Comment, firstProject.board.domain.post.QComment>createList("comments", firstProject.board.domain.post.Comment.class, firstProject.board.domain.post.QComment.class, PathInits.DIRECT2);
+
+    public final EnumPath<Gender> gender = createEnum("gender", Gender.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
