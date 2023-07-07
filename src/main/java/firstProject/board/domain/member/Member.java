@@ -5,13 +5,11 @@ import firstProject.board.domain.post.Post;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 public class Member {
 
@@ -32,10 +30,22 @@ public class Member {
     @NotEmpty
     private String address;
 
+    public Member(String loginId, String password, String name, String birth, Gender gender, String address) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.birth = birth;
+        this.gender = gender;
+        this.address = address;
+    }
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
+
+    public Member() {
+
+    }
 }

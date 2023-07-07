@@ -36,4 +36,9 @@ public class JpaMemberRepository implements MemberRepository {
     public Optional<Member> findByLoginId(String loginId) {
         return Optional.ofNullable(repository.findByLoginId(loginId));
     }
+
+    @Override
+    public void delete(Long id) {
+        repository.delete(repository.findById(id).get());
+    }
 }
