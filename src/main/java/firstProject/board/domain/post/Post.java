@@ -33,8 +33,8 @@ public class Post {
     private Long readCount; //조회수
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime localDateTime;
-
-
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<UploadFile> files;
     public Post() {
     }
 

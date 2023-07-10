@@ -40,26 +40,26 @@ public class PostController {
     private final FileRepository fileRepository;
 
     @GetMapping
-    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model){
+    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
         List<Post> posts = boardService.getPosts(postSearch);
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
 
     @GetMapping("/{id}")
-    public String post(@PathVariable long id, Model model){
+    public String post(@PathVariable long id, Model model) {
         Post post = postRepository.findById(id);
         postRepository.updateReadCount(id);
         UploadFile file = fileRepository.findByPostId(id);
-        log.info("file={}",file);
+        log.info("file={}", file);
         model.addAttribute("file", file);
         model.addAttribute("post", post);
-        model.addAttribute("commentDto",new CommentDto());
+        model.addAttribute("commentDto", new CommentDto());
         return "posts/post";
     }
 
     @GetMapping("/add")
-    public String addForm(Model model){
+    public String addForm(Model model) {
 
         model.addAttribute("postAddDto", new PostAddDto());
         return "posts/addForm";
@@ -77,7 +77,7 @@ public class PostController {
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
         //성공 로직
         if (!file.isEmpty()) {
-            fileService.saveFile(post,file);
+            fileService.saveFile(post, file);
         }
         log.info("loginMember name = {}", member.getName());
         Post savePost = boardService.savePost(post, member);
@@ -85,18 +85,18 @@ public class PostController {
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";
     }
+
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember)
-    {
+    public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
         Post post = postRepository.findById(id);
-        model.addAttribute("postUpdateDto" ,new PostUpdateDto(post.getPostName(), post.getContent()));
+        model.addAttribute("postUpdateDto", new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("post", post);
-        if(loginMember.getName().equals(post.getMember().getName())){
+        UploadFile file = post.getFiles().get(0);
+        model.addAttribute("file", file);
+        if (loginMember.getName().equals(post.getMember().getName())) {
             return "posts/editForm";
         }
-        UploadFile file = fileRepository.findByPostId(id);
-        model.addAttribute("file", file);
-        model.addAttribute("commentDto",new CommentDto());
+        model.addAttribute("commentDto", new CommentDto());
         model.addAttribute("status2", true);
         log.info("잘못된 요청입니다");
         return "/posts/post";
@@ -105,7 +105,7 @@ public class PostController {
 
 
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto,BindingResult bindingResult){
+    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "posts/editForm";
@@ -115,27 +115,28 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER , required = false) Member loginMember){
+    public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
         Post findPost = postRepository.findById(id);
-        if(loginMember.getName().equals(findPost.getMember().getName())){
+        if (loginMember.getName().equals(findPost.getMember().getName())) {
             boardService.deletePost(id);
             return "redirect:/posts";
         }
         return "redirect:/posts/{id}";
 
     }
+
     @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable Long id, @Validated @ModelAttribute CommentDto commentDto,BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member){
+    public String addComment(@PathVariable Long id, @Validated @ModelAttribute CommentDto commentDto, BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "redirect:/posts/{id}";
         }
-        boardService.saveComment(id,member,commentDto);
+        boardService.saveComment(id, member, commentDto);
         return "redirect:/posts/{id}";
     }
 
     @GetMapping("/comment/{commentId}/delete")
-    public String deleteComment(@PathVariable Long commentId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member,RedirectAttributes redirectAttributes ){
+    public String deleteComment(@PathVariable Long commentId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) {
         Long postId = boardService.deleteComment(commentId);
         redirectAttributes.addAttribute("id", postId);
         return "redirect:/posts/{id}";
@@ -149,12 +150,14 @@ public class PostController {
         UrlResource resource = new UrlResource("file:" + file.getFullPath());
         log.info("resource = {}", resource);
         String encodedUploadFileName = UriUtils.encode(uploadFileName, StandardCharsets.UTF_8);
-        String contentDisposition = "attachment; filename=\""+encodedUploadFileName+"\"";
+        String contentDisposition = "attachment; filename=\"" + encodedUploadFileName + "\"";
         log.info("contentDisposition :{}", contentDisposition);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(resource);
     }
+
+
 }
 
 

@@ -5,13 +5,11 @@ import firstProject.board.domain.member.MemberRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class JpaMemberRepository implements MemberRepository {
     private final EntityManager em;
     private final SpringDataJpaMemberRepository repository;

@@ -9,5 +9,7 @@ public interface FileService {
 
     void saveFile(Post post, MultipartFile file) throws IOException;
 
+    void deleteFile(Post post);
+
 
 }

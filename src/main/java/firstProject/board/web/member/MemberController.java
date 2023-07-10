@@ -45,8 +45,7 @@ public class MemberController {
             log.info("bindingResult={}", bindingResult);
             return "members/addMemberForm";
         }
-        Member member = new Member(memberAddDto.getLoginId(), memberAddDto.getPassword(), memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
-        memberRepository.save(member);
+        memberService.saveMember(memberAddDto);
         return "redirect:/";
     }
 
@@ -60,7 +59,7 @@ public class MemberController {
     @GetMapping("/{memberId}/delete")
     public String deleteMember(@PathVariable("memberId") Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, HttpServletRequest request) {
         if(memberService.equalMember(loginMember,id)) {
-            memberRepository.delete(id);
+            memberService.deleteMember(id);
             HttpSession session = request.getSession();
             if (session != null) {
                 session.invalidate();

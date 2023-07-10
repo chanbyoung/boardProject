@@ -3,13 +3,11 @@ package firstProject.board.domain.post.repository.impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.UploadFile;
 import firstProject.board.domain.post.repository.FileRepository;
 import firstProject.board.domain.post.repository.PostRepository;
 import firstProject.board.domain.post.repository.PostSearchCond;
 import firstProject.board.domain.post.repository.PostUpdateDto;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -20,7 +18,6 @@ import java.util.List;
 import static firstProject.board.domain.post.QPost.post;
 
 @Repository
-@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class JpaPostRepository implements PostRepository {
@@ -90,10 +87,6 @@ public class JpaPostRepository implements PostRepository {
     @Override
     public void delete(Long id) {
         Post post = em.find(Post.class, id);
-        UploadFile file = fileRepository.findByPostId(id);
-        if (file != null) {
-            fileRepository.delete(file);
-        }
         repository.delete(post);
 
     }
