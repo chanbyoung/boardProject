@@ -2,9 +2,9 @@ package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.repository.CommentDto;
-import firstProject.board.domain.post.repository.PostSearchCond;
-import firstProject.board.domain.post.repository.PostUpdateDto;
+import firstProject.board.repository.post.CommentDto;
+import firstProject.board.repository.post.PostSearchCond;
+import firstProject.board.repository.post.PostUpdateDto;
 
 import java.util.List;
 

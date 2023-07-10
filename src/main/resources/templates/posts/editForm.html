@@ -59,7 +59,7 @@
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='post.html'"
-                        th:onclick="|location.href='@{/posts/{id}(id=${file.id})}'|"
+                        th:onclick="|location.href='@{/posts/{id}(id=${post.id})}'|"
                         type="button" th:text="#{button.cancel.edit}">취소</button>
             </div>
         </div>

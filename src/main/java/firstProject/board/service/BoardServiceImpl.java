@@ -1,10 +1,10 @@
 package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.member.MemberRepository;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.repository.*;
+import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.post.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

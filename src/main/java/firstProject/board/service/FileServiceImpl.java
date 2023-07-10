@@ -1,6 +1,6 @@
 package firstProject.board.service;
 
-import firstProject.board.domain.post.repository.FileRepository;
+import firstProject.board.repository.post.FileRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import lombok.RequiredArgsConstructor;

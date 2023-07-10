@@ -1,6 +1,6 @@
-package firstProject.board.domain.member;
+package firstProject.board.repository.member;
 
-import jakarta.persistence.Column;
+import firstProject.board.domain.member.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;
@@ -17,7 +17,6 @@ public class MemberAddDto {
     @NotEmpty
     private String name; //사용자 이름
     @NotEmpty
-    @Column(length = 8)
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;

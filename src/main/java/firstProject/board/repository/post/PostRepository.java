@@ -1,6 +1,8 @@
-package firstProject.board.domain.post.repository;
+package firstProject.board.repository.post;
 
 import firstProject.board.domain.post.Post;
+import firstProject.board.repository.post.PostSearchCond;
+import firstProject.board.repository.post.PostUpdateDto;
 
 import java.util.List;
 

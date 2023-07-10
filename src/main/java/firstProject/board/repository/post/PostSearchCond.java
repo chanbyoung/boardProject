@@ -1,4 +1,4 @@
-package firstProject.board.domain.post.repository;
+package firstProject.board.repository.post;
 
 import lombok.Getter;
 import lombok.Setter;

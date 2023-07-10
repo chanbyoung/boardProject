@@ -1,7 +1,7 @@
 package firstProject.board;
 
-import firstProject.board.domain.member.MemberRepository;
-import firstProject.board.domain.post.repository.PostRepository;
+import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,12 +1,13 @@
-package firstProject.board.domain.post.repository.impl;
+package firstProject.board.repository.post.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.repository.FileRepository;
-import firstProject.board.domain.post.repository.PostRepository;
-import firstProject.board.domain.post.repository.PostSearchCond;
-import firstProject.board.domain.post.repository.PostUpdateDto;
+import firstProject.board.repository.post.FileRepository;
+import firstProject.board.repository.post.PostRepository;
+import firstProject.board.repository.post.PostSearchCond;
+import firstProject.board.repository.post.PostUpdateDto;
+import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

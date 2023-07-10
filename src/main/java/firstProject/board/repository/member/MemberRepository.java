@@ -1,4 +1,6 @@
-package firstProject.board.domain.member;
+package firstProject.board.repository.member;
+
+import firstProject.board.domain.member.Member;
 
 import java.util.List;
 import java.util.Optional;

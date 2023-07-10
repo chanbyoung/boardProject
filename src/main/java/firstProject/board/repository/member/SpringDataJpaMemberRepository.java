@@ -1,4 +1,4 @@
-package firstProject.board.domain.member.impl;
+package firstProject.board.repository.member;
 
 import firstProject.board.domain.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

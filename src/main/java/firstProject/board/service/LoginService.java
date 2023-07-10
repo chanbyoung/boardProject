@@ -1,7 +1,7 @@
 package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.member.MemberRepository;
+import firstProject.board.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

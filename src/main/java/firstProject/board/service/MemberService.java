@@ -1,8 +1,8 @@
 package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.member.MemberAddDto;
-import firstProject.board.domain.member.MemberRepository;
+import firstProject.board.repository.member.MemberAddDto;
+import firstProject.board.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

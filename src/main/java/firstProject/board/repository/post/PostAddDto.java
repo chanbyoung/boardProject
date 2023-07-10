@@ -1,4 +1,4 @@
-package firstProject.board.domain.post;
+package firstProject.board.repository.post;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

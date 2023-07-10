@@ -1,7 +1,8 @@
-package firstProject.board.domain.member.impl;
+package firstProject.board.repository.member.impl;
 
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.member.MemberRepository;
+import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.member.SpringDataJpaMemberRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

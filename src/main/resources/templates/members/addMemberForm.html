@@ -46,7 +46,7 @@
     </div>
     <div>
       <label for="birth">생년월일</label>
-      <input type="text" id="birth" th:field="*{birth}" class="formcontrol"
+      <input type="date" id="birth" th:field="*{birth}" class="formcontrol"
              th:errorclass="field-error">
       <div class="field-error" th:errors="*{birth}" />
     </div>

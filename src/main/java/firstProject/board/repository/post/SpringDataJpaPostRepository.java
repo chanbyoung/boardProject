@@ -1,4 +1,4 @@
-package firstProject.board.domain.post.repository.impl;
+package firstProject.board.repository.post;
 
 import firstProject.board.domain.post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;

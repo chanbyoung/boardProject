@@ -3,9 +3,8 @@ package firstProject.board.web.post;
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.PostAddDto;
 import firstProject.board.domain.post.UploadFile;
-import firstProject.board.domain.post.repository.*;
+import firstProject.board.repository.post.*;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -91,8 +90,7 @@ public class PostController {
         Post post = postRepository.findById(id);
         model.addAttribute("postUpdateDto", new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("post", post);
-        UploadFile file = post.getFiles().get(0);
-        model.addAttribute("file", file);
+        model.addAttribute("file", fileRepository.findByPostId(id));
         if (loginMember.getName().equals(post.getMember().getName())) {
             return "posts/editForm";
         }

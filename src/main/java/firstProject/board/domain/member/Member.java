@@ -23,7 +23,7 @@ public class Member {
     @NotEmpty
     private String name; //사용자 이름
     @NotEmpty
-    @Column(length = 8)
+    @Column
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
