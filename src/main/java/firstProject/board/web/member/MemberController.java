@@ -3,6 +3,8 @@ package firstProject.board.web.member;
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.post.Comment;
+import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.MemberAddDto;
 import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.service.MemberService;
@@ -15,6 +17,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +34,6 @@ public class MemberController {
         model.addAttribute("memberAddDto", new MemberAddDto());
         return "members/addMemberForm";
     }
-
     /**
      * enum
      */
@@ -53,6 +56,10 @@ public class MemberController {
     public String member(@PathVariable("memberId") Long id, Model model) {
         Member member = memberRepository.findById(id);
         model.addAttribute("member", member);
+        List<Post> posts = member.getPosts();
+        List<Comment> comments = member.getComments();
+        model.addAttribute("posts", posts);
+        model.addAttribute("comments", comments);
         return "members/member";
     }
 

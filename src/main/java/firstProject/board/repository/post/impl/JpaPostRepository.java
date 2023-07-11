@@ -47,20 +47,20 @@ public class JpaPostRepository implements PostRepository {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
         BooleanBuilder builder = new BooleanBuilder();
-        if(StringUtils.hasText(type)){
-            if(type.equals("name")){
-                if (StringUtils.hasText(searchContent)){
-                    builder.and(post.member.name.like("%"+searchContent+"%"));
+        if (StringUtils.hasText(type)) {
+            if (type.equals("name")) {
+                if (StringUtils.hasText(searchContent)) {
+                    builder.and(post.member.name.like("%" + searchContent + "%"));
                 }
             }
-            if(type.equals("postName")){
-                if (StringUtils.hasText(searchContent)){
-                    builder.and(post.postName.like("%"+searchContent+"%"));
+            if (type.equals("postName")) {
+                if (StringUtils.hasText(searchContent)) {
+                    builder.and(post.postName.like("%" + searchContent + "%"));
                 }
             }
-            if(type.equals("content")){
-                if (StringUtils.hasText(searchContent)){
-                    builder.and(post.content.like("%"+searchContent+"%"));
+            if (type.equals("content")) {
+                if (StringUtils.hasText(searchContent)) {
+                    builder.and(post.content.like("%" + searchContent + "%"));
                 }
             }
         }
@@ -77,12 +77,6 @@ public class JpaPostRepository implements PostRepository {
     public void update(Long id, PostUpdateDto updateParam) {
         Post post = em.find(Post.class, id);
         post.updatePost(updateParam.getPostName(), updateParam.getContent());
-    }
-
-    @Override
-    public void updateReadCount(Long id) {
-        Post post = em.find(Post.class, id);
-        post.UpdateReadCount(post.getReadCount()+1);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class PostController {
     @GetMapping("/{id}")
     public String post(@PathVariable long id, Model model) {
         Post post = postRepository.findById(id);
-        postRepository.updateReadCount(id);
+        boardService.updateReadCount(post,id);
         UploadFile file = fileRepository.findByPostId(id);
         log.info("file={}", file);
         model.addAttribute("file", file);

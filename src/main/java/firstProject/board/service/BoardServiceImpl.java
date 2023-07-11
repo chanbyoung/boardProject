@@ -58,5 +58,8 @@ public class BoardServiceImpl implements BoardService{
         return post.getId();
     }
 
-
+    @Override
+    public void updateReadCount(Post post, long id) {
+        post.updateReadCount();
+    }
 }

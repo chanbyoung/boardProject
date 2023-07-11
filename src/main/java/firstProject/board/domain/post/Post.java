@@ -55,7 +55,7 @@ public class Post {
         member.getPosts().add(this);
     }
 
-    public void UpdateReadCount(long l) {
-        this.readCount = l;
+    public void updateReadCount() {
+        this.readCount += 1L;
     }
 }

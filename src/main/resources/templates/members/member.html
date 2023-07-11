@@ -39,29 +39,41 @@
     </div>
     <div><button class="w-100 btn btn-secondary btn-lg"onclick="location.href='posts.html'"th:onclick="|location.href='@{/members/{memberId}/delete(memberId=${member.id})}'|"type="button">회원탈퇴</button></div>
 
-<!--    <table class="table">-->
-<!--      <thead>-->
-<!--      <tr>-->
-<!--        <th th:text="#{label.post.postNum}">번호</th>-->
-<!--        <th th:text="#{label.post.postName}">제목</th>-->
-<!--        <th th:text="#{label.post.commentCnt}">댓글 수</th>-->
-<!--        <th th:text="#{label.post.name}">작성자</th>-->
-<!--        <th th:text="#{label.post.readCount}">조회수</th>-->
-<!--        <th th:text="#{label.post.localDateTime}">작성일</th>-->
-<!--      </tr>-->
-<!--      </thead>-->
-<!--      <tbody>-->
-<!--      <tr th:each="post : ${posts}">-->
-<!--        <td th:text="${post.id}">글 번호</td>-->
-<!--        <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${post.id})}" th:text="${post.postName}">글 제목</a></td>-->
-<!--        <td th:text="${post.comments.size()}">댓글 수</td>-->
-<!--        <td th:text="${post.member.name}">작성자 id</td>-->
-<!--        <td th:text="${post.readCount}">조회수</td>-->
-<!--        <td th:text="${{post.localDateTime}}">작성일자</td>-->
-<!--      </tr>-->
-<!--      </tbody>-->
-<!--    </table>-->
-<!--  </div>-->
+    <table class="table">
+      <caption>내가 쓴 글</caption>
+      <thead>
+      <tr>
+        <th th:text="#{label.post.postNum}">번호</th>
+        <th th:text="#{label.post.postName}">제목</th>
+        <th th:text="#{label.post.readCount}">조회수</th>
+        <th th:text="#{label.post.localDateTime}">작성일</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="post : ${posts}">
+        <td th:text="${post.id}">글 번호</td>
+        <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${post.id})}" th:text="${post.postName}">글 제목</a></td>
+        <td th:text="${post.readCount}">조회수</td>
+        <td th:text="${{post.localDateTime}}">작성일자</td>
+      </tr>
+      </tbody>
+    </table>
+    <table class="table">
+      <caption>내가 쓴 댓글</caption>
+      <thead>
+      <tr>
+        <th th:text="#{label.post.postName}">글 제목</th>
+        <th th:text="#{label.comment.content}">댓글 내용</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="comment : ${comments}">
+        <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${comment.post.id})}" th:text="${comment.post.postName}">글 제목</a></td>
+        <td th:text="${comment.content}">댓글 내용</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
 
 </div>

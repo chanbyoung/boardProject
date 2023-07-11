@@ -24,4 +24,7 @@ public interface BoardService {
     void saveComment(Long id, Member member, CommentDto commentDto);
 
     Long deleteComment(Long commentId);
+
+    void updateReadCount(Post post, long id);
+
 }
