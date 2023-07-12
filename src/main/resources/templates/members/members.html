@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-$END$
+
+<div class="container" style="max-width: 600px">
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.members}">목록</h2>
+    </div>
+
+    <hr class="my-4">
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="#{label.member.name}">이름</th>
+                <th th:text="#{label.member.birth}">생년월일</th>
+                <th th:text="#{label.member.gender}">성별</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member : ${members}">
+                <td><a href="member.html" th:href="@{/members/{memberId}(memberId=${member.id})}" th:text="${member.name}">이름</a></td>
+                <td th:text="${member.birth}">생년월일</td>
+                <td th:text="${member.gender}">성별</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <button class="w-100 btn btn-secondary btn-lg"
+                onclick="location.href='posts.html'"
+                th:onclick="|location.href='@{/members/{memberId}(memberId=${id})}'|"
+                type="button" th:text="#{button.member.name}">취소</button>
+        <button class="w-100 btn btn-secondary btn-lg"
+                onclick="location.href='posts.html'"
+                th:onclick="|location.href='@{/}'|"
+                type="button" th:text="메인으로">취소</button>
+    </div>
+</div> <!-- /container -->
+
 </body>
 </html>

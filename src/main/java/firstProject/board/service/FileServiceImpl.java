@@ -1,8 +1,8 @@
 package firstProject.board.service;
 
-import firstProject.board.repository.post.FileRepository;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
+import firstProject.board.repository.post.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+
 @RequiredArgsConstructor
 @Slf4j
 @Repository
@@ -33,7 +34,10 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public void deleteFile(Post post) {
-        post.getFiles().remove(0);
+    public Long deleteFile(Long id) {
+        UploadFile file = fileRepository.findById(id).get();
+        Post post = file.getPost();
+        fileRepository.delete(file);
+        return post.getId();
     }
 }

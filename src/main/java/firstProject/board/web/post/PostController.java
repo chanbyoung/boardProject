@@ -155,6 +155,13 @@ public class PostController {
                 .body(resource);
     }
 
+    @GetMapping("/delete/{fileId}")
+    public String deleteFile(@PathVariable Long fileId, RedirectAttributes redirectAttributes) {
+        Long postId = fileService.deleteFile(fileId);
+        redirectAttributes.addAttribute("id", postId);
+        return "redirect:/posts/{id}";
+    }
+
 
 }
 

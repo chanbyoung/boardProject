@@ -15,6 +15,10 @@
   <div class="py-5 text-center">
     <h2 th:text="#{page.member}">회원</h2>
   </div>
+  <form th:action="@{'/members/{memberId}/find'(memberId=${member.id})}" method="get">
+   <input id="username" type="text" th:name="username" placeholder="검색할 이름을 입력하세요">
+   <input type="submit" value="제출하기">
+  </form>
   <hr class="my-4">
   <div>
     <div>

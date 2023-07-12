@@ -72,4 +72,15 @@ public class MemberController {
                 session.invalidate();
             }
         }return "redirect:/";}
+
+    @GetMapping("/{memberId}/find")
+    public String findMember(@PathVariable("memberId") Long id,@RequestParam("username") String username, Model model) {
+        log.info("username = {} ", username);
+        log.info("memberId = {} ", id);
+        List<Member> members = memberRepository.findByName(username);
+        log.info("members={} ", members);
+        model.addAttribute("members", members);
+        model.addAttribute("id", id);
+        return "members/members";
+    }
 }

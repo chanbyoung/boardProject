@@ -37,6 +37,14 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
+    public List<Member> findByName(String username) {
+        List<Member> members = em.createQuery("select m from Member m where name = :username", Member.class)
+                .setParameter("username", username)
+                .getResultList();
+        return members;
+    }
+
+    @Override
     public void delete(Long id) {
         repository.delete(repository.findById(id).get());
     }
