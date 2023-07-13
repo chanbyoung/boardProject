@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,6 +45,10 @@ public class MemberController {
 
     @PostMapping("/add")
     public String save(@Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult) {
+        Optional<Member> findLoginId = memberRepository.findByLoginId(memberAddDto.getLoginId());
+        if (!findLoginId.isEmpty()) {
+            bindingResult.reject("loginId", "아이디가 중복되었습니다");
+        }
         if (bindingResult.hasErrors()) {
             log.info("bindingResult={}", bindingResult);
             return "members/addMemberForm";

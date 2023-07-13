@@ -18,7 +18,9 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id; //데이터 베이스에 관리되는 id
+
     @NotEmpty
+    @Column(unique = true)
     private String loginId;
     @NotEmpty
     private String password;
