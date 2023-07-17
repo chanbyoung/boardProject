@@ -23,7 +23,7 @@
 
     </div>
 
-    <form action="post.html" th:action th:object="${postUpdateDto}" method="post">
+    <form action="post.html" th:action enctype="multipart/form-data" th:object="${postUpdateDto}" method="post">
 
 <!--        <div th:if="${#fields.hasGlobalErrors()}">-->
 <!--            <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>-->
@@ -35,6 +35,16 @@
             <div class="field-error" th:errors="*{postName}">
                 제목 오류
             </div>
+        </div>
+        <div>
+            <label for="files" th:text="'첨부파일:'">파일</label>
+            <a th:if = "${file}" id=files th:text="${file.uploadFileName}"/>
+            <input type="file" name ="file">.
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='post.html'"
+                    th:if = "${file}"
+                    th:onclick="|location.href='@{/posts/delete/{fileid}(fileid=${file.id})}'|"
+                    type="button" th:text="파일삭제"></button>
         </div>
         <div>
             <label for="content" th:text="#{label.post.content}">content</label>

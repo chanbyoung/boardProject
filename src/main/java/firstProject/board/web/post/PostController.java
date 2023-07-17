@@ -103,10 +103,20 @@ public class PostController {
 
 
     @PostMapping("/{id}/edit")
-    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto, BindingResult bindingResult) throws IOException {
+    public String edit(@PathVariable Long id, @Validated @ModelAttribute PostUpdateDto postUpdateDto, @RequestParam MultipartFile file, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "posts/editForm";
+        }
+        //파일 수정 로직
+        if (!file.isEmpty()) {
+            UploadFile findFile = fileRepository.findByPostId(id);
+            if (findFile == null) {
+                fileService.saveFile(postRepository.findById(id), file);
+            } else {
+                fileService.deleteFile(findFile.getId());
+                fileService.saveFile(postRepository.findById(id), file);
+            }
         }
         boardService.editPost(id, postUpdateDto);
         return "redirect:/posts/{id}";
