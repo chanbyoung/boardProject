@@ -37,6 +37,8 @@ public class FileServiceImpl implements FileService{
     public Long deleteFile(Long id) {
         UploadFile file = fileRepository.findById(id).get();
         Post post = file.getPost();
+        File f = new File(file.getFullPath());
+        f.delete();
         fileRepository.delete(file);
         return post.getId();
     }
