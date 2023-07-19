@@ -4,13 +4,18 @@ import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.MemberRepository;
-import firstProject.board.repository.post.*;
+import firstProject.board.repository.post.CommentRepository;
+import firstProject.board.repository.post.PostRepository;
+import firstProject.board.repository.post.impl.CommentDto;
+import firstProject.board.repository.post.impl.PostSearchCond;
+import firstProject.board.repository.post.impl.PostUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -21,9 +26,8 @@ public class BoardServiceImpl implements BoardService{
     private final MemberRepository memberRepository;
 
     @Override
-    public List<Post> getPosts(PostSearchCond cond) {
-        List<Post> posts = postRepository.findAll(cond);
-        return posts;
+    public Page<Post> getPosts(PostSearchCond cond, Pageable pageable) {
+       return postRepository.findAll(cond, pageable);
     }
 
 

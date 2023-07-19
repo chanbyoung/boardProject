@@ -4,13 +4,21 @@ import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
-import firstProject.board.repository.post.*;
+import firstProject.board.repository.post.FileRepository;
+import firstProject.board.repository.post.PostRepository;
+import firstProject.board.repository.post.impl.CommentDto;
+import firstProject.board.repository.post.impl.PostAddDto;
+import firstProject.board.repository.post.impl.PostSearchCond;
+import firstProject.board.repository.post.impl.PostUpdateDto;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +33,6 @@ import org.springframework.web.util.UriUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -39,9 +46,20 @@ public class PostController {
     private final FileRepository fileRepository;
 
     @GetMapping
-    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
-        List<Post> posts = boardService.getPosts(postSearch);
+    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model,@PageableDefault Pageable pageable) {
+        Page<Post> posts = boardService.getPosts(postSearch, pageable);
+        int nowPage = pageable.getPageNumber()+1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 9, posts.getTotalPages());
+
+
+        log.info("startPage = {}", startPage);
+        log.info("endPage = {} ",endPage);
+
         model.addAttribute("posts", posts);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "posts/posts";
     }
 

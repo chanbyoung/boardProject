@@ -3,14 +3,14 @@ package firstProject.board.repository.post.impl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import firstProject.board.domain.post.Post;
-import firstProject.board.repository.post.FileRepository;
 import firstProject.board.repository.post.PostRepository;
-import firstProject.board.repository.post.PostSearchCond;
-import firstProject.board.repository.post.PostUpdateDto;
 import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -25,7 +25,6 @@ public class JpaPostRepository implements PostRepository {
 
     private final EntityManager em;
     private final SpringDataJpaPostRepository repository;
-    private final FileRepository fileRepository;
     private final JPAQueryFactory query;
 
 
@@ -43,7 +42,7 @@ public class JpaPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findAll(PostSearchCond cond) {
+    public Page<Post> findAll(PostSearchCond cond, Pageable pageable) {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
         BooleanBuilder builder = new BooleanBuilder();
@@ -68,9 +67,17 @@ public class JpaPostRepository implements PostRepository {
                 .select(post)
                 .from(post)
                 .where(builder)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .orderBy(post.id.desc())
                 .fetch();
-        return result;
+
+        long count = query
+                .select(post.count())
+                .from(post)
+                .where(builder)
+                .fetchOne();
+        return new PageImpl<>(result, pageable, count);
     }
 
     @Override
