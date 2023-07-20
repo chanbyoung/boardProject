@@ -48,18 +48,9 @@ public class PostController {
     @GetMapping
     public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model,@PageableDefault Pageable pageable) {
         Page<Post> posts = boardService.getPosts(postSearch, pageable);
-        int nowPage = pageable.getPageNumber()+1;
-        int startPage = Math.max(nowPage - 4, 1);
-        int endPage = Math.min(nowPage + 9, posts.getTotalPages());
-
-
-        log.info("startPage = {}", startPage);
-        log.info("endPage = {} ",endPage);
-
+        PageInfo pageInfo = new PageInfo(pageable.getPageNumber(), posts.getTotalPages());
         model.addAttribute("posts", posts);
-        model.addAttribute("nowPage", nowPage);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
+        model.addAttribute("pageInfo", pageInfo);
         return "posts/posts";
     }
 

@@ -46,9 +46,9 @@
             </tr>
             </tbody>
         </table>
-        <th:block th:each="page:${#numbers.sequence(startPage,endPage)}">
-            <a th:if="${page != nowPage}" th:href="@{/posts(page=${page}-1)}" th:text ="${page}"></a>
-            <strong th:if="${page==nowPage}" th:text ="${page}" style="color:red"></strong>
+        <th:block th:each="page:${#numbers.sequence(pageInfo.getStartPage(),pageInfo.getEndPage())}">
+            <a th:if="${page != pageInfo.getNowPage()}" th:href="@{/posts(page=${page}-1)}" th:text ="${page}"></a>
+            <strong th:if="${page==pageInfo.getNowPage()}" th:text ="${page}" style="color:red"></strong>
         </th:block>
     </div>
     <div>
