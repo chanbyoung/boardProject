@@ -7,6 +7,7 @@ import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.impl.CommentDto;
+import firstProject.board.repository.post.impl.JpaCommentRepository;
 import firstProject.board.repository.post.impl.PostSearchCond;
 import firstProject.board.repository.post.impl.PostUpdateDto;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class BoardServiceImpl implements BoardService{
     private final PostRepository postRepository;
+    private final JpaCommentRepository jplCmtRepository;
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
 
@@ -50,7 +52,8 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void saveComment(Long id, Member member, CommentDto commentDto) {
         Post findPost = postRepository.findById(id);
-        Comment comment = new Comment(member, commentDto.getContent(), findPost);
+        Long cnt = commentRepository.countCommentByPostId(id);
+        Comment comment = new Comment(member, commentDto.getContent(), findPost, cnt);
         commentRepository.save(comment);
     }
 
@@ -58,7 +61,9 @@ public class BoardServiceImpl implements BoardService{
     public Long deleteComment( Long commentId) {
         Comment comment = commentRepository.findById(commentId).get();
         Post post = comment.getPost();
+        Long commentNum = comment.getCommentNum();
         commentRepository.delete(comment);
+        jplCmtRepository.updateCommentNum(post.getId(),commentNum);
         return post.getId();
     }
 

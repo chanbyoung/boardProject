@@ -13,6 +13,7 @@ public class PageInfo {
     public PageInfo(int nowPage,int totalPages) {
         this.nowPage = nowPage+1;
         this.startPage = Math.max(nowPage - 4, 1);
-        this.endPage = Math.min(nowPage + 9, totalPages);
+        int min= Math.min(nowPage + 9, totalPages);
+        this.endPage = (min>0) ? min : 1;
     }
 }

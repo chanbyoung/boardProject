@@ -17,6 +17,8 @@ public class Post {
     @Column(name = "post_id")
     private Long id; // 글 번호, 데이터 베이스에 관리되는 id
 
+    private Long postNum;
+
     @NotBlank
     private String postName; // 글 이름
 
@@ -56,6 +58,11 @@ public class Post {
     }
 
     public void updateReadCount() {
+
         this.readCount += 1L;
+    }
+
+    public void updatePostNum(Long cnt) {
+        this.postNum = cnt;
     }
 }

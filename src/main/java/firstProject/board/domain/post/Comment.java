@@ -14,6 +14,8 @@ public class Comment {
     @Column(name= "comment_id")
     private Long id;
 
+    private Long commentNum;
+
     @NotBlank
     private String content; // 댓글 내용
 
@@ -25,12 +27,17 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public Comment(Member member, String content, Post post) {
+    public Comment(Member member, String content, Post post, Long commentNum) {
         this.member = member;
         this.content = content;
         this.post = post;
+        this.commentNum = commentNum+1;
     }
 
     public Comment() {
+    }
+
+    public void updateCommentNum(Long cnt) {
+        this.commentNum = cnt;
     }
 }

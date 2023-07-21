@@ -30,6 +30,8 @@ public class JpaPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
+        Long cnt = repository.countPostBy();
+        post.updatePostNum(cnt+1);
         em.persist(post);
         return post;
     }
@@ -89,7 +91,13 @@ public class JpaPostRepository implements PostRepository {
     @Override
     public void delete(Long id) {
         Post post = em.find(Post.class, id);
+        Long postNum = post.getPostNum();
         repository.delete(post);
 
+        em.createQuery("update Post p" +
+                " set p.postNum = p.postNum-1" +
+                " where p.postNum> :postNum")
+                .setParameter("postNum", postNum)
+                .executeUpdate();
     }
 }
