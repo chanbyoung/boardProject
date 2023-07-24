@@ -94,6 +94,11 @@ public class PostController {
         return "redirect:/posts/{id}";
     }
 
+
+
+
+
+
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
         Post post = postRepository.findById(id);

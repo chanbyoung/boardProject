@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,13 +31,13 @@ public class Post {
     private String content;  // 글 내용
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     private Long readCount; //조회수
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime localDateTime;
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<UploadFile> files;
+    private List<UploadFile> files = new ArrayList<>();
     public Post() {
     }
 

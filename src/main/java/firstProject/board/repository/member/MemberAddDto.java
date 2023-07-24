@@ -22,4 +22,16 @@ public class MemberAddDto {
     private Gender gender;
     @NotEmpty
     private String address;
+
+    public MemberAddDto() {
+    }
+
+    public MemberAddDto(String loginId, String password, String name, String birth, Gender gender, String address) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.birth = birth;
+        this.gender = gender;
+        this.address = address;
+    }
 }
