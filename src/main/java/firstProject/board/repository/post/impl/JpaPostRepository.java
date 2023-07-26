@@ -2,7 +2,9 @@ package firstProject.board.repository.post.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import firstProject.board.domain.member.QMember;
 import firstProject.board.domain.post.Post;
+import firstProject.board.domain.post.QComment;
 import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import jakarta.persistence.EntityManager;
@@ -29,11 +31,11 @@ public class JpaPostRepository implements PostRepository {
 
 
     @Override
-    public Post save(Post post) {
+    public Long save(Post post) {
         Long cnt = repository.countPostBy();
         post.updatePostNum(cnt+1);
         em.persist(post);
-        return post;
+        return post.getId();
     }
 
 
@@ -68,10 +70,15 @@ public class JpaPostRepository implements PostRepository {
         List<Post> result = query
                 .select(post)
                 .from(post)
+                .leftJoin(post.member, QMember.member)
+                .fetchJoin()
+                .leftJoin(post.comments, QComment.comment)
+                .fetchJoin()
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(post.id.desc())
+                .distinct()
                 .fetch();
 
         long count = query

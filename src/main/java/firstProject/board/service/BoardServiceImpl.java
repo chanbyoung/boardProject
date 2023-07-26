@@ -34,10 +34,10 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public Post savePost(Post post,Member member) {
+    public Long savePost(Post post,Member member) {
         post.updateMember(memberRepository.findById(member.getId()));
-        Post savePost = postRepository.save(post);
-        return savePost;
+        Long postId = postRepository.save(post);
+        return postId;
     }
     @Override
     public void deletePost(Long id) {

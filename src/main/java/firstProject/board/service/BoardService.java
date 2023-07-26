@@ -14,7 +14,7 @@ public interface BoardService {
     Page<Post> getPosts(PostSearchCond postSearch, Pageable pageable);
 
     //게시글 저장
-    Post savePost(Post post, Member member);
+    Long savePost(Post post, Member member);
 
     //게시글 수정
     void editPost(Long id, PostUpdateDto editParam);

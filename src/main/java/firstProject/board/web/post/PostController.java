@@ -88,8 +88,8 @@ public class PostController {
             fileService.saveFile(post, file);
         }
         log.info("loginMember name = {}", member.getName());
-        Post savePost = boardService.savePost(post, member);
-        redirectAttributes.addAttribute("id", savePost.getId());
+        Long postId = boardService.savePost(post, member);
+        redirectAttributes.addAttribute("id", postId);
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";
     }

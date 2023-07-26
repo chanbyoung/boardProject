@@ -7,9 +7,18 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostAddDto {
+
+    private Long id;
     @NotBlank
     private String postName;
     @NotBlank
     private String content;
 
+    public PostAddDto() {
+    }
+
+    public PostAddDto updatePostID(Long id) {
+        this.id = id;
+        return this;
+    }
 }
