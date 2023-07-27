@@ -6,10 +6,7 @@ import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.PostRepository;
-import firstProject.board.repository.post.impl.CommentDto;
-import firstProject.board.repository.post.impl.JpaCommentRepository;
-import firstProject.board.repository.post.impl.PostSearchCond;
-import firstProject.board.repository.post.impl.PostUpdateDto;
+import firstProject.board.repository.post.impl.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,7 +25,7 @@ public class BoardServiceImpl implements BoardService{
     private final MemberRepository memberRepository;
 
     @Override
-    public Page<Post> getPosts(PostSearchCond cond, Pageable pageable) {
+    public Page<PostGetDto> getPosts(PostSearchCond cond, Pageable pageable) {
        return postRepository.findAll(cond, pageable);
     }
 

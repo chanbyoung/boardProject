@@ -6,10 +6,7 @@ import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import firstProject.board.repository.post.FileRepository;
 import firstProject.board.repository.post.PostRepository;
-import firstProject.board.repository.post.impl.CommentDto;
-import firstProject.board.repository.post.impl.PostAddDto;
-import firstProject.board.repository.post.impl.PostSearchCond;
-import firstProject.board.repository.post.impl.PostUpdateDto;
+import firstProject.board.repository.post.impl.*;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +44,7 @@ public class PostController {
 
     @GetMapping
     public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model,@PageableDefault Pageable pageable) {
-        Page<Post> posts = boardService.getPosts(postSearch, pageable);
+        Page<PostGetDto> posts = boardService.getPosts(postSearch, pageable);
         PageInfo pageInfo = new PageInfo(pageable.getPageNumber(), posts.getTotalPages());
         model.addAttribute("posts", posts);
         model.addAttribute("pageInfo", pageInfo);

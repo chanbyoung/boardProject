@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static firstProject.board.domain.post.QPost.post;
 
@@ -46,7 +47,7 @@ public class JpaPostRepository implements PostRepository {
     }
 
     @Override
-    public Page<Post> findAll(PostSearchCond cond, Pageable pageable) {
+    public Page<PostGetDto> findAll(PostSearchCond cond, Pageable pageable) {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
         BooleanBuilder builder = new BooleanBuilder();
@@ -67,19 +68,21 @@ public class JpaPostRepository implements PostRepository {
                 }
             }
         }
-        List<Post> result = query
+        List<Post> posts = query
                 .select(post)
                 .from(post)
                 .leftJoin(post.member, QMember.member)
                 .fetchJoin()
                 .leftJoin(post.comments, QComment.comment)
-                .fetchJoin()
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(post.id.desc())
                 .distinct()
                 .fetch();
+
+        List<PostGetDto> result = posts.stream().map(p -> new PostGetDto(p)).collect(Collectors.toList());
+
 
         long count = query
                 .select(post.count())

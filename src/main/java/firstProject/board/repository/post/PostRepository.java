@@ -1,6 +1,7 @@
 package firstProject.board.repository.post;
 
 import firstProject.board.domain.post.Post;
+import firstProject.board.repository.post.impl.PostGetDto;
 import firstProject.board.repository.post.impl.PostSearchCond;
 import firstProject.board.repository.post.impl.PostUpdateDto;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,7 @@ public interface PostRepository {
 
     Post findById(Long id);
 
-    Page<Post> findAll(PostSearchCond cond, Pageable pageable);
+    Page<PostGetDto> findAll(PostSearchCond cond, Pageable pageable);
 
     void update(Long id, PostUpdateDto updateParam);
 

@@ -39,7 +39,7 @@
             <tr th:each="post : ${posts}">
                 <td th:text="${post.postNum}">글 번호</td>
                 <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${post.id})}" th:text="${post.postName}">글 제목</a></td>
-                <td th:text="${post.comments.size()}">댓글 수</td>
+                <td th:text="${post.commentSize}">댓글 수</td>
                 <td><a th:href="@{/members/{memberId}(memberId=${post.member.id})}" th:text="${post.member.name}">작성자 이름</a></td>
                 <td th:text="${post.readCount}">조회수</td>
                 <td th:text="${{post.localDateTime}}">작성일자</td>
