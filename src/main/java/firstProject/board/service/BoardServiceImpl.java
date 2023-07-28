@@ -25,7 +25,13 @@ public class BoardServiceImpl implements BoardService{
     private final MemberRepository memberRepository;
 
     @Override
-    public Page<PostGetDto> getPosts(PostSearchCond cond, Pageable pageable) {
+    public PostGetDto getPost(Long id) {
+        return new PostGetDto(postRepository.findById(id));
+
+    }
+
+    @Override
+    public Page<PostsGetDto> getPosts(PostSearchCond cond, Pageable pageable) {
        return postRepository.findAll(cond, pageable);
     }
 
@@ -64,8 +70,5 @@ public class BoardServiceImpl implements BoardService{
         return post.getId();
     }
 
-    @Override
-    public void updateReadCount(Post post, long id) {
-        post.updateReadCount();
-    }
+
 }

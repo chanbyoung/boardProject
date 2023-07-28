@@ -42,12 +42,20 @@ public class JpaPostRepository implements PostRepository {
 
     @Override
     public Post findById(Long id) {
-        Post post = em.find(Post.class, id);
+        Post post = em.createQuery(
+                        "select p" +
+                                " from Post p" +
+                                " join fetch p.member m" +
+                                " where p.id = :postId", Post.class)
+                .setParameter("postId", id)
+                .getSingleResult();
+        post.updateReadCount();
         return post;
+
     }
 
     @Override
-    public Page<PostGetDto> findAll(PostSearchCond cond, Pageable pageable) {
+    public Page<PostsGetDto> findAll(PostSearchCond cond, Pageable pageable) {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
         BooleanBuilder builder = new BooleanBuilder();
@@ -81,7 +89,7 @@ public class JpaPostRepository implements PostRepository {
                 .distinct()
                 .fetch();
 
-        List<PostGetDto> result = posts.stream().map(p -> new PostGetDto(p)).collect(Collectors.toList());
+        List<PostsGetDto> result = posts.stream().map(p -> new PostsGetDto(p)).collect(Collectors.toList());
 
 
         long count = query

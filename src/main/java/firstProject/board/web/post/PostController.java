@@ -2,6 +2,7 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import firstProject.board.repository.post.FileRepository;
@@ -30,6 +31,7 @@ import org.springframework.web.util.UriUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -39,12 +41,13 @@ public class PostController {
 
     private final PostRepository postRepository;
     private final BoardService boardService;
+    private final JpaCommentRepository cmtRepository;
     private final FileService fileService;
     private final FileRepository fileRepository;
 
     @GetMapping
     public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model,@PageableDefault Pageable pageable) {
-        Page<PostGetDto> posts = boardService.getPosts(postSearch, pageable);
+        Page<PostsGetDto> posts = boardService.getPosts(postSearch, pageable);
         PageInfo pageInfo = new PageInfo(pageable.getPageNumber(), posts.getTotalPages());
         model.addAttribute("posts", posts);
         model.addAttribute("pageInfo", pageInfo);
@@ -53,12 +56,13 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String post(@PathVariable long id, Model model) {
-        Post post = postRepository.findById(id);
-        boardService.updateReadCount(post,id);
+        PostGetDto post = boardService.getPost(id);
+        List<Comment> comments = cmtRepository.findCommentByPostId(id);
         UploadFile file = fileRepository.findByPostId(id);
         log.info("file={}", file);
         model.addAttribute("file", file);
         model.addAttribute("post", post);
+        model.addAttribute("comments",comments);
         model.addAttribute("commentDto", new CommentDto());
         return "posts/post";
     }

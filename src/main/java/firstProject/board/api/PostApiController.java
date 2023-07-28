@@ -6,9 +6,9 @@ import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.MemberAddDto;
 import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import firstProject.board.repository.post.impl.PostAddDto;
-import firstProject.board.repository.post.impl.PostGetDto;
 import firstProject.board.repository.post.impl.PostSearchCond;
 import firstProject.board.repository.post.impl.PostUpdateDto;
+import firstProject.board.repository.post.impl.PostsGetDto;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +29,14 @@ public class PostApiController {
     private final MemberService memberService;
     @GetMapping("/posts")
     public Result postsApi(@PageableDefault Pageable pageable) {
-        Page<PostGetDto> posts = boardService.getPosts(new PostSearchCond(), pageable);
+        Page<PostsGetDto> posts = boardService.getPosts(new PostSearchCond(), pageable);
         return new Result(posts.getSize(), posts);
     }
 
     @GetMapping("/posts/{postId}")
-    public PostGetDto getPost(@PathVariable("postId") Long postId) {
+    public PostsGetDto getPost(@PathVariable("postId") Long postId) {
         Post post = postRepository.findById(postId).get();
-        return new PostGetDto(post);
+        return new PostsGetDto(post);
     }
 
     @PostMapping("/add")
@@ -49,7 +49,7 @@ public class PostApiController {
     }
 
     @PutMapping("/{id}/edit")
-    public PostGetDto edit(@PathVariable("id") Long id, @Validated @RequestBody PostUpdateDto postUpdateDto) {
+    public PostsGetDto edit(@PathVariable("id") Long id, @Validated @RequestBody PostUpdateDto postUpdateDto) {
         boardService.editPost(id, postUpdateDto);
         return getPost(id);
     }

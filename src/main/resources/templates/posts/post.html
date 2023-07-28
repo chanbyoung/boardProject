@@ -53,7 +53,7 @@
     </div>
     <div>
         <label for="name" th:text="#{label.post.name}">작성자 id</label>
-        <input type="text" id="name" name="name" class="form-control" value="10000" th:value="${post.member.name}" readonly>
+        <input type="text" id="name" name="name" class="form-control" value="10000" th:value="${post.memberName}" readonly>
     </div>
     <div>
         <label for="files" th:text="첨부파일">파일</label>
@@ -89,7 +89,7 @@
                 <th>내용</th>
                 <th>삭제</th>
             </tr>
-            <tr th:each="comment : ${post.comments}">
+            <tr th:each="comment : ${comments}">
                 <td th:text="${comment.commentNum}">댓글 번호</td>
                 <td th:text="${comment.member.name}">작성자 id</td>
                 <td th:text="${comment.content}">내용</td>
