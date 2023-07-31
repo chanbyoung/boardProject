@@ -2,7 +2,7 @@ package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
-import firstProject.board.repository.post.impl.*;
+import firstProject.board.repository.post.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

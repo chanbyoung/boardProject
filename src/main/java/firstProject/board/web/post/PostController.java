@@ -7,7 +7,8 @@ import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import firstProject.board.repository.post.FileRepository;
 import firstProject.board.repository.post.PostRepository;
-import firstProject.board.repository.post.impl.*;
+import firstProject.board.repository.post.dto.*;
+import firstProject.board.repository.post.impl.JpaCommentRepository;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class PostController {
     private final FileRepository fileRepository;
 
     @GetMapping
-    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model,@PageableDefault Pageable pageable) {
+    public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault Pageable pageable) {
         Page<PostsGetDto> posts = boardService.getPosts(postSearch, pageable);
         PageInfo pageInfo = new PageInfo(pageable.getPageNumber(), posts.getTotalPages());
         model.addAttribute("posts", posts);

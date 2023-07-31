@@ -1,9 +1,9 @@
 package firstProject.board.repository.post;
 
 import firstProject.board.domain.post.Post;
-import firstProject.board.repository.post.impl.PostsGetDto;
-import firstProject.board.repository.post.impl.PostSearchCond;
-import firstProject.board.repository.post.impl.PostUpdateDto;
+import firstProject.board.repository.post.dto.PostsGetDto;
+import firstProject.board.repository.post.dto.PostSearchCond;
+import firstProject.board.repository.post.dto.PostUpdateDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
