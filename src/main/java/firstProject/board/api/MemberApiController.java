@@ -1,6 +1,6 @@
 package firstProject.board.api;
 
-import firstProject.board.repository.member.MemberGetDto;
+import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -110,6 +110,8 @@ public class PostController {
         if (loginMember.getName().equals(post.getMember().getName())) {
             return "posts/editForm";
         }
+        PostGetDto getPost = boardService.getPost(id);
+        model.addAttribute("post", getPost);
         model.addAttribute("commentDto", new CommentDto());
         model.addAttribute("status2", true);
         log.info("잘못된 요청입니다");

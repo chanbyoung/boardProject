@@ -1,9 +1,10 @@
 package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
-import firstProject.board.repository.member.MemberAddDto;
-import firstProject.board.repository.member.MemberGetDto;
+import firstProject.board.repository.member.dto.MemberAddDto;
+import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.member.dto.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,9 @@ public class MemberService {
 
     public void deleteMember(Long id) {
         memberRepository.delete(id);
+    }
+
+    public void editMember(Long id, MemberUpdateDto memberUpdateDto) {
+        memberRepository.update(id, memberUpdateDto);
     }
 }

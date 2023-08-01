@@ -5,8 +5,9 @@ import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
-import firstProject.board.repository.member.MemberAddDto;
 import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.member.dto.MemberAddDto;
+import firstProject.board.repository.member.dto.MemberUpdateDto;
 import firstProject.board.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -87,5 +89,26 @@ public class MemberController {
         model.addAttribute("members", members);
         model.addAttribute("id", id);
         return "members/members";
+    }
+
+    @GetMapping("/{memberId}/update")
+    private String updateMember(@PathVariable("memberId") Long id, Model model,@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
+        Member member = memberRepository.findById(id);
+        model.addAttribute("member", member);
+        if (loginMember.getName().equals(member.getName())) {
+            return "members/editForm";
+        }
+        return "members/member";
+    }
+
+    @PostMapping("/{memberId}/update")
+    private String update(@PathVariable("memberId") Long id, @Validated @ModelAttribute("member") MemberUpdateDto memberUpdateDto,BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
+            return "members/editForm";
+        }
+        memberService.editMember(id, memberUpdateDto);
+        redirectAttributes.addAttribute("memberId", id);
+        return "redirect:/members/{memberId}";
     }
 }

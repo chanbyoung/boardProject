@@ -6,11 +6,19 @@ import lombok.Data;
 
 @Data
 public class CommentDto {
+
+    private Long postId;
+
+    private String postName;
+
     @NotBlank
     private String content;
 
     public CommentDto(Comment comment) {
+        this.postId = comment.getPost().getId();
+        this.postName = comment.getPost().getPostName();
         this.content = comment.getContent();
+
     }
 
     public CommentDto() {

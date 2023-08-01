@@ -2,8 +2,8 @@ package firstProject.board.domain.member;
 
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
+import firstProject.board.repository.member.dto.MemberUpdateDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -18,20 +18,13 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id; //데이터 베이스에 관리되는 id
-
-    @NotEmpty
     @Column(unique = true)
     private String loginId;
-    @NotEmpty
     private String password;
-    @NotEmpty
     private String name; //사용자 이름
-    @NotEmpty
-    @Column
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @NotEmpty
     private String address;
 
     public Member(String loginId, String password, String name, String birth, Gender gender, String address) {
@@ -51,5 +44,11 @@ public class Member {
 
     public Member() {
 
+    }
+
+    public void update(MemberUpdateDto memberUpdateDto) {
+        this.name = memberUpdateDto.getName();
+        this.birth = memberUpdateDto.getBirth();
+        this.address = memberUpdateDto.getAddress();
     }
 }

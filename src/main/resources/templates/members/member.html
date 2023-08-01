@@ -41,6 +41,7 @@
       <label for="address" th:text="#{label.member.address}">주소</label>
       <input type="text" id="address" name="address" class="form-control" value="10000" th:value="${member.address}" readonly>
     </div>
+    <div><button class="w-100 btn btn-secondary btn-lg"onclick="location.href='posts.html'"th:onclick="|location.href='@{/members/{memberId}/update(memberId=${member.id})}'|"type="button">회원수정</button></div>
     <div><button class="w-100 btn btn-secondary btn-lg"onclick="location.href='posts.html'"th:onclick="|location.href='@{/members/{memberId}/delete(memberId=${member.id})}'|"type="button">회원탈퇴</button></div>
 
     <table class="table">

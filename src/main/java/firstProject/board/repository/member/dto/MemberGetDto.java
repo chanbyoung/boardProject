@@ -1,4 +1,4 @@
-package firstProject.board.repository.member;
+package firstProject.board.repository.member.dto;
 
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;

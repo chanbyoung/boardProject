@@ -3,7 +3,7 @@ package firstProject.board.api;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
-import firstProject.board.repository.member.MemberAddDto;
+import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import firstProject.board.repository.post.dto.PostAddDto;
 import firstProject.board.repository.post.dto.PostSearchCond;
