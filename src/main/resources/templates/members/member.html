@@ -19,6 +19,7 @@
    <input id="username" type="text" th:name="username" placeholder="검색할 이름을 입력하세요">
    <input type="submit" value="제출하기">
   </form>
+  <h4 th:if="${status}" th:style="'color:red'" th:text="'글을 수정할 수 있는 권한이 없습니다.'"></h4>
   <hr class="my-4">
   <div>
     <div>

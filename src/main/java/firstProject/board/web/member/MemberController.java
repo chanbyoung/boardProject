@@ -98,6 +98,7 @@ public class MemberController {
         if (loginMember.getName().equals(member.getName())) {
             return "members/editForm";
         }
+        model.addAttribute("status", true);
         return "members/member";
     }
 

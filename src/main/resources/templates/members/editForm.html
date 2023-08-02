@@ -19,10 +19,8 @@
 <div class="container">
 
     <div class="py-5 text-center">
-        <h2 th:text="#{page.updateContent}">수정</h2>
-
+        <h2 th:text="#{page.member.edit}">수정</h2>
     </div>
-
     <form action="member.html" th:action  th:object="${member}" method="post">
         <div>
             <label for="loginId" th:text="#{label.member.loginId}">loginId</label>
