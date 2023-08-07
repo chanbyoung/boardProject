@@ -47,6 +47,14 @@ public class Post {
         this.localDateTime = LocalDateTime.now();
         this.readCount = 0L;
     }
+    //테스트용 id
+    public Post(Long id,String postName, String content) {
+        this.id = id;
+        this.postName = postName;
+        this.content = content;
+        this.localDateTime = LocalDateTime.now();
+        this.readCount = 0L;
+    }
 
     public void updatePost(String postName, String content) {
         this.postName = postName;

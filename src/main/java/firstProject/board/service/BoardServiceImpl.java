@@ -51,6 +51,7 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public void editPost(Long id, PostUpdateDto editParam) {
         postRepository.update(id,editParam);
+
     }
 
     @Override

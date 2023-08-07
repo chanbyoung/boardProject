@@ -22,6 +22,14 @@ public class PostGetDto {
         this.content = p.getContent();
     }
 
+    public PostGetDto(Long id, Long postNum, String memberName, String postName, String content) {
+        this.id = id;
+        this.postNum = postNum;
+        this.memberName = memberName;
+        this.postName = postName;
+        this.content = content;
+    }
+
     public PostGetDto() {
     }
 }
