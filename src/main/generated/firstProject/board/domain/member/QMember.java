@@ -20,15 +20,23 @@ public class QMember extends EntityPathBase<Member> {
 
     public static final QMember member = new QMember("member1");
 
+    public final firstProject.board.domain.QBaseEntity _super = new firstProject.board.domain.QBaseEntity(this);
+
     public final StringPath address = createString("address");
 
     public final StringPath birth = createString("birth");
 
     public final ListPath<firstProject.board.domain.post.Comment, firstProject.board.domain.post.QComment> comments = this.<firstProject.board.domain.post.Comment, firstProject.board.domain.post.QComment>createList("comments", firstProject.board.domain.post.Comment.class, firstProject.board.domain.post.QComment.class, PathInits.DIRECT2);
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
+
     public final EnumPath<Gender> gender = createEnum("gender", Gender.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final StringPath loginId = createString("loginId");
 

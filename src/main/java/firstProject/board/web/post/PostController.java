@@ -5,14 +5,15 @@ import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
+import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.FileRepository;
 import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.dto.*;
-import firstProject.board.repository.post.impl.JpaCommentRepository;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,6 @@ import org.springframework.web.util.UriUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Controller
 @Slf4j
@@ -42,7 +42,7 @@ public class PostController {
 
     private final PostRepository postRepository;
     private final BoardService boardService;
-    private final JpaCommentRepository cmtRepository;
+    private final CommentRepository commentRepository;
     private final FileService fileService;
     private final FileRepository fileRepository;
 
@@ -56,14 +56,15 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public String post(@PathVariable long id, Model model) {
+    public String post(@PathVariable long id, Model model, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable) {
         PostGetDto post = boardService.getPost(id);
-        List<Comment> comments = cmtRepository.findCommentByPostId(id);
+        Page<Comment> comments = commentRepository.findCommentByPostId(id, commentsPageable);
         UploadFile file = fileRepository.findByPostId(id);
         log.info("file={}", file);
         model.addAttribute("file", file);
         model.addAttribute("post", post);
         model.addAttribute("comments",comments);
+        model.addAttribute("commentsPageable", commentsPageable);
         model.addAttribute("commentDto", new CommentDto());
         return "posts/post";
     }

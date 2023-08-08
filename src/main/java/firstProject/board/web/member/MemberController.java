@@ -3,16 +3,20 @@ package firstProject.board.web.member;
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.post.Comment;
-import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
+import firstProject.board.repository.post.dto.CommentDto;
+import firstProject.board.repository.post.dto.PostsGetDto;
 import firstProject.board.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,11 +64,14 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public String member(@PathVariable("memberId") Long id, Model model) {
+    public String member(@PathVariable("memberId") Long id, @Qualifier("post") @PageableDefault(size = 5) Pageable postsPageable, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable,Model model) {
         Member member = memberRepository.findById(id);
         model.addAttribute("member", member);
-        List<Post> posts = member.getPosts();
-        List<Comment> comments = member.getComments();
+        Page<PostsGetDto> posts = memberService.findPosts(id, postsPageable);
+        Page<CommentDto> comments = memberService.findComments(id, commentsPageable);
+        log.info("getTotalPages = {}" , posts.getTotalPages());
+        model.addAttribute("postsPageable", postsPageable);
+        model.addAttribute("commentsPageable", commentsPageable);
         model.addAttribute("posts", posts);
         model.addAttribute("comments", comments);
         return "members/member";

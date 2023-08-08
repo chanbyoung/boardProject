@@ -97,6 +97,10 @@
                     th:onclick="|location.href='@{/posts/comment/{commentId}/delete(commentId=${comment.id})}'|"
                     type="submit">삭제</button></td>
             </tr>
+            <th:block th:each="page:${#numbers.sequence(0,(comments.getTotalPages()-1 ge 0 ? comments.getTotalPages()-1 : 0))}">
+                <a th:if="${page != commentsPageable.getPageNumber()}" th:href="@{/posts/{postId}(postId=${post.id},comment_page=${page})}" th:text ="${page}+1"></a>
+                <strong th:if="${page==commentsPageable.getPageNumber()}" th:text ="${page}+1" style="color:red"></strong>
+            </th:block>
         </table>
     </div>
 

@@ -7,4 +7,5 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
     Member findByLoginId(String loginId);
 
 
+
 }

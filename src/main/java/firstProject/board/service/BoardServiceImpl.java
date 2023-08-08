@@ -55,6 +55,15 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    public Page<CommentGetDto> getComment(Long postId, Pageable pageable) {
+        Page<Comment> comments = commentRepository.findCommentByPostId(postId, pageable);
+        Page<CommentGetDto> reComments = comments.map(c -> new CommentGetDto(c));
+        return reComments;
+
+
+    }
+
+    @Override
     public void saveComment(Long id, Member member, CommentDto commentDto) {
         Post findPost = postRepository.findById(id);
         Long cnt = commentRepository.countCommentByPostId(id);

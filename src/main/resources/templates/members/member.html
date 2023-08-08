@@ -57,11 +57,15 @@
       </thead>
       <tbody>
       <tr th:each="post : ${posts}">
-        <td th:text="${post.id}">글 번호</td>
+        <td th:text="${post.postNum}">글 번호</td>
         <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${post.id})}" th:text="${post.postName}">글 제목</a></td>
         <td th:text="${post.readCount}">조회수</td>
         <td th:text="${{post.localDateTime}}">작성일자</td>
       </tr>
+      <th:block th:each="page:${#numbers.sequence(0,(posts.getTotalPages()-1 ge 0 ? posts.getTotalPages()-1 : 0))}">
+        <a th:if="${page != postsPageable.getPageNumber()}" th:href="@{/members/{memberId}(memberId=${member.id},post_page=${page})}" th:text ="${page}+1"></a>
+        <strong th:if="${page==postsPageable.getPageNumber()}" th:text ="${page}+1" style="color:red"></strong>
+      </th:block>
       </tbody>
     </table>
     <table class="table">
@@ -74,9 +78,13 @@
       </thead>
       <tbody>
       <tr th:each="comment : ${comments}">
-        <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${comment.post.id})}" th:text="${comment.post.postName}">글 제목</a></td>
+        <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${comment.postId})}" th:text="${comment.postName}">글 제목</a></td>
         <td th:text="${comment.content}">댓글 내용</td>
       </tr>
+      <th:block th:each="page:${#numbers.sequence(0,(comments.getTotalPages()-1 ge 0 ? comments.getTotalPages()-1 : 0))}">
+        <a th:if="${page != commentsPageable.getPageNumber()}" th:href="@{/members/{memberId}(memberId=${member.id},comment_page=${page})}" th:text ="${page}+1"></a>
+        <strong th:if="${page==commentsPageable.getPageNumber()}" th:text ="${page}+1" style="color:red"></strong>
+      </th:block>
       </tbody>
     </table>
   </div>

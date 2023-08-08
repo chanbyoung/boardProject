@@ -20,6 +20,8 @@ public interface BoardService {
 
     void deletePost(Long id);
 
+    Page<CommentGetDto> getComment(Long postId, Pageable pageable);
+
     void saveComment(Long id, Member member, CommentDto commentDto);
 
     Long deleteComment(Long commentId);

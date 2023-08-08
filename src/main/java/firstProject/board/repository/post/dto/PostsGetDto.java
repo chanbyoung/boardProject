@@ -35,7 +35,7 @@ public class PostsGetDto {
         this.postName = post.getPostName();
         this.commentSize = post.getComments().size();
         this.member = post.getMember();
-        this.localDateTime = post.getLocalDateTime();
+        this.localDateTime = post.getCreateDate();
         this.readCount = post.getReadCount();
     }
 }

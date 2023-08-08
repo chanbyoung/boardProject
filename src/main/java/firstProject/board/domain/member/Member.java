@@ -1,5 +1,6 @@
 package firstProject.board.domain.member;
 
+import firstProject.board.domain.BaseEntity;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Entity
 @ToString
-public class Member {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")

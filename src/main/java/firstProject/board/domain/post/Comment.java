@@ -1,5 +1,6 @@
 package firstProject.board.domain.post;
 
+import firstProject.board.domain.BaseEntity;
 import firstProject.board.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +10,7 @@ import lombok.ToString;
 @Data
 @Entity
 @ToString(exclude = {"post", "member"})
-public class Comment {
+public class Comment extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "comment_id")
     private Long id;

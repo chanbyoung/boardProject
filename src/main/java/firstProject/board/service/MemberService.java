@@ -1,12 +1,20 @@
 package firstProject.board.service;
 
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.post.Comment;
+import firstProject.board.domain.post.Post;
+import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.member.dto.MemberGetDto;
-import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
+import firstProject.board.repository.post.CommentRepository;
+import firstProject.board.repository.post.SpringDataJpaPostRepository;
+import firstProject.board.repository.post.dto.CommentDto;
+import firstProject.board.repository.post.dto.PostsGetDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +27,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
-
+    private final SpringDataJpaPostRepository jpaPostRepository;
+    private final CommentRepository jpaCommentRepository;
     public MemberGetDto getMember(Long id) {
         Member member = memberRepository.findById(id);
         MemberGetDto memberGetDto = new MemberGetDto(member);
@@ -49,5 +58,17 @@ public class MemberService {
 
     public void editMember(Long id, MemberUpdateDto memberUpdateDto) {
         memberRepository.update(id, memberUpdateDto);
+    }
+
+    public Page<PostsGetDto> findPosts(Long id, Pageable pageRequest) {
+        Page<Post> posts = jpaPostRepository.findPostByMemberId(id, pageRequest);
+        Page<PostsGetDto> rePosts = posts.map(p -> new PostsGetDto(p));
+        return rePosts;
+    }
+
+    public Page<CommentDto> findComments(Long id, Pageable postsPageable) {
+        Page<Comment> comments = jpaCommentRepository.findCommentByMemberId(id, postsPageable);
+        Page<CommentDto> reComments = comments.map(c -> new CommentDto(c));
+        return reComments;
     }
 }

@@ -1,18 +1,17 @@
 package firstProject.board.domain.post;
 
+import firstProject.board.domain.BaseEntity;
 import firstProject.board.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Entity
-public class Post {
+public class Post extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -34,8 +33,7 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     private Long readCount; //조회수
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime localDateTime;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<UploadFile> files = new ArrayList<>();
     public Post() {
@@ -44,7 +42,6 @@ public class Post {
     public Post(String postName, String content) {
         this.postName = postName;
         this.content = content;
-        this.localDateTime = LocalDateTime.now();
         this.readCount = 0L;
     }
     //테스트용 id
@@ -52,7 +49,6 @@ public class Post {
         this.id = id;
         this.postName = postName;
         this.content = content;
-        this.localDateTime = LocalDateTime.now();
         this.readCount = 0L;
     }
 
