@@ -5,6 +5,7 @@ import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
+import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
 import firstProject.board.repository.post.dto.CommentDto;
 import firstProject.board.repository.post.dto.PostsGetDto;
@@ -52,6 +53,7 @@ public class MemberController {
     @PostMapping("/add")
     public String save(@Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult) {
         Optional<Member> findLoginId = memberRepository.findByLoginId(memberAddDto.getLoginId());
+        log.info("Address= {} ", memberAddDto.getAddress());
         if (!findLoginId.isEmpty()) {
             bindingResult.reject("loginId", "아이디가 중복되었습니다");
         }
@@ -100,7 +102,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}/update")
     private String updateMember(@PathVariable("memberId") Long id, Model model,@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
-        Member member = memberRepository.findById(id);
+        MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
         if (loginMember.getName().equals(member.getName())) {
             return "members/editForm";

@@ -26,9 +26,10 @@ public class Member extends BaseEntity {
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    private String address;
+    @Embedded
+    private Address address;
 
-    public Member(String loginId, String password, String name, String birth, Gender gender, String address) {
+    public Member(String loginId, String password, String name, String birth, Gender gender, Address address) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;

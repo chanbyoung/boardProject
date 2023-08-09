@@ -1,8 +1,10 @@
 package firstProject.board.repository.member.dto;
 
+import firstProject.board.domain.member.Address;
 import firstProject.board.domain.member.Gender;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,13 +22,13 @@ public class MemberAddDto {
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @NotEmpty
-    private String address;
+    @Valid
+    private Address address;
 
     public MemberAddDto() {
     }
 
-    public MemberAddDto(String loginId, String password, String name, String birth, Gender gender, String address) {
+    public MemberAddDto(String loginId, String password, String name, String birth, Gender gender, Address address) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;

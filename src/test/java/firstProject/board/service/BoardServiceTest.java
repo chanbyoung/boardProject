@@ -39,7 +39,7 @@ class BoardServiceTest {
         //given
         Long postId = 1L;
         Post mockPost = new Post(postId, "Post", "content");
-        mockPost.updateMember(new Member("123","123","pcb","20000728", Gender.MALE,"seoul"));
+//        mockPost.updateMember(new Member("123","123","pcb","20000728", Gender.MALE,"seoul"));
         when(postRepository.findById(postId)).thenReturn(mockPost);
 
         //when

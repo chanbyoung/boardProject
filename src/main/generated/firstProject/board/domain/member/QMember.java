@@ -18,11 +18,13 @@ public class QMember extends EntityPathBase<Member> {
 
     private static final long serialVersionUID = 1635026353L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QMember member = new QMember("member1");
 
     public final firstProject.board.domain.QBaseEntity _super = new firstProject.board.domain.QBaseEntity(this);
 
-    public final StringPath address = createString("address");
+    public final QAddress address;
 
     public final StringPath birth = createString("birth");
 
@@ -47,15 +49,24 @@ public class QMember extends EntityPathBase<Member> {
     public final ListPath<firstProject.board.domain.post.Post, firstProject.board.domain.post.QPost> posts = this.<firstProject.board.domain.post.Post, firstProject.board.domain.post.QPost>createList("posts", firstProject.board.domain.post.Post.class, firstProject.board.domain.post.QPost.class, PathInits.DIRECT2);
 
     public QMember(String variable) {
-        super(Member.class, forVariable(variable));
+        this(Member.class, forVariable(variable), INITS);
     }
 
     public QMember(Path<? extends Member> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QMember(PathMetadata metadata) {
-        super(Member.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QMember(PathMetadata metadata, PathInits inits) {
+        this(Member.class, metadata, inits);
+    }
+
+    public QMember(Class<? extends Member> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.address = inits.isInitialized("address") ? new QAddress(forProperty("address")) : null;
     }
 
 }

@@ -1,6 +1,8 @@
 package firstProject.board.repository.member.dto;
 
+import firstProject.board.domain.member.Address;
 import firstProject.board.domain.member.Member;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +16,8 @@ public class MemberUpdateDto {
     private String name;
     @NotEmpty
     private String birth;
-    @NotEmpty
-    private String address;
+    @Valid
+    private Address address;
 
     public MemberUpdateDto() {
     }

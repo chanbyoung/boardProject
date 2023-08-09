@@ -1,5 +1,6 @@
 package firstProject.board.api;
 
+import firstProject.board.domain.member.Address;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
@@ -42,7 +43,7 @@ public class PostApiController {
     @PostMapping("/add")
     public PostAddDto addPost(@Validated @RequestBody PostAddDto postAddDto) {
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
-        MemberAddDto member = new MemberAddDto(UUID.randomUUID().toString(), "test!", "테스트사용자", "00000000", Gender.MALE, "서울");
+        MemberAddDto member = new MemberAddDto(UUID.randomUUID().toString(), "test!", "테스트사용자", "00000000", Gender.MALE, new Address("123","123","123","123"));
         Member testMember = memberService.saveMember(member);
         Long postId = boardService.savePost(post, testMember);
         return postAddDto.updatePostID(postId);

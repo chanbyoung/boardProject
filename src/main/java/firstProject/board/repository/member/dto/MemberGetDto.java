@@ -1,5 +1,6 @@
 package firstProject.board.repository.member.dto;
 
+import firstProject.board.domain.member.Address;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.repository.post.dto.CommentDto;
@@ -18,7 +19,7 @@ public class MemberGetDto {
     private String name;
     private String birth;
     private Gender gender;
-    private String address;
+    private Address address;
     private List<PostGetDto> posts;
     private List<CommentDto> comments;
 
