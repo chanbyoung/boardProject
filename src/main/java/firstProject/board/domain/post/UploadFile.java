@@ -1,12 +1,12 @@
 package firstProject.board.domain.post;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.UUID;
 
 @Entity
-@Data
+@Getter
 public class UploadFile{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")
@@ -24,6 +24,11 @@ public class UploadFile{
     }
 
     public UploadFile() {
+    }
+
+    public void updatePostAndFullPath(Post post, String fullPath) {
+        this.post = post;
+        this.fullPath = fullPath;
     }
 
     private String createStoreFileName(String originalFilename) {

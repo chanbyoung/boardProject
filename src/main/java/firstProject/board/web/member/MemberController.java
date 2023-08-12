@@ -25,7 +25,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -67,7 +66,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}")
     public String member(@PathVariable("memberId") Long id, @Qualifier("post") @PageableDefault(size = 5) Pageable postsPageable, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable,Model model) {
-        Member member = memberRepository.findById(id);
+        MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
         Page<PostsGetDto> posts = memberService.findPosts(id, postsPageable);
         Page<CommentDto> comments = memberService.findComments(id, commentsPageable);
@@ -90,12 +89,14 @@ public class MemberController {
         }return "redirect:/";}
 
     @GetMapping("/{memberId}/find")
-    public String findMember(@PathVariable("memberId") Long id,@RequestParam("username") String username, Model model) {
+    public String findMember(@PathVariable("memberId") Long id,@PageableDefault(size = 5) Pageable pageable,@RequestParam("username") String username, Model model) {
         log.info("username = {} ", username);
         log.info("memberId = {} ", id);
-        List<Member> members = memberRepository.findByName(username);
+        Page<MemberGetDto> members = memberService.getMemberName(username, pageable);
         log.info("members={} ", members);
         model.addAttribute("members", members);
+        model.addAttribute("username",username);
+        model.addAttribute("pageable", pageable);
         model.addAttribute("id", id);
         return "members/members";
     }

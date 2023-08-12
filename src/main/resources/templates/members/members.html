@@ -31,6 +31,10 @@
             </tr>
             </tbody>
         </table>
+        <th:block th:each="page:${#numbers.sequence(0,(members.getTotalPages()-1 ge 0 ? members.getTotalPages()-1 : 0))}">
+            <a th:if="${page != pageable.getPageNumber()}" th:href="@{/members/{memberId}/find(memberId=${id},username=${username},page=${page})}" th:text ="${page}+1"></a>
+            <strong th:if="${page== pageable.getPageNumber()}" th:text ="${page}+1" style="color:red"></strong>
+        </th:block>
     </div>
     <div>
         <button class="w-100 btn btn-secondary btn-lg"

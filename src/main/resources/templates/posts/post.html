@@ -91,7 +91,7 @@
             </tr>
             <tr th:each="comment : ${comments}">
                 <td th:text="${comment.commentNum}">댓글 번호</td>
-                <td th:text="${comment.member.name}">작성자 id</td>
+                <td th:text="${comment.memberName}">작성자 id</td>
                 <td th:text="${comment.content}">내용</td>
                 <td><button class="w-100 btn btn-secondary btn-lg"
                     th:onclick="|location.href='@{/posts/comment/{commentId}/delete(commentId=${comment.id})}'|"

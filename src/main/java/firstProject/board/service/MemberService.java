@@ -4,6 +4,7 @@ import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.member.SpringDataJpaMemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final SpringDataJpaMemberRepository jpaMemberRepository;
     private final SpringDataJpaPostRepository jpaPostRepository;
     private final CommentRepository jpaCommentRepository;
     public MemberGetDto getMember(Long id) {
@@ -39,6 +41,12 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         List<MemberGetDto> result = members.stream().map(m -> new MemberGetDto(m)).collect(Collectors.toList());
         return result;
+    }
+
+    public Page<MemberGetDto> getMemberName(String name, Pageable pageable) {
+        Page<Member> members = jpaMemberRepository.findMemberByMemberName(name, pageable);
+        Page<MemberGetDto> reMembers = members.map(m -> new MemberGetDto(m));
+        return reMembers;
     }
     public boolean equalMember(Member loginMember, Long id) {
         Member member = memberRepository.findById(loginMember.getId());

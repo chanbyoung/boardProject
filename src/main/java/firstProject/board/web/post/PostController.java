@@ -2,10 +2,8 @@ package firstProject.board.web.post;
 
 import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Member;
-import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
-import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.FileRepository;
 import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.dto.*;
@@ -42,7 +40,6 @@ public class PostController {
 
     private final PostRepository postRepository;
     private final BoardService boardService;
-    private final CommentRepository commentRepository;
     private final FileService fileService;
     private final FileRepository fileRepository;
 
@@ -58,8 +55,8 @@ public class PostController {
     @GetMapping("/{id}")
     public String post(@PathVariable long id, Model model, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable) {
         PostGetDto post = boardService.getPost(id);
-        Page<Comment> comments = commentRepository.findCommentByPostId(id, commentsPageable);
-        UploadFile file = fileRepository.findByPostId(id);
+        Page<CommentGetDto> comments = boardService.getComment(id, commentsPageable);
+        FileGetDto file = fileService.getFile(id);
         log.info("file={}", file);
         model.addAttribute("file", file);
         model.addAttribute("post", post);
@@ -103,20 +100,17 @@ public class PostController {
 
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
-        Post post = postRepository.findById(id);
+    public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, RedirectAttributes redirectAttributes) {
+        PostGetDto post = boardService.getPost(id);
         model.addAttribute("postUpdateDto", new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("post", post);
-        model.addAttribute("file", fileRepository.findByPostId(id));
-        if (loginMember.getName().equals(post.getMember().getName())) {
+        model.addAttribute("file", fileService.getFile(id));
+        if (loginMember.getName().equals(post.getMemberName())) {
             return "posts/editForm";
         }
-        PostGetDto getPost = boardService.getPost(id);
-        model.addAttribute("post", getPost);
-        model.addAttribute("commentDto", new CommentDto());
-        model.addAttribute("status2", true);
+        redirectAttributes.addFlashAttribute("status2", Boolean.TRUE);
         log.info("잘못된 요청입니다");
-        return "/posts/post";
+        return "redirect:/posts/{id}";
 
     }
 
