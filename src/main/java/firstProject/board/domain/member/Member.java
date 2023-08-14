@@ -29,7 +29,18 @@ public class Member extends BaseEntity {
     @Embedded
     private Address address;
 
+
+
     public Member(String loginId, String password, String name, String birth, Gender gender, Address address) {
+        this.loginId = loginId;
+        this.password = password;
+        this.name = name;
+        this.birth = birth;
+        this.gender = gender;
+        this.address = address;
+    }
+    public Member(Long id, String loginId, String password, String name, String birth, Gender gender, Address address) {
+        this.id = id;
         this.loginId = loginId;
         this.password = password;
         this.name = name;
