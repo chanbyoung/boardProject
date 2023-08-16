@@ -110,11 +110,4 @@ class MemberServiceTest {
     void editMember() {
     }
 
-    @Test
-    void findPosts() {
-    }
-
-    @Test
-    void findComments() {
-    }
 }

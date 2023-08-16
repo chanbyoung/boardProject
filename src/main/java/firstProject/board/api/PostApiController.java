@@ -32,12 +32,12 @@ public class PostApiController {
     }
 
     @GetMapping("/posts/{postId}")
-    public PostGetDto getPost(@PathVariable("postId") Long postId) {
+    public PostGetDto getPostApi(@PathVariable("postId") Long postId) {
         return boardService.getPost(postId);
     }
 
     @PostMapping("/add")
-    public PostAddDto addPost(@Validated @RequestBody PostAddDto postAddDto) {
+    public PostAddDto addPostApi(@Validated @RequestBody PostAddDto postAddDto) {
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
         MemberAddDto member = new MemberAddDto(UUID.randomUUID().toString(), "test!", "테스트사용자", "00000000", Gender.MALE, new Address("123","123","123","123"));
         Member testMember = memberService.saveMember(member);
@@ -46,9 +46,21 @@ public class PostApiController {
     }
 
     @PutMapping("/{id}/edit")
-    public PostGetDto edit(@PathVariable("id") Long id, @Validated @RequestBody PostUpdateDto postUpdateDto) {
+    public PostGetDto editApi(@PathVariable("id") Long id, @Validated @RequestBody PostUpdateDto postUpdateDto) {
         boardService.editPost(id, postUpdateDto);
-        return getPost(id);
+        return getPostApi(id);
     }
+
+    @PostMapping("/{id}/delete")
+    public String deleteApi(@PathVariable Long id) {
+        boardService.deletePost(id);
+        return "ok";
+    }
+
+//    @PostMapping("/{id}/comment")
+//    public String addCommentApi(@PathVariable Long id, @Validated @RequestBody CommentDto commentDto) {
+//        boardService.saveComment(id,new Member(100L,UUID.randomUUID().toString(), "test!", "테스트사용자", "00000000", Gender.MALE, new Address("123","123","123","123")), commentDto);
+//        return "redirect:/api/posts/{id}";
+//    }
 
 }

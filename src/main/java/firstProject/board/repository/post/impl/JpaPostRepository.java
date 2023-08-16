@@ -4,7 +4,6 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import firstProject.board.domain.member.QMember;
 import firstProject.board.domain.post.Post;
-import firstProject.board.domain.post.QComment;
 import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import firstProject.board.repository.post.dto.PostSearchCond;
@@ -65,17 +64,17 @@ public class JpaPostRepository implements PostRepository {
         if (StringUtils.hasText(type)) {
             if (type.equals("name")) {
                 if (StringUtils.hasText(searchContent)) {
-                    builder.and(post.member.name.like("%" + searchContent + "%"));
+                    builder.and(post.member.name.contains(searchContent));
                 }
             }
             if (type.equals("postName")) {
                 if (StringUtils.hasText(searchContent)) {
-                    builder.and(post.postName.like("%" + searchContent + "%"));
+                    builder.and(post.postName.contains(searchContent));
                 }
             }
             if (type.equals("content")) {
                 if (StringUtils.hasText(searchContent)) {
-                    builder.and(post.content.like("%" + searchContent + "%"));
+                    builder.and(post.content.contains(searchContent));
                 }
             }
         }
@@ -84,7 +83,6 @@ public class JpaPostRepository implements PostRepository {
                 .from(post)
                 .leftJoin(post.member, QMember.member)
                 .fetchJoin()
-                .leftJoin(post.comments, QComment.comment)
                 .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
