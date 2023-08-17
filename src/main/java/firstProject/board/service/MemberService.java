@@ -55,7 +55,7 @@ public class MemberService {
     }
 
     public Member saveMember(MemberAddDto memberAddDto) {
-        Member member = new Member(memberAddDto.getLoginId(), memberAddDto.getPassword(), memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
+        Member member = new Member(memberAddDto.getLoginId(), memberAddDto.getPassword(), memberAddDto.getEmail(),memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
         memberRepository.save(member);
         return member;
     }

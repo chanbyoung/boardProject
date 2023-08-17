@@ -11,6 +11,7 @@ import lombok.Setter;
 public class MemberGetDto {
     private Long id;
     private String loginId;
+    private String email;
     private String name;
     private String birth;
     private Gender gender;
@@ -23,6 +24,7 @@ public class MemberGetDto {
     public MemberGetDto(Member member) {
         this.id= member.getId();
         this.loginId = member.getLoginId();
+        this.email = member.getEmail();
         this.name = member.getName();
         this.birth = member.getBirth();
         this.gender = member.getGender();

@@ -15,6 +15,8 @@ public class MemberUpdateDto {
     @NotEmpty
     private String name;
     @NotEmpty
+    private String email;
+    @NotEmpty
     private String birth;
     @Valid
     private Address address;
@@ -26,6 +28,7 @@ public class MemberUpdateDto {
         this.id = member.getId();
         this.loginId = member.getLoginId();
         this.name = member.getName();
+        this.email = member.getEmail();
         this.birth = member.getBirth();
         this.address = member.getAddress();
     }

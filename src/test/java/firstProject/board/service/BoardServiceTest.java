@@ -40,7 +40,7 @@ class BoardServiceTest {
         //given
         Long postId = 1L;
         Post mockPost = new Post(postId, "Post", "content");
-        mockPost.updateMember(new Member("123","123","pcb","20000728", Gender.MALE,new Address()));
+        mockPost.updateMember(new Member("123","123","123@123.com","pcb","20000728", Gender.MALE,new Address()));
         when(postRepository.findById(postId)).thenReturn(mockPost);
 
         //when
@@ -75,7 +75,7 @@ class BoardServiceTest {
         //given
         Long postId = 1L;
         Post mockPost = new Post(postId, "Post", "content");
-        Member mockMember = new Member("123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        Member mockMember = new Member("123", "123","123@123.com", "pcb", "20000728", Gender.MALE, new Address());
         when(postRepository.save(mockPost)).thenReturn(postId);
         when(memberRepository.findById(any())).thenReturn(mockMember);
         //when

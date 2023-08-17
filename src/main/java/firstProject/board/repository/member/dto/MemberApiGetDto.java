@@ -17,6 +17,7 @@ public class MemberApiGetDto {
     private Long id;
     private String loginId;
     private String name;
+    private String email;
     private String birth;
     private Gender gender;
     private Address address;
@@ -27,6 +28,7 @@ public class MemberApiGetDto {
         this.id= member.getId();
         this.loginId = member.getLoginId();
         this.name = member.getName();
+        this.email = member.getEmail();
         this.birth = member.getBirth();
         this.gender = member.getGender();
         this.address = member.getAddress();

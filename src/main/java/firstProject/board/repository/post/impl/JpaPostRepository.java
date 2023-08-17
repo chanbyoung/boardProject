@@ -51,7 +51,6 @@ public class JpaPostRepository implements PostRepository {
                                 " where p.id = :postId", Post.class)
                 .setParameter("postId", id)
                 .getSingleResult();
-        post.updateReadCount();
         return post;
 
     }

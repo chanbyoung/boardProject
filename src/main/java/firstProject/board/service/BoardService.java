@@ -27,4 +27,6 @@ public interface BoardService {
     Long deleteComment(Long commentId);
 
 
+    void viewCountUp(Long id);
+
 }

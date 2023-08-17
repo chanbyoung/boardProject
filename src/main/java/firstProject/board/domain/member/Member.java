@@ -22,6 +22,7 @@ public class Member extends BaseEntity {
     @Column(unique = true)
     private String loginId;
     private String password;
+    private String email;
     private String name; //사용자 이름
     private String birth;
     @Enumerated(EnumType.STRING)
@@ -31,18 +32,20 @@ public class Member extends BaseEntity {
 
 
 
-    public Member(String loginId, String password, String name, String birth, Gender gender, Address address) {
+    public Member(String loginId, String password,String email, String name, String birth, Gender gender, Address address) {
         this.loginId = loginId;
         this.password = password;
+        this.email = email;
         this.name = name;
         this.birth = birth;
         this.gender = gender;
         this.address = address;
     }
-    public Member(Long id, String loginId, String password, String name, String birth, Gender gender, Address address) {
+    public Member(Long id, String loginId, String password,String email, String name, String birth, Gender gender, Address address) {
         this.id = id;
         this.loginId = loginId;
         this.password = password;
+        this.email = email;
         this.name = name;
         this.birth = birth;
         this.gender = gender;
@@ -62,6 +65,7 @@ public class Member extends BaseEntity {
     public void update(MemberUpdateDto memberUpdateDto) {
         this.name = memberUpdateDto.getName();
         this.birth = memberUpdateDto.getBirth();
+        this.email = memberUpdateDto.getEmail();
         this.address = memberUpdateDto.getAddress();
     }
 }

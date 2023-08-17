@@ -31,7 +31,7 @@ class MemberServiceTest {
     void getMember() {
         //given
         Long memberId= 1L;
-        Member mockMember = new Member(memberId,"123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        Member mockMember = new Member(memberId,"123", "123","123@123.com", "pcb", "20000728", Gender.MALE, new Address());
         when(memberRepository.findById(memberId)).thenReturn(mockMember);
 
         //when
@@ -47,9 +47,9 @@ class MemberServiceTest {
         //given
         List<Member> mockMemberList = new ArrayList<>();
         Long memberId = 1L;
-        Member mockMember = new Member(memberId,"123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        Member mockMember = new Member(memberId,"123", "123","123@123.com", "pcb", "20000728", Gender.MALE, new Address());
         Long memberId2 = 2L;
-        Member mockMember2 = new Member(memberId2,"123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        Member mockMember2 = new Member(memberId2,"123", "123","123@123.com", "pcb", "20000728", Gender.MALE, new Address());
         mockMemberList.add(mockMember);
         mockMemberList.add(mockMember2);
         when(memberRepository.findAll()).thenReturn(mockMemberList);
@@ -69,7 +69,7 @@ class MemberServiceTest {
     void equalMember() {
         //given
         Long memberId = 1L;
-        Member mockMember = new Member(memberId,"123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        Member mockMember = new Member(memberId,"123", "123","123@123.com", "pcb", "20000728", Gender.MALE, new Address());
         when(memberRepository.findById(memberId)).thenReturn(mockMember);
 
         //when
@@ -82,7 +82,7 @@ class MemberServiceTest {
     @Test
     void saveMember() {
         //given
-        MemberAddDto member = new MemberAddDto("123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        MemberAddDto member = new MemberAddDto("123", "123", "pcb","abc123@abc.com" ,"20000728", Gender.MALE, new Address());
 
         //when
         Member saveMember = memberService.saveMember(member);
@@ -96,7 +96,7 @@ class MemberServiceTest {
     void deleteMember() {
         //given
         Long memberId = 1L;
-        Member mockMember = new Member(memberId,"123", "123", "pcb", "20000728", Gender.MALE, new Address());
+        Member mockMember = new Member(memberId,"123", "123","123@123.com", "pcb", "20000728", Gender.MALE, new Address());
         memberRepository.save(mockMember);
 
         //when

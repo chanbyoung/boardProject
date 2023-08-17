@@ -19,6 +19,8 @@ public class MemberAddDto {
     @NotEmpty
     private String name; //사용자 이름
     @NotEmpty
+    private String email;
+    @NotEmpty
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -28,10 +30,11 @@ public class MemberAddDto {
     public MemberAddDto() {
     }
 
-    public MemberAddDto(String loginId, String password, String name, String birth, Gender gender, Address address) {
+    public MemberAddDto(String loginId, String password, String name,String email, String birth, Gender gender, Address address) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;
+        this.email = email;
         this.birth = birth;
         this.gender = gender;
         this.address = address;

@@ -9,6 +9,9 @@ import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.dto.*;
 import firstProject.board.service.BoardService;
 import firstProject.board.service.FileService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,10 +56,11 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public String post(@PathVariable long id, Model model, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable) {
+    public String post(@PathVariable long id, Model model, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable, HttpServletRequest req, HttpServletResponse rep) {
         PostGetDto post = boardService.getPost(id);
         Page<CommentGetDto> comments = boardService.getComment(id, commentsPageable);
         FileGetDto file = fileService.getFile(id);
+        viewCountUp(id,req,rep);
         log.info("file={}", file);
         model.addAttribute("file", file);
         model.addAttribute("post", post);
@@ -64,6 +68,33 @@ public class PostController {
         model.addAttribute("commentsPageable", commentsPageable);
         model.addAttribute("commentDto", new CommentDto());
         return "posts/post";
+    }
+
+    private void viewCountUp(Long id, HttpServletRequest request, HttpServletResponse response) {
+        Cookie oldCookie = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("postView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+                boardService.viewCountUp(id);
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            boardService.viewCountUp(id);
+            Cookie newCookie = new Cookie("postView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60*60*24);
+            response.addCookie(newCookie);
+        }
     }
 
     @GetMapping("/add")

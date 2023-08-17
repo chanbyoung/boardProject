@@ -102,14 +102,15 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/update")
-    private String updateMember(@PathVariable("memberId") Long id, Model model,@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
+    private String updateMember(@PathVariable("memberId") Long id, Model model,@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, RedirectAttributes redirectAttributes) {
         MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
         if (loginMember.getName().equals(member.getName())) {
             return "members/editForm";
         }
-        model.addAttribute("status", true);
-        return "members/member";
+        redirectAttributes.addFlashAttribute("status", Boolean.TRUE);
+        redirectAttributes.addAttribute("id", id);
+        return "redirect:/members/{id}";
     }
 
     @PostMapping("/{memberId}/update")

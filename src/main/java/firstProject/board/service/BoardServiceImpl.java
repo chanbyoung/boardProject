@@ -81,5 +81,9 @@ public class BoardServiceImpl implements BoardService{
         return post.getId();
     }
 
-
+    @Override
+    public void viewCountUp(Long id) {
+        Post post = postRepository.findById(id);
+        post.updateReadCount();
+    }
 }
