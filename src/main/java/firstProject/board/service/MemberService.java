@@ -8,6 +8,8 @@ import firstProject.board.repository.member.SpringDataJpaMemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
+import firstProject.board.repository.member.dto.find.MemberFindLoginIdDto;
+import firstProject.board.repository.member.dto.find.MemberFindPasswordDto;
 import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.SpringDataJpaPostRepository;
 import firstProject.board.repository.post.dto.CommentDto;
@@ -78,5 +80,15 @@ public class MemberService {
         Page<Comment> comments = jpaCommentRepository.findCommentByMemberId(id, postsPageable);
         Page<CommentDto> reComments = comments.map(c -> new CommentDto(c));
         return reComments;
+    }
+
+    public String findLoginId(MemberFindLoginIdDto memberFindLoginIdDto) {
+        String loginId = jpaMemberRepository.findLoginIdByMemberInfo(memberFindLoginIdDto.getName(), memberFindLoginIdDto.getEmail());
+        return loginId;
+    }
+
+    public String findPassWord(MemberFindPasswordDto memberFindPasswordDto) {
+        String password = jpaMemberRepository.findPasswordByMemberInfo(memberFindPasswordDto.getName(), memberFindPasswordDto.getLoginId(), memberFindPasswordDto.getEmail());
+        return password;
     }
 }

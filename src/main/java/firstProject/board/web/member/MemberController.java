@@ -7,6 +7,8 @@ import firstProject.board.repository.member.MemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
+import firstProject.board.repository.member.dto.find.MemberFindLoginIdDto;
+import firstProject.board.repository.member.dto.find.MemberFindPasswordDto;
 import firstProject.board.repository.post.dto.CommentDto;
 import firstProject.board.repository.post.dto.PostsGetDto;
 import firstProject.board.service.MemberService;
@@ -122,5 +124,41 @@ public class MemberController {
         memberService.editMember(id, memberUpdateDto);
         redirectAttributes.addAttribute("memberId", id);
         return "redirect:/members/{memberId}";
+    }
+
+    @GetMapping("/find")
+    public String findIdAndPassword(Model model) {
+        model.addAttribute("memberFindLoginIdDto", new MemberFindLoginIdDto());
+        model.addAttribute("memberFindPasswordDto", new MemberFindPasswordDto());
+        return "members/findForm";
+    }
+
+    @PostMapping("/find/loginId")
+    public String findLoginId(@ModelAttribute MemberFindLoginIdDto memberFindDto,RedirectAttributes redirectAttributes) {
+        log.info("memberFindDto = {} ", memberFindDto);
+        String loginId = memberService.findLoginId(memberFindDto);
+        log.info("loginId = {} ", loginId);
+        if (loginId != null) {
+            redirectAttributes.addFlashAttribute("status1", loginId);
+        }
+        else {
+            redirectAttributes.addFlashAttribute("status3", "이름 또는 이메일이 잘못 입력되었습니다.");
+
+        }
+        return "redirect:/members/find";
+    }
+
+    @PostMapping("/find/password")
+    public String findPassword(@ModelAttribute MemberFindPasswordDto memberFindPasswordDto, RedirectAttributes redirectAttributes) {
+        String passWord = memberService.findPassWord(memberFindPasswordDto);
+        log.info("password={}", passWord);
+        if (passWord != null) {
+            redirectAttributes.addFlashAttribute("status2", passWord);
+
+        } else {
+            redirectAttributes.addFlashAttribute("status3", "ID 또는 이름 또는 이메일이 잘못 입력되었습니다.");
+
+        }
+        return "redirect:/members/find";
     }
 }
