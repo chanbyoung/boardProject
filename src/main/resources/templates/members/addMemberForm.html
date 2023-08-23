@@ -70,6 +70,20 @@
     <h2>회원 가입</h2>
   </div>
   <h4 class="mb-3">회원 정보 입력</h4>
+  <form th:action="@{/mailConfirm}" method="post" target="param">
+    <div>
+      <h3 class="join_title"><label for="email">이메일</label></h3>
+      <span class="box int_email">
+        <input type="text" name="email" id="email" class="form-control" maxlength="100">
+      </span>
+    </div>
+    <!-- 이메일 인증 번호 요청 버튼 -->
+    <input type="submit" value="인증번호받기" id="email-btn"/>
+  </form>
+  <div>
+    <h3 class="join_title">인증 번호</h3>
+    <input type="text" name="email-check" id="email-check" class="form-control" maxlength="100" placeholder="인증번호 입력">
+  </div>
   <form action="" th:action th:object="${memberAddDto}" method="post">
     <div th:if="${#fields.hasGlobalErrors()}">
       <p class="field-error" th:each="err : ${#fields.globalErrors()}"
@@ -93,13 +107,6 @@
              class="form-control"
              th:errorclass="field-error">
       <div class="field-error" th:errors="*{password}" />
-    </div>
-    <div>
-      <label for="email">이메일</label>
-      <input type="text" id="email" th:field="*{email}"
-             class="form-control"
-             th:errorclass="field-error">
-      <div class="field-error" th:errors="*{email}" />
     </div>
     <div>
       <label for="birth">생년월일</label>
