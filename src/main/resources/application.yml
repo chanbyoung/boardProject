@@ -1,0 +1,22 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+#        ddl-auto: true
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: true
+  profiles:
+    active: local
+    include: h2, mail
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        jdbc:
+          bind: trace
+
+file:
+  dir: /C:/spring/board/fileRepository/

@@ -26,8 +26,8 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-application-h2.properties
-application-my.properties
+application-my.yml
+application-mail.yml
 
 
 ### NetBeans ###
