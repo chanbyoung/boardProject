@@ -40,6 +40,7 @@ public class MemberController {
     @GetMapping("/add")
     public String addForm(Model model)
     {
+
         model.addAttribute("memberAddDto", new MemberAddDto());
         return "members/addMemberForm";
     }

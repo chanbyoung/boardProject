@@ -3,19 +3,21 @@ package firstProject.board.web.member;
 import firstProject.board.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 @Slf4j
 public class EmailController {
     private final MailService mailService;
 
-    @PostMapping("/mailConfirm")
-    public void mailConfirm(@RequestParam String email) throws Exception {
+    @GetMapping("/mailCheck")
+    public String mailConfirm(@RequestParam("email") String email) throws Exception {
+        log.info("email={} ", email);
         String authCode = mailService.sendEmail(email);
         log.info("인증코드 = {} ", authCode);
+        return authCode;
     }
 }

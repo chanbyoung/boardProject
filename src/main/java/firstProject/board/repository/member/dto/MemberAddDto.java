@@ -39,4 +39,8 @@ public class MemberAddDto {
         this.gender = gender;
         this.address = address;
     }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 }
