@@ -30,13 +30,22 @@
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{name}" />
         </div>
-        <div>
-            <label for="email_l">이메일</label>
-            <input type="text" id="email_l" th:field="*{email}" class="formcontrol"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{email}" />
-        </div>
-        <button class="w-100 btn btn-primary btn-lg" type="submit">ID 찾기</button>
+        <tr class="email_tr">
+            <th>
+                <label>이메일</label>
+            </th>
+            <td>
+                <p>
+                    <input id="email" type="text" name="email" th:field="*{email}"  title="이메일 주소를 입력해주세요." required/>
+                    <button id="emailChk" type="button" class="doubleChk">인증번호 보내기</button><br/>
+                    <input id="email2" type="text" name="email2" title="인증번호 입력" disabled required/>
+                    <button id="emailChk2" type="button" class="doubleChk">이메일인증</button><br>
+                    <span class="point successEmailChk">이메일 입력후 인증번호 보내기를 해주십시오.</span>
+                    <input type="hidden" id="emailDoubleChk"/>
+                </p>
+            </td>
+        </tr>
+        <button class="w-100 btn btn-primary btn-lg" id="id_submit" type="submit" disabled>ID 찾기</button>
     </form>
 
     <form th:action="@{/members/find/password}" th:object="${memberFindPasswordDto}" method="post">
@@ -52,14 +61,114 @@
                th:errorclass="field-error">
         <div class="field-error" th:errors="*{name}" />
     </div>
-    <div>
-        <label for="email_p">이메일</label>
-        <input type="text" id="email_p" th:field="*{email}" class="formcontrol"
-               th:errorclass="field-error">
-        <div class="field-error" th:errors="*{email}" />
-    </div>
-    <button class="w-100 btn btn-primary btn-lg" type="submit">비밀번호 찾기</button>
+        <tr class="email_tr">
+            <th>
+                <label>이메일</label>
+            </th>
+            <td>
+                <p>
+                    <input id="email_p" type="text" name="email" th:field="*{email}"  title="이메일 주소를 입력해주세요." required/>
+                    <button id="emailChk_p" type="button" class="doubleChk">인증번호 보내기</button><br/>
+                    <input id="email2_p" type="text" name="email2" title="인증번호 입력" disabled required/>
+                    <button id="emailChk2_p" type="button" class="doubleChk">이메일인증</button><br>
+                    <span class="point successEmailChk_p">이메일 입력후 인증번호 보내기를 해주십시오.</span>
+                    <input type="hidden" id="emailDoubleChk_p"/>
+                </p>
+            </td>
+        </tr>
+    <button class="w-100 btn btn-primary btn-lg" id="password_submit" type="submit" disabled>비밀번호 찾기</button>
 </form>
 </div>
+<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    var code = "";
+    $("#emailChk").click(function(){
+        var email = $("#email").val();
+        console.log(email)
+        $.ajax({
+            type:"GET",
+            data:{
+                email: email
+            },
+            url:"/mailCheck",
+            cache : false,
+            success:function(data){
+                if(data == "error"){
+                    alert("이메일 주소가 올바르지 않습니다. 유효한 이메일 주소를 입력해주세요.");
+                    $("#email").attr("autofocus",true);
+                    $(".successEmailChk").text("유효한 이메일 주소를 입력해주세요.");
+                    $(".successEmailChk").css("color","red");
+                }else{
+                    alert("인증번호 발송이 완료되었습니다.\n입력한 이메일에서 인증번호 확인을 해주십시오.");
+                    $("#email2").attr("disabled",false);
+                    $("#emailChk2").css("display","inline-block");
+                    $(".successEmailChk").text("인증번호를 입력한 뒤 이메일 인증을 눌러주십시오.");
+                    $(".successEmailChk").css("color","green");
+                    code = data;
+                }
+            }
+        });
+    });
+    $("#emailChk2").click(function(){
+        if($("#email2").val() == code){
+            $(".successEmailChk").text("인증번호가 일치합니다.");
+            $(".successEmailChk").css("color","green");
+            $("#emailDoubleChk").val("true");
+            $("#email2").attr("disabled",true);
+            $("#id_submit").attr("disabled", false);
+            //$("#email").attr("disabled",true);
+        }else{
+            $(".successEmailChk").text("인증번호가 일치하지 않습니다. 확인해주시기 바랍니다.");
+            $(".successEmailChk").css("color","red");
+            $("#emailDoubleChk").val("false");
+            $("#email2").attr("autofocus",true);
+        }
+    });
+</script>
+<script>
+    var code = "";
+    $("#emailChk_p").click(function(){
+        var email = $("#email_p").val();
+        console.log(email)
+        $.ajax({
+            type:"GET",
+            data:{
+                email: email
+            },
+            url:"/mailCheck",
+            cache : false,
+            success:function(data){
+                if(data == "error"){
+                    alert("이메일 주소가 올바르지 않습니다. 유효한 이메일 주소를 입력해주세요.");
+                    $("#email_p").attr("autofocus",true);
+                    $(".successEmailChk_p").text("유효한 이메일 주소를 입력해주세요.");
+                    $(".successEmailChk_p").css("color","red");
+                }else{
+                    alert("인증번호 발송이 완료되었습니다.\n입력한 이메일에서 인증번호 확인을 해주십시오.");
+                    $("#email2_p").attr("disabled",false);
+                    $("#emailChk2_p").css("display","inline-block");
+                    $(".successEmailChk_p").text("인증번호를 입력한 뒤 이메일 인증을 눌러주십시오.");
+                    $(".successEmailChk_p").css("color","green");
+                    code = data;
+                }
+            }
+        });
+    });
+    $("#emailChk2_p").click(function(){
+        if($("#email2_p").val() == code){
+            $(".successEmailChk_p").text("인증번호가 일치합니다.");
+            $(".successEmailChk_p").css("color","green");
+            $("#emailDoubleChk_p").val("true");
+            $("#email2_p").attr("disabled",true);
+            $("#password_submit").attr("disabled", false);
+            //$("#email").attr("disabled",true);
+        }else{
+            $(".successEmailChk_p").text("인증번호가 일치하지 않습니다. 확인해주시기 바랍니다.");
+            $(".successEmailChk_p").css("color","red");
+            $("#emailDoubleChk_p").val("false");
+            $("#email2_p").attr("autofocus",true);
+        }
+    });
+</script>
 </body>
 </html>

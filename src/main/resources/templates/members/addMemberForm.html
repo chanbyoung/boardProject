@@ -136,7 +136,7 @@
     <hr class="my-4">
     <div class="row">
       <div class="col">
-        <button class="w-100 btn btn-primary btn-lg" type="submit">회원 가입</button>
+        <button class="w-100 btn btn-primary btn-lg" id="submit_button" type="submit" disabled>회원 가입</button>
       </div>
       <div class="col">
         <button class="w-100 btn btn-secondary btn-lg"
@@ -183,6 +183,7 @@
       $(".successEmailChk").css("color","green");
       $("#emailDoubleChk").val("true");
       $("#email2").attr("disabled",true);
+      $("#submit_button").attr("disabled", false);
       //$("#email").attr("disabled",true);
     }else{
       $(".successEmailChk").text("인증번호가 일치하지 않습니다. 확인해주시기 바랍니다.");
