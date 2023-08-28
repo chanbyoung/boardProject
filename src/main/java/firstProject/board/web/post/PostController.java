@@ -114,12 +114,12 @@ public class PostController {
             return "posts/addForm";
         }
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
+        log.info("loginMember name = {}", member.getName());
+        Long postId = boardService.savePost(post, member);
         //성공 로직
         if (!file.isEmpty()) {
             fileService.saveFile(post, file);
         }
-        log.info("loginMember name = {}", member.getName());
-        Long postId = boardService.savePost(post, member);
         redirectAttributes.addAttribute("id", postId);
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";

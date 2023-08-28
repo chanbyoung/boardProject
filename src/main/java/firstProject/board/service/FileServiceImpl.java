@@ -26,9 +26,9 @@ public class FileServiceImpl implements FileService{
     @Override
     public void saveFile(Post post, MultipartFile file) throws IOException {
         UploadFile uploadFile = new UploadFile(file.getOriginalFilename());
-        fileRepository.save(uploadFile);
         String fullPath = fileDir+uploadFile.getStoreFileName();
         uploadFile.updatePostAndFullPath(post,fullPath);
+        fileRepository.save(uploadFile);
         log.info("파일 저장 fullPath={}", fullPath);
         file.transferTo(new File(fullPath));
     }

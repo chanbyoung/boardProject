@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface SpringDataJpaPostRepository extends JpaRepository<Post,Long> {
     void deleteById(Long id);
-
+    @Query("select count(p) from Post p")
     Long countPostBy();
 
     @Override
