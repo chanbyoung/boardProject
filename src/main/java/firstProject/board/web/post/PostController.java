@@ -136,7 +136,8 @@ public class PostController {
         model.addAttribute("postUpdateDto", new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("post", post);
         model.addAttribute("file", fileService.getFile(id));
-        if (loginMember.getName().equals(post.getMemberName())) {
+        // 수정시 검증 로직
+        if (loginMember.getEmail().equals(post.getEmail())) {
             return "posts/editForm";
         }
         redirectAttributes.addFlashAttribute("status2", Boolean.TRUE);
@@ -167,12 +168,14 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember) {
+    public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,RedirectAttributes redirectAttributes) {
         Post findPost = postRepository.findById(id);
-        if (loginMember.getName().equals(findPost.getMember().getName())) {
+        //수정시 검증 로직
+        if (loginMember.getEmail().equals(findPost.getMember().getEmail())) {
             boardService.deletePost(id);
             return "redirect:/posts";
         }
+        redirectAttributes.addFlashAttribute("status2", Boolean.TRUE);
         return "redirect:/posts/{id}";
 
     }

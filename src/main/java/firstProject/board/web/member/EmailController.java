@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class EmailController {
     private final MailService mailService;
-
     @GetMapping("/mailCheck")
     public String mailConfirm(@RequestParam("email") String email) throws Exception {
         log.info("email={} ", email);
@@ -20,4 +19,5 @@ public class EmailController {
         log.info("인증코드 = {} ", authCode);
         return authCode;
     }
+
 }

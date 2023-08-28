@@ -54,8 +54,11 @@ public class MemberController {
 
     @PostMapping("/add")
     public String save(@Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult) {
+        Optional<Member> email = memberService.findEmail(memberAddDto.getEmail());
+        if (!email.isEmpty()) {
+            bindingResult.reject("email","이메일이 중복되었습니다");
+        }
         Optional<Member> findLoginId = memberRepository.findByLoginId(memberAddDto.getLoginId());
-        log.info("Address= {} ", memberAddDto.getAddress());
         if (!findLoginId.isEmpty()) {
             bindingResult.reject("loginId", "아이디가 중복되었습니다");
         }

@@ -46,7 +46,7 @@
 
     <!-- 추가 -->
     <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
-    <h4 th:if="${status2}" th:style="'color:red'" th:text="'글을 수정할 수 있는 권한이 없습니다.'"></h4>
+    <h4 th:if="${status2}" th:style="'color:red'" th:text="'글을 수정/삭제 할 수 있는 권한이 없습니다.'"></h4>
     <div>
         <label for="postName" th:text="#{label.post.postName}">postName</label>
         <input type="text" id="postName" th:field="*{post.postName}" class="form-control"  readonly>

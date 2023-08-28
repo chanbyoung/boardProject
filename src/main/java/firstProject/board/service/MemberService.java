@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -90,5 +91,9 @@ public class MemberService {
     public String findPassWord(MemberFindPasswordDto memberFindPasswordDto) {
         String password = jpaMemberRepository.findPasswordByMemberInfo(memberFindPasswordDto.getName(), memberFindPasswordDto.getLoginId(), memberFindPasswordDto.getEmail());
         return password;
+    }
+
+    public Optional<Member> findEmail(String email) {
+        return jpaMemberRepository.findEmailExist(email);
     }
 }
