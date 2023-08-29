@@ -4,11 +4,11 @@ import firstProject.board.domain.BaseEntity;
 import firstProject.board.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
+import lombok.Getter;
 import lombok.ToString;
 
-@Data
 @Entity
+@Getter
 @ToString(exclude = {"post", "member"})
 public class Comment extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +36,10 @@ public class Comment extends BaseEntity {
     }
 
     public Comment() {
+    }
+
+    public void updateCommentContent(String content) {
+        this.content = content;
     }
 
     public void updateCommentNum(Long cnt) {

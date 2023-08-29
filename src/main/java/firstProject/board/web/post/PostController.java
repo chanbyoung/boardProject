@@ -219,6 +219,13 @@ public class PostController {
         return "redirect:/posts/{id}";
     }
 
+    @PostMapping("/updateComment")
+    @ResponseBody
+    public String updateComment(@RequestParam Long commentId, @RequestParam String updatedComment) {
+        log.info("commentId ={} , updatedComment = {}", commentId,updatedComment);
+        boardService.updateComment(commentId,updatedComment);
+        return "Comment updated successfully";
+    }
 
 }
 

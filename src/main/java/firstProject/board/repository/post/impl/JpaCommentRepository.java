@@ -22,6 +22,11 @@ public class JpaCommentRepository {
 
         return comments;
     }
+
+    public void updateCommentContent(Long id, String content) {
+        Comment comment = em.find(Comment.class, id);
+        comment.updateCommentContent(content);
+    }
     public void updateCommentNum(Long postId,Long commentNum) {
         em.createQuery("update Comment c" +
                 " set c.commentNum = c.commentNum-1" +

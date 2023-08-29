@@ -86,4 +86,9 @@ public class BoardServiceImpl implements BoardService{
         Post post = postRepository.findById(id);
         post.updateReadCount();
     }
+
+    @Override
+    public void updateComment(Long commentId, String content) {
+        jplCmtRepository.updateCommentContent(commentId, content);
+    }
 }

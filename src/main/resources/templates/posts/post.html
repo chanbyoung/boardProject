@@ -85,17 +85,29 @@
         <table class="table">
             <tr>
                 <th>댓글 번호</th>
-                <th>작성자 id</th>
                 <th>내용</th>
+                <th>작성자 id</th>
+                <th>수정</th>
                 <th>삭제</th>
             </tr>
             <tr th:each="comment : ${comments}">
                 <td th:text="${comment.commentNum}">댓글 번호</td>
+                <td class="comment-content" th:text="${comment.content}" ></td>
                 <td th:text="${comment.memberName}">작성자 id</td>
-                <td th:text="${comment.content}">내용</td>
-                <td><button class="w-100 btn btn-secondary btn-lg"
+                <td><button class="edit-button" id="edit-button" th:data-comment-id="${comment.id}">수정</button> </td>
+                <td><button class="w-100 h-25 btn btn-secondary btn-lg"
                     th:onclick="|location.href='@{/posts/comment/{commentId}/delete(commentId=${comment.id})}'|"
                     type="submit">삭제</button></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    댓글 수정
+                    <form class="edit-comment-form" style="display: none;">
+                        <input type="hidden" class="edit-comment-id">
+                        <input type="text" class="edit-comment-text">
+                        <button class="save-button" type="submit">Save</button>
+                    </form>
+                </td>
             </tr>
             <th:block th:each="page:${#numbers.sequence(0,(comments.getTotalPages()-1 ge 0 ? comments.getTotalPages()-1 : 0))}">
                 <a th:if="${page != commentsPageable.getPageNumber()}" th:href="@{/posts/{postId}(postId=${post.id},comment_page=${page})}" th:text ="${page}+1"></a>
@@ -103,7 +115,44 @@
             </th:block>
         </table>
     </div>
-
 </div> <!-- /container -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".edit-button").click(function () {
+            var commentId = $(this).data("comment-id");
+            var currentComment = $(this).closest("tr").find(".comment-content").text();
+            console.log(commentId)
+            console.log(currentComment)
+            $(".edit-comment-text").val(currentComment);
+            $(".edit-comment-id").val(commentId);
+
+            $(".edit-comment-form").show();
+        });
+
+        $(".edit-comment-form").submit(function (event) {
+            event.preventDefault();
+
+            var commentId = $(".edit-comment-id").val();
+            var updatedComment = $(".edit-comment-text").val();
+
+            $.ajax({
+                url: "/posts/updateComment", // Mapping to your Spring controller
+                method: "POST",
+                data: {
+                    commentId: commentId,
+                    updatedComment: updatedComment
+                },
+                success: function (response) {
+                    $("#comment-" + commentId).text(updatedComment);
+                    $(".edit-comment-form").hide();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error updating comment:", error);
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
