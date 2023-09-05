@@ -7,6 +7,7 @@ import firstProject.board.repository.member.dto.MemberUpdateDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,19 +33,19 @@ public class Member extends BaseEntity {
 
 
 
-    public Member(String loginId, String password,String email, String name, String birth, Gender gender, Address address) {
+    public Member(String loginId, String password,PasswordEncoder pwEncoder,String email, String name, String birth, Gender gender, Address address) {
         this.loginId = loginId;
-        this.password = password;
+        this.password = pwEncoder.encode(password);
         this.email = email;
         this.name = name;
         this.birth = birth;
         this.gender = gender;
         this.address = address;
     }
-    public Member(Long id, String loginId, String password,String email, String name, String birth, Gender gender, Address address) {
+    public Member(Long id, String loginId, String password, String email, String name, String birth, Gender gender, Address address) {
         this.id = id;
         this.loginId = loginId;
-        this.password = password;
+        this.password =password;
         this.email = email;
         this.name = name;
         this.birth = birth;
@@ -68,4 +69,5 @@ public class Member extends BaseEntity {
         this.email = memberUpdateDto.getEmail();
         this.address = memberUpdateDto.getAddress();
     }
+
 }

@@ -22,21 +22,6 @@ public class LoginController {
         return "login/loginForm";
     }
 
-//    @PostMapping("/login")
-//    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult bindingResult,
-//                        @RequestParam(defaultValue = "/") String redirectURL, HttpServletRequest request){
-//        if(bindingResult.hasErrors()){
-//            return "login/loginForm";
-//        }
-//        Member loginMember = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
-//        if(loginMember == null){
-//            bindingResult.reject("loginFail", "아이디 혹은 비밀번호가 맞지 않습니다");
-//            return "login/loginForm";
-//        }
-//        HttpSession session = request.getSession();
-//        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
-//        return "redirect:"+ redirectURL;
-//    }
     @PostMapping("/logout")
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession(false);

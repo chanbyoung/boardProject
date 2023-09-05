@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ public class MemberService {
     private final SpringDataJpaMemberRepository jpaMemberRepository;
     private final SpringDataJpaPostRepository jpaPostRepository;
     private final CommentRepository jpaCommentRepository;
+    private final PasswordEncoder passwordEncoder;
     public MemberGetDto getMember(Long id) {
         Member member = memberRepository.findById(id);
         MemberGetDto memberGetDto = new MemberGetDto(member);
@@ -58,7 +60,7 @@ public class MemberService {
     }
 
     public Member saveMember(MemberAddDto memberAddDto) {
-        Member member = new Member(memberAddDto.getLoginId(), memberAddDto.getPassword(), memberAddDto.getEmail(),memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
+        Member member = new Member(memberAddDto.getLoginId(), memberAddDto.getPassword(),passwordEncoder, memberAddDto.getEmail(),memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
         memberRepository.save(member);
         return member;
     }
