@@ -1,7 +1,5 @@
 package firstProject.board.web.post;
 
-import firstProject.board.SessionConst;
-import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import firstProject.board.repository.post.FileRepository;
@@ -34,6 +32,7 @@ import org.springframework.web.util.UriUtils;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 
 @Controller
 @Slf4j
@@ -107,15 +106,14 @@ public class PostController {
     @PostMapping("/add")
     public String addPost(@Validated @ModelAttribute PostAddDto postAddDto, BindingResult bindingResult,
                           @RequestParam MultipartFile file,
-                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) throws IOException {
+                          Principal principal, RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "posts/addForm";
         }
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
-        log.info("loginMember name = {}", member.getName());
-        Long postId = boardService.savePost(post, member);
+        Long postId = boardService.savePost(post, principal.getName());
         //성공 로직
         if (!file.isEmpty()) {
             fileService.saveFile(post, file);
@@ -131,14 +129,16 @@ public class PostController {
 
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, RedirectAttributes redirectAttributes) {
+    public String editForm(@PathVariable Long id, Model model, Principal principal, RedirectAttributes redirectAttributes) {
         PostGetDto post = boardService.getPost(id);
         model.addAttribute("postUpdateDto", new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("post", post);
         model.addAttribute("file", fileService.getFile(id));
         // 수정시 검증 로직
-        if (loginMember.getEmail().equals(post.getEmail())) {
-            return "posts/editForm";
+        if(principal != null) {
+            if (principal.getName().equals(post.getLoginId())) {
+                return "posts/editForm";
+            }
         }
         redirectAttributes.addFlashAttribute("status2", Boolean.TRUE);
         log.info("잘못된 요청입니다");
@@ -168,10 +168,10 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long id,Principal principal,RedirectAttributes redirectAttributes) {
         Post findPost = postRepository.findById(id);
         //수정시 검증 로직
-        if (loginMember.getEmail().equals(findPost.getMember().getEmail())) {
+        if (principal.getName().equals(findPost.getMember().getLoginId())) {
             boardService.deletePost(id);
             return "redirect:/posts";
         }
@@ -181,19 +181,19 @@ public class PostController {
     }
 
     @PostMapping("/{id}/comment")
-    public String addComment(@PathVariable Long id, @Validated @ModelAttribute CommentDto commentDto, BindingResult bindingResult, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member) {
+    public String addComment(@PathVariable Long id, @Validated @ModelAttribute CommentDto commentDto, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "redirect:/posts/{id}";
         }
-        boardService.saveComment(id, member, commentDto);
+        boardService.saveComment(id, principal.getName(), commentDto);
         return "redirect:/posts/{id}";
     }
 
-    @GetMapping("/comment/{commentId}/delete")
-    public String deleteComment(@PathVariable Long commentId, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, RedirectAttributes redirectAttributes) {
-        Long postId = boardService.deleteComment(commentId);
-        redirectAttributes.addAttribute("id", postId);
+    @GetMapping("/{id}/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable Long id, @PathVariable Long commentId,Principal principal, RedirectAttributes redirectAttributes) {
+        boardService.deleteComment(commentId ,id , principal.getName());
+        redirectAttributes.addAttribute("id", id);
         return "redirect:/posts/{id}";
     }
 

@@ -3,7 +3,7 @@ package firstProject.board.service;
 import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Comment;
 import firstProject.board.domain.post.Post;
-import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.member.SpringDataJpaMemberRepository;
 import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.PostRepository;
 import firstProject.board.repository.post.dto.*;
@@ -23,7 +23,7 @@ public class BoardServiceImpl implements BoardService{
     private final PostRepository postRepository;
     private final JpaCommentRepository jplCmtRepository;
     private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
+    private final SpringDataJpaMemberRepository jpaMemberRepository;
 
     @Override
     public PostGetDto getPost(Long id) {
@@ -38,8 +38,8 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public Long savePost(Post post,Member member) {
-        post.updateMember(memberRepository.findById(member.getId()));
+    public Long savePost(Post post,String loginId) {
+        post.updateMember(jpaMemberRepository.findByLoginId(loginId));
         Long postId = postRepository.save(post);
         return postId;
     }
@@ -64,21 +64,24 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void saveComment(Long id, Member member, CommentDto commentDto) {
+    public void saveComment(Long id, String loginId, CommentDto commentDto) {
         Post findPost = postRepository.findById(id);
+        Member member = jpaMemberRepository.findByLoginId(loginId);
         Long cnt = commentRepository.countCommentByPostId(id);
         Comment comment = new Comment(member, commentDto.getContent(), findPost, cnt);
         commentRepository.save(comment);
     }
 
     @Override
-    public Long deleteComment( Long commentId) {
+    public Boolean deleteComment( Long commentId,Long postId, String loginId) {
         Comment comment = commentRepository.findById(commentId).get();
-        Post post = comment.getPost();
-        Long commentNum = comment.getCommentNum();
-        commentRepository.delete(comment);
-        jplCmtRepository.updateCommentNum(post.getId(),commentNum);
-        return post.getId();
+        if (comment.getMember().getLoginId() == loginId) {
+            Long commentNum = comment.getCommentNum();
+            commentRepository.delete(comment);
+            jplCmtRepository.updateCommentNum(postId,commentNum);
+            return true;
+        }
+        return false;
     }
 
     @Override

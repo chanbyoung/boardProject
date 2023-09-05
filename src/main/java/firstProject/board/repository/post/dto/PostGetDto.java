@@ -10,7 +10,7 @@ public class PostGetDto {
     private Long id;
     private Long postNum;
     private String memberName;
-    private String email;
+    private String loginId;
     private String postName;
     private String content;
 
@@ -18,7 +18,7 @@ public class PostGetDto {
         this.id = p.getId();
         this.postNum = p.getPostNum();
         this.memberName = p.getMember().getName();
-        this.email = p.getMember().getEmail();
+        this.loginId = p.getMember().getLoginId();
         this.postName = p.getPostName();
         this.content = p.getContent();
     }

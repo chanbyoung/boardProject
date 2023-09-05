@@ -11,4 +11,5 @@ public class Config {
     public JPAQueryFactory jpaQueryFactory(EntityManager em){
         return new JPAQueryFactory(em);
     }
+
 }

@@ -79,7 +79,7 @@ class BoardServiceTest {
         when(postRepository.save(mockPost)).thenReturn(postId);
         when(memberRepository.findById(any())).thenReturn(mockMember);
         //when
-        Long newPostId = boardService.savePost(mockPost, mockMember);
+        Long newPostId = boardService.savePost(mockPost, mockMember.getLoginId());
         //then
         assertThat(newPostId).isEqualTo(mockPost.getId());
     }

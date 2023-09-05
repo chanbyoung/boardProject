@@ -1,6 +1,5 @@
 package firstProject.board.service;
 
-import firstProject.board.domain.member.Member;
 import firstProject.board.domain.post.Post;
 import firstProject.board.repository.post.dto.*;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,7 @@ public interface BoardService {
     Page<PostsGetDto> getPosts(PostSearchCond postSearch, Pageable pageable);
 
     //게시글 저장
-    Long savePost(Post post, Member member);
+    Long savePost(Post post, String loginId);
 
     //게시글 수정
     void editPost(Long id, PostUpdateDto editParam);
@@ -22,9 +21,9 @@ public interface BoardService {
 
     Page<CommentGetDto> getComment(Long postId, Pageable pageable);
 
-    void saveComment(Long id, Member member, CommentDto commentDto);
+    void saveComment(Long id, String loginId, CommentDto commentDto);
 
-    Long deleteComment(Long commentId);
+    Boolean deleteComment(Long commentId,Long postId, String loginId);
 
     void updateComment(Long commentId, String content);
 

@@ -41,7 +41,7 @@ public class PostApiController {
         Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
         MemberAddDto member = new MemberAddDto(UUID.randomUUID().toString(), "test!", "테스트사용자","abc1234@abc.com" ,"00000000", Gender.MALE, new Address("123","123","123","123"));
         Member testMember = memberService.saveMember(member);
-        Long postId = boardService.savePost(post, testMember);
+        Long postId = boardService.savePost(post, testMember.getLoginId());
         return postAddDto.updatePostID(postId);
     }
 

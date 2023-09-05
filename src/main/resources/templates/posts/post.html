@@ -96,7 +96,7 @@
                 <td th:text="${comment.memberName}">작성자 id</td>
                 <td><button class="edit-button" id="edit-button" th:data-comment-id="${comment.id}">수정</button> </td>
                 <td><button class="w-100 h-25 btn btn-secondary btn-lg"
-                    th:onclick="|location.href='@{/posts/comment/{commentId}/delete(commentId=${comment.id})}'|"
+                    th:onclick="|location.href='@{/posts/{postId}/comment/{commentId}/delete(postId=${post.id},commentId=${comment.id})}'|"
                     type="submit">삭제</button></td>
             </tr>
             <tr>
@@ -148,6 +148,7 @@
                     $(".edit-comment-form").hide();
                 },
                 error: function (xhr, status, error) {
+                    alert("입력된 댓글 형식이 올바르지 않습니다.");
                     console.error("Error updating comment:", error);
                 }
             });
