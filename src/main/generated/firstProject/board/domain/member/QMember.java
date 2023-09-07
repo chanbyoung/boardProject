@@ -50,6 +50,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final ListPath<firstProject.board.domain.post.Post, firstProject.board.domain.post.QPost> posts = this.<firstProject.board.domain.post.Post, firstProject.board.domain.post.QPost>createList("posts", firstProject.board.domain.post.Post.class, firstProject.board.domain.post.QPost.class, PathInits.DIRECT2);
 
+    public final EnumPath<Role> role = createEnum("role", Role.class);
+
     public QMember(String variable) {
         this(Member.class, forVariable(variable), INITS);
     }

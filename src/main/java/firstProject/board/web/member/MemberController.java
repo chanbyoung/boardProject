@@ -1,6 +1,5 @@
 package firstProject.board.web.member;
 
-import firstProject.board.SessionConst;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.repository.member.MemberRepository;
@@ -20,6 +19,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -85,8 +86,10 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/delete")
-    public String deleteMember(@PathVariable("memberId") Long id, @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, HttpServletRequest request) {
-        if(memberService.equalMember(loginMember,id)) {
+    public String deleteMember(@PathVariable("memberId") Long id, Authentication authentication, HttpServletRequest request) {
+        String deleteMemberName = authentication.getName();
+        Member member = memberRepository.findByLoginId(deleteMemberName).get();
+        if(memberService.equalMember(member,id) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             memberService.deleteMember(id);
             HttpSession session = request.getSession();
             if (session != null) {
@@ -108,10 +111,10 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/update")
-    private String updateMember(@PathVariable("memberId") Long id, Model model,@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember, RedirectAttributes redirectAttributes) {
+    private String updateMember(@PathVariable("memberId") Long id, Model model,Authentication authentication,  RedirectAttributes redirectAttributes) {
         MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
-        if (loginMember.getName().equals(member.getName())) {
+        if (authentication.getName().equals(member.getLoginId())|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             return "members/editForm";
         }
         redirectAttributes.addFlashAttribute("status", Boolean.TRUE);

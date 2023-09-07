@@ -14,6 +14,12 @@ public class CommentDto {
     @NotBlank
     private String content;
 
+    public CommentDto(Long postId, String postName, String content) {
+        this.postId = postId;
+        this.postName = postName;
+        this.content = content;
+    }
+
     public CommentDto(Comment comment) {
         this.postId = comment.getPost().getId();
         this.postName = comment.getPost().getPostName();

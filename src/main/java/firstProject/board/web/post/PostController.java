@@ -1,5 +1,6 @@
 package firstProject.board.web.post;
 
+import firstProject.board.domain.member.Role;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import firstProject.board.repository.post.FileRepository;
@@ -20,6 +21,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -129,14 +132,15 @@ public class PostController {
 
 
     @GetMapping("/{id}/edit")
-    public String editForm(@PathVariable Long id, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+    public String editForm(@PathVariable Long id, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
         PostGetDto post = boardService.getPost(id);
         model.addAttribute("postUpdateDto", new PostUpdateDto(post.getPostName(), post.getContent()));
         model.addAttribute("post", post);
         model.addAttribute("file", fileService.getFile(id));
+        log.info("권한정보 ={} , 허용 정보 ={}", Role.ADMIN,authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")));
         // 수정시 검증 로직
-        if(principal != null) {
-            if (principal.getName().equals(post.getLoginId())) {
+        if(authentication != null) {
+            if (authentication.getName().equals(post.getLoginId()) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
                 return "posts/editForm";
             }
         }
@@ -168,10 +172,10 @@ public class PostController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id,Principal principal,RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long id,Authentication authentication,RedirectAttributes redirectAttributes) {
         Post findPost = postRepository.findById(id);
         //수정시 검증 로직
-        if (principal.getName().equals(findPost.getMember().getLoginId())) {
+        if (authentication.getName().equals(findPost.getMember().getLoginId()) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             boardService.deletePost(id);
             return "redirect:/posts";
         }
@@ -191,8 +195,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}/comment/{commentId}/delete")
-    public String deleteComment(@PathVariable Long id, @PathVariable Long commentId,Principal principal, RedirectAttributes redirectAttributes) {
-        boardService.deleteComment(commentId ,id , principal.getName());
+    public String deleteComment(@PathVariable Long id, @PathVariable Long commentId,Authentication authentication, RedirectAttributes redirectAttributes) {
+        boardService.deleteComment(commentId ,id , authentication);
         redirectAttributes.addAttribute("id", id);
         return "redirect:/posts/{id}";
     }

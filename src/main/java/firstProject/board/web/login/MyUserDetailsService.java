@@ -20,9 +20,11 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<Member> findMember = memberRepository.findByLoginId(username);
         Member member = findMember.orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 회원입니다"));
+
         return User.builder()
                 .username(member.getLoginId())
                 .password(member.getPassword())
+                .authorities(String.valueOf(member.getRole()))
                 .build();
     }
 }

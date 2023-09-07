@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,9 +75,9 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public Boolean deleteComment( Long commentId,Long postId, String loginId) {
+    public Boolean deleteComment(Long commentId, Long postId, Authentication authentication) {
         Comment comment = commentRepository.findById(commentId).get();
-        if (comment.getMember().getLoginId() == loginId) {
+        if (comment.getMember().getLoginId() == authentication.getName() || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             Long commentNum = comment.getCommentNum();
             commentRepository.delete(comment);
             jplCmtRepository.updateCommentNum(postId,commentNum);

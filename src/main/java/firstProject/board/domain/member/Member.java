@@ -28,9 +28,10 @@ public class Member extends BaseEntity {
     private String birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @Embedded
     private Address address;
-
 
 
     public Member(String loginId, String password,PasswordEncoder pwEncoder,String email, String name, String birth, Gender gender, Address address) {
@@ -41,6 +42,7 @@ public class Member extends BaseEntity {
         this.birth = birth;
         this.gender = gender;
         this.address = address;
+        this.role = Role.USER;
     }
     public Member(Long id, String loginId, String password, String email, String name, String birth, Gender gender, Address address) {
         this.id = id;
@@ -68,6 +70,10 @@ public class Member extends BaseEntity {
         this.birth = memberUpdateDto.getBirth();
         this.email = memberUpdateDto.getEmail();
         this.address = memberUpdateDto.getAddress();
+    }
+
+    public void updateRole() {
+        this.role = Role.ADMIN;
     }
 
 }

@@ -4,6 +4,7 @@ import firstProject.board.domain.post.Post;
 import firstProject.board.repository.post.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 public interface BoardService {
     PostGetDto getPost(Long id);
@@ -23,7 +24,7 @@ public interface BoardService {
 
     void saveComment(Long id, String loginId, CommentDto commentDto);
 
-    Boolean deleteComment(Long commentId,Long postId, String loginId);
+    Boolean deleteComment(Long commentId, Long postId, Authentication authentication);
 
     void updateComment(Long commentId, String content);
 
