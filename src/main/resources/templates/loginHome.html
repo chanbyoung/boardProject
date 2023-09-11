@@ -13,6 +13,12 @@
   <h4><a class="mb-3" th:text="|로그인: ${member.name}|" th:href="@{/members/{memberId}(memberId=${member.id})}">로그인 사용자 이름</a></h4>
   <hr class="my-4">
   <div class="row">
+    <div th:if="${admin}" class="col">
+      <button class="w-100 btn btn-secondary btn-lg" type="button"
+              th:onclick="|location.href='@{/members/find}'|">
+        회원 조회
+      </button>
+    </div>
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
               th:onclick="|location.href='@{/posts}'|">

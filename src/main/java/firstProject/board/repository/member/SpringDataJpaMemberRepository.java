@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Long> {
     Member findByLoginId(String loginId);
-    @Query("select m from Member m where m.name like %:name%")
+    @Query("select m from Member m where m.name like %:name% and m.role ='USER'")
     Page<Member> findMemberByMemberName(@Param("name") String memberName, Pageable pageable);
 
     @Query("select m.loginId from Member m where m.name=:name and m.email=:email")

@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -17,6 +18,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig{
+    private final AuthenticationFailureHandler customFailureHandler;
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -28,7 +30,7 @@ public class SecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((request)->
                         request.dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                                .requestMatchers("/", "/members/add","/members/find/**", "/login", "/logout", "/css/**", "/*.ico",
+                                .requestMatchers("/", "/members/add","/members/findMember/**", "/login", "/logout", "/css/**", "/*.ico",
                                         "/error", "/api/**","/members/js/findAddress.js", "/mailCheck").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(login -> login
@@ -37,9 +39,10 @@ public class SecurityConfig{
                         .usernameParameter("loginId")
                         .passwordParameter("password")
 //                        .successHandler(new LoginSuccessHandler())
+                        .failureHandler(customFailureHandler)
                         .permitAll()
                 )
-                .logout(withDefaults()).build();
-
+                .logout(withDefaults())
+                .build();
     }
 }

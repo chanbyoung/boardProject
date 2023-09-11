@@ -3,6 +3,7 @@ package firstProject.board.web.member;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
 import firstProject.board.repository.member.MemberRepository;
+import firstProject.board.repository.member.SpringDataJpaMemberRepository;
 import firstProject.board.repository.member.dto.MemberAddDto;
 import firstProject.board.repository.member.dto.MemberGetDto;
 import firstProject.board.repository.member.dto.MemberUpdateDto;
@@ -36,6 +37,7 @@ import java.util.Optional;
 @RequestMapping("/members")
 public class MemberController {
     private final MemberRepository memberRepository;
+    private final SpringDataJpaMemberRepository jpaMemberRepository;
     private final MemberService memberService;
 
     @GetMapping("/add")
@@ -97,24 +99,25 @@ public class MemberController {
             }
         }return "redirect:/";}
 
-    @GetMapping("/{memberId}/find")
-    public String findMember(@PathVariable("memberId") Long id,@PageableDefault(size = 5) Pageable pageable,@RequestParam("username") String username, Model model) {
+    @GetMapping("/find")
+    public String findMember(@PageableDefault(size = 5) Pageable pageable, @RequestParam(value = "username",defaultValue = "") String username, Model model,Authentication authentication) {
         log.info("username = {} ", username);
-        log.info("memberId = {} ", id);
         Page<MemberGetDto> members = memberService.getMemberName(username, pageable);
         log.info("members={} ", members);
+        Member originMember = jpaMemberRepository.findByLoginId(authentication.getName());
         model.addAttribute("members", members);
         model.addAttribute("username",username);
         model.addAttribute("pageable", pageable);
-        model.addAttribute("id", id);
+        model.addAttribute("id", originMember.getId());
         return "members/members";
     }
 
+
     @GetMapping("/{memberId}/update")
-    private String updateMember(@PathVariable("memberId") Long id, Model model,Authentication authentication,  RedirectAttributes redirectAttributes) {
+    private String updateMember(@PathVariable("memberId") Long id, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {
         MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
-        if (authentication.getName().equals(member.getLoginId())|| authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if (authentication.getName().equals(member.getLoginId()) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             return "members/editForm";
         }
         redirectAttributes.addFlashAttribute("status", Boolean.TRUE);
@@ -133,7 +136,7 @@ public class MemberController {
         return "redirect:/members/{memberId}";
     }
 
-    @GetMapping("/find")
+    @GetMapping("/findMember")
     public String findIdAndPassword(Model model) {
         model.addAttribute("memberFindLoginIdDto", new MemberFindLoginIdDto());
         model.addAttribute("memberFindPasswordDto", new MemberFindPasswordDto());
