@@ -74,12 +74,15 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public String member(@PathVariable("memberId") Long id, @Qualifier("post") @PageableDefault(size = 5) Pageable postsPageable, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable,Model model) {
+    public String member(@PathVariable("memberId") Long id,Authentication authentication, @Qualifier("post") @PageableDefault(size = 5) Pageable postsPageable, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable,Model model) {
         MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
         Page<PostsGetDto> posts = memberService.findPosts(id, postsPageable);
         Page<CommentDto> comments = memberService.findComments(id, commentsPageable);
         log.info("getTotalPages = {}" , posts.getTotalPages());
+        if (member.getLoginId().equals(authentication.getName()) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            model.addAttribute("flag",true);
+        }
         model.addAttribute("postsPageable", postsPageable);
         model.addAttribute("commentsPageable", commentsPageable);
         model.addAttribute("posts", posts);
@@ -88,7 +91,7 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/delete")
-    public String deleteMember(@PathVariable("memberId") Long id, Authentication authentication, HttpServletRequest request) {
+    public String deleteMember(@PathVariable("memberId") Long id, Authentication authentication, HttpServletRequest request,RedirectAttributes redirectAttributes) {
         String deleteMemberName = authentication.getName();
         Member member = memberRepository.findByLoginId(deleteMemberName).get();
         if(memberService.equalMember(member,id) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
@@ -97,7 +100,10 @@ public class MemberController {
             if (session != null) {
                 session.invalidate();
             }
-        }return "redirect:/";}
+            return "redirect:/";
+        }
+        redirectAttributes.addFlashAttribute("status", Boolean.TRUE);
+        return "redirect:/members/{memberId}";}
 
     @GetMapping("/find")
     public String findMember(@PageableDefault(size = 5) Pageable pageable, @RequestParam(value = "username",defaultValue = "") String username, Model model,Authentication authentication) {
@@ -121,8 +127,7 @@ public class MemberController {
             return "members/editForm";
         }
         redirectAttributes.addFlashAttribute("status", Boolean.TRUE);
-        redirectAttributes.addAttribute("id", id);
-        return "redirect:/members/{id}";
+        return "redirect:/members/{memberId}";
     }
 
     @PostMapping("/{memberId}/update")

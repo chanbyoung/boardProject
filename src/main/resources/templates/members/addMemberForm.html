@@ -111,6 +111,11 @@
       <div class="field-error" th:errors="*{password}" />
     </div>
     <div>
+      <label for="confirmPassword">비밀번호 확인</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" class="form-control">
+      <div class="field-error" id="passwordMatchError" style="color: red;"></div>
+    </div>
+    <div>
       <label for="birth">생년월일</label>
       <input type="date" id="birth" th:field="*{birth}" class="formcontrol"
              th:errorclass="field-error">
@@ -149,49 +154,78 @@
 </div> <!-- /container -->
 <script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
+  var isPasswordMatch = false;
+  var isEmailVerified = false;
   var code = "";
-  $("#emailChk").click(function(){
+
+  function updateSubmitButton() {
+    if (isPasswordMatch && isEmailVerified) {
+      $("#submit_button").prop("disabled", false);
+    } else {
+      $("#submit_button").prop("disabled", true);
+    }
+  }
+
+  function handlePasswordInput() {
+    var password = $("#password").val();
+    var confirmPassword = $("#confirmPassword").val();
+    var errorDiv = $("#passwordMatchError");
+
+    if (password === confirmPassword) {
+      errorDiv.text('');
+      isPasswordMatch = true;
+    } else {
+      errorDiv.text('비밀번호가 일치하지 않습니다');
+      isPasswordMatch = false;
+    }
+
+    updateSubmitButton();
+  }
+
+  function handleEmailVerification(data) {
+    if (data === "error") {
+      alert("이메일 주소가 올바르지 않습니다. 유효한 이메일 주소를 입력해주세요.");
+      $("#email").attr("autofocus", true);
+      $(".successEmailChk").text("유효한 이메일 주소를 입력해주세요.").css("color", "red");
+    } else {
+      alert("인증번호 발송이 완료되었습니다. \n 입력한 이메일에서 인증번호 확인을 해주십시오.");
+      $("#email2").prop("disabled", false);
+      $("#emailChk2").css("display", "inline-block");
+      $(".successEmailChk").text("인증번호를 입력한 뒤 이메일 인증을 눌러주십시오.").css("color", "green");
+      code = data;
+    }
+  }
+
+  function handleEmailVerification2() {
+    if ($("#email2").val() === code) {
+      $(".successEmailChk").text("인증번호가 일치합니다.").css("color", "green");
+      $("#emailDoubleChk").val("true");
+      $("#email2").prop("disabled", true);
+      isEmailVerified = true;
+    } else {
+      $(".successEmailChk").text("인증번호가 일치하지 않습니다. 확인해주시기 바랍니다.").css("color", "red");
+      $("#emailDoubleChk").val("false");
+      $("#email2").attr("autofocus", true);
+      isEmailVerified = false;
+    }
+
+    updateSubmitButton();
+  }
+
+  $("#confirmPassword").on("input", handlePasswordInput);
+
+  $("#emailChk").click(function () {
     var email = $("#email").val();
-    console.log(email)
     $.ajax({
-      type:"GET",
-      data:{
-        email: email
-      },
-      url:"/mailCheck",
-      cache : false,
-      success:function(data){
-        if(data == "error"){
-          alert("이메일 주소가 올바르지 않습니다. 유효한 이메일 주소를 입력해주세요.");
-          $("#email").attr("autofocus",true);
-          $(".successEmailChk").text("유효한 이메일 주소를 입력해주세요.");
-          $(".successEmailChk").css("color","red");
-        }else{
-          alert("인증번호 발송이 완료되었습니다.\n입력한 이메일에서 인증번호 확인을 해주십시오.");
-          $("#email2").attr("disabled",false);
-          $("#emailChk2").css("display","inline-block");
-          $(".successEmailChk").text("인증번호를 입력한 뒤 이메일 인증을 눌러주십시오.");
-          $(".successEmailChk").css("color","green");
-          code = data;
-        }
-      }
+      type: "GET",
+      data: { email: email },
+      url: "/mailCheck",
+      cache: false,
+      success: handleEmailVerification,
     });
   });
-  $("#emailChk2").click(function(){
-    if($("#email2").val() == code){
-      $(".successEmailChk").text("인증번호가 일치합니다.");
-      $(".successEmailChk").css("color","green");
-      $("#emailDoubleChk").val("true");
-      $("#email2").attr("disabled",true);
-      $("#submit_button").attr("disabled", false);
-      //$("#email").attr("disabled",true);
-    }else{
-      $(".successEmailChk").text("인증번호가 일치하지 않습니다. 확인해주시기 바랍니다.");
-      $(".successEmailChk").css("color","red");
-      $("#emailDoubleChk").val("false");
-      $("#email2").attr("autofocus",true);
-    }
-  });
+
+  $("#emailChk2").click(handleEmailVerification2);
 </script>
 </body>
 </html>

@@ -85,7 +85,7 @@
         </div>
         <div>
             <label for="email">이메일</label>
-            <input type="text" id="email" th:field="*{email}" class="form-control" th:errorclass="field-error">
+            <input type="text" id="email" th:field="*{email}" class="form-control" th:errorclass="field-error" readonly>
             <div class="field-error" th:errors="*{email}" />
         </div>
         <div>
