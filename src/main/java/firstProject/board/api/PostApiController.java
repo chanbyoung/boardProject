@@ -38,7 +38,7 @@ public class PostApiController {
 
     @PostMapping("/add")
     public PostAddDto addPostApi(@Validated @RequestBody PostAddDto postAddDto) {
-        Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
+        Post post = new Post(postAddDto);
         MemberAddDto member = new MemberAddDto(UUID.randomUUID().toString(), "test!", "테스트사용자","abc1234@abc.com" ,"00000000", Gender.MALE, new Address("123","123","123","123"));
         Member testMember = memberService.saveMember(member);
         Long postId = boardService.savePost(post, testMember.getLoginId());

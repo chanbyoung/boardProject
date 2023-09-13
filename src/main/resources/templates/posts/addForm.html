@@ -34,6 +34,13 @@
             </div>
         </div>
         <div>
+            카테고리
+            <select th:field="*{category}" class="form-select">
+                <option value="">==카테고리==</option>
+                <option th:each="category: ${categories}" th:value="${category}" th:text="${category.getValue()}"></option>
+            </select>
+        </div>
+        <div>
             <input type="file" name ="file">
         </div>
         <div>

@@ -111,6 +111,9 @@ public class MemberController {
         Page<MemberGetDto> members = memberService.getMemberName(username, pageable);
         log.info("members={} ", members);
         Member originMember = jpaMemberRepository.findByLoginId(authentication.getName());
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            model.addAttribute("admin_flag", true);
+        }
         model.addAttribute("members", members);
         model.addAttribute("username",username);
         model.addAttribute("pageable", pageable);
@@ -140,6 +143,8 @@ public class MemberController {
         redirectAttributes.addAttribute("memberId", id);
         return "redirect:/members/{memberId}";
     }
+
+
 
     @GetMapping("/findMember")
     public String findIdAndPassword(Model model) {

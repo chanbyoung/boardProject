@@ -26,6 +26,8 @@ public class PostsGetDto {
 
     private Long readCount;
 
+    private String category;
+
     public PostsGetDto() {
     }
 
@@ -37,5 +39,6 @@ public class PostsGetDto {
         this.member = post.getMember();
         this.localDateTime = post.getCreateDate();
         this.readCount = post.getReadCount();
+        this.category = post.getCategory().getValue();
     }
 }

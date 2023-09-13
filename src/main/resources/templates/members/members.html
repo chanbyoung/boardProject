@@ -24,6 +24,7 @@
                 <th th:text="#{label.member.name}">이름</th>
                 <th th:text="#{label.member.birth}">생년월일</th>
                 <th th:text="#{label.member.gender}">성별</th>
+                <th th:if="${admin_flag}" th:text="#{label.member.role}">권한</th>
             </tr>
             </thead>
             <tbody>
@@ -31,6 +32,7 @@
                 <td><a href="member.html" th:href="@{/members/{memberId}(memberId=${member.id})}" th:text="${member.name}">이름</a></td>
                 <td th:text="${member.birth}">생년월일</td>
                 <td th:text="${member.gender}">성별</td>
+                <td th:if="${admin_flag}" th:text="${member.role}">권한</td>
             </tr>
             </tbody>
         </table>

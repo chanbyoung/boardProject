@@ -1,8 +1,8 @@
 package firstProject.board.repository.member.dto;
 
 import firstProject.board.domain.member.Address;
-import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.member.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +14,9 @@ public class MemberGetDto {
     private String email;
     private String name;
     private String birth;
-    private Gender gender;
+    private String gender;
     private Address address;
+    private Role role;
 
 
     public MemberGetDto() {
@@ -27,7 +28,8 @@ public class MemberGetDto {
         this.email = member.getEmail();
         this.name = member.getName();
         this.birth = member.getBirth();
-        this.gender = member.getGender();
+        this.gender = member.getGender().getDescription();
         this.address = member.getAddress();
+        this.role = member.getRole();
     }
 }

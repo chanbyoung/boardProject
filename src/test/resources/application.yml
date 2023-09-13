@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    include: mail
+logging:
+  level:
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+file:
+  dir: /C:/spring/board/fileRepository/

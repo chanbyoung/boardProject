@@ -24,6 +24,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final firstProject.board.domain.QBaseEntity _super = new firstProject.board.domain.QBaseEntity(this);
 
+    public final EnumPath<Category> category = createEnum("category", Category.class);
+
     public final ListPath<Comment, QComment> comments = this.<Comment, QComment>createList("comments", Comment.class, QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");

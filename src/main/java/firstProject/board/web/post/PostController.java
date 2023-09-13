@@ -1,6 +1,7 @@
 package firstProject.board.web.post;
 
 import firstProject.board.domain.member.Role;
+import firstProject.board.domain.post.Category;
 import firstProject.board.domain.post.Post;
 import firstProject.board.domain.post.UploadFile;
 import firstProject.board.repository.post.FileRepository;
@@ -98,13 +99,20 @@ public class PostController {
             response.addCookie(newCookie);
         }
     }
-
     @GetMapping("/add")
     public String addForm(Model model) {
-
         model.addAttribute("postAddDto", new PostAddDto());
         return "posts/addForm";
     }
+
+    /**
+     * enum
+     */
+    @ModelAttribute("categories")
+    public Category[] categories() {
+        return Category.values();
+    }
+
 
     @PostMapping("/add")
     public String addPost(@Validated @ModelAttribute PostAddDto postAddDto, BindingResult bindingResult,
@@ -115,7 +123,7 @@ public class PostController {
             log.info("errors={}", bindingResult);
             return "posts/addForm";
         }
-        Post post = new Post(postAddDto.getPostName(), postAddDto.getContent());
+        Post post = new Post(postAddDto);
         Long postId = boardService.savePost(post, principal.getName());
         //성공 로직
         if (!file.isEmpty()) {
@@ -125,11 +133,6 @@ public class PostController {
         redirectAttributes.addAttribute("status", true);
         return "redirect:/posts/{id}";
     }
-
-
-
-
-
 
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, Authentication authentication, RedirectAttributes redirectAttributes) {

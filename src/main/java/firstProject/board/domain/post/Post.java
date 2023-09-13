@@ -2,6 +2,7 @@ package firstProject.board.domain.post;
 
 import firstProject.board.domain.BaseEntity;
 import firstProject.board.domain.member.Member;
+import firstProject.board.repository.post.dto.PostAddDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -36,12 +37,15 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<UploadFile> files = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Category category;
     public Post() {
     }
 
-    public Post(String postName, String content) {
-        this.postName = postName;
-        this.content = content;
+    public Post(PostAddDto p) {
+        this.postName = p.getPostName();
+        this.content = p.getContent();
+        this.category = p.getCategory();
         this.readCount = 0L;
     }
     //테스트용 id
@@ -68,6 +72,18 @@ public class Post extends BaseEntity {
     }
 
     public void updatePostNum(Long cnt) {
+
         this.postNum = cnt;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", postNum=" + postNum +
+                ", postName='" + postName + '\'' +
+                ", content='" + content + '\'' +
+                ", readCount=" + readCount +
+                '}';
     }
 }

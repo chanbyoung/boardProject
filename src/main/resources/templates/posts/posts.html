@@ -28,6 +28,7 @@
             <thead>
             <tr>
                 <th th:text="#{label.post.postNum}">번호</th>
+                <th th:text="#{label.post.category}">카테고리</th>
                 <th th:text="#{label.post.postName}">제목</th>
                 <th th:text="#{label.post.commentCnt}">댓글 수</th>
                 <th th:text="#{label.post.name}">작성자</th>
@@ -38,6 +39,7 @@
             <tbody>
             <tr th:each="post : ${posts}">
                 <td th:text="${post.postNum}">글 번호</td>
+                <td th:text="${post.category}">카테고리</td>
                 <td><a href="post.html" th:href="@{/posts/{postNum}(postNum=${post.id})}" th:text="${post.postName}">글 제목</a></td>
                 <td th:text="${post.commentSize}">댓글 수</td>
                 <td><a th:href="@{/members/{memberId}(memberId=${post.member.id})}" th:text="${post.member.name}">작성자 이름</a></td>

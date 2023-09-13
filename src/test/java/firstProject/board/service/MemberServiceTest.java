@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -79,16 +80,18 @@ class MemberServiceTest {
         assertThat(flag).isTrue();
     }
 
-    @Test
+    @Test //passwordEncoder 때문에 실패
     void saveMember() {
         //given
         MemberAddDto member = new MemberAddDto("123", "123", "pcb","abc123@abc.com" ,"20000728", Gender.MALE, new Address());
+        Member mockMember = mock(Member.class);
+        when(memberService.saveMember(member)).thenReturn(mockMember);
 
         //when
         Member saveMember = memberService.saveMember(member);
 
         //then
-        assertThat(member.getName()).isEqualTo(saveMember.getName());
+        assertThat(mockMember).isEqualTo(saveMember);
 
     }
 

@@ -3,12 +3,15 @@ package firstProject.board.service;
 import firstProject.board.domain.member.Address;
 import firstProject.board.domain.member.Gender;
 import firstProject.board.domain.member.Member;
+import firstProject.board.domain.post.Category;
 import firstProject.board.domain.post.Post;
 import firstProject.board.repository.member.SpringDataJpaMemberRepository;
 import firstProject.board.repository.post.CommentRepository;
 import firstProject.board.repository.post.PostRepository;
+import firstProject.board.repository.post.dto.PostAddDto;
 import firstProject.board.repository.post.dto.PostGetDto;
 import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,11 +28,13 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @Transactional
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 class BoardServiceTest {
 
     @InjectMocks BoardServiceImpl boardService;
-    @Spy PostRepository postRepository;
+    @Spy
+    PostRepository postRepository;
     @Spy
     SpringDataJpaMemberRepository memberRepository;
     @Spy CommentRepository commentRepository;
@@ -52,6 +57,7 @@ class BoardServiceTest {
         assertThat(post.getId()).isEqualTo(mockPost.getId());
         assertThat(post.getPostName()).isEqualTo(mockPost.getPostName());
         assertThat(post.getContent()).isEqualTo(mockPost.getContent());
+        assertThat(post.getMemberName()).isEqualTo(mockPost.getMember().getName());
     }
 
 //    @Test
@@ -84,11 +90,12 @@ class BoardServiceTest {
         assertThat(newPostId).isEqualTo(mockPost.getId());
     }
 
-    @Test
+    @Test // 수정해야됨
     public void deletePostTest() throws Exception {
         //give
         Long postId = 1L;
-        Post mockPost = new Post("Post", "content");
+        PostAddDto postAddDto = new PostAddDto(postId, "post", "content", Category.GENERAL);
+        Post mockPost = new Post(postAddDto);
         when(postRepository.save(mockPost)).thenReturn(postId);
         when(postRepository.findById(postId)).thenThrow(EmptyResultDataAccessException.class);
         Long savePostId = postRepository.save(mockPost);

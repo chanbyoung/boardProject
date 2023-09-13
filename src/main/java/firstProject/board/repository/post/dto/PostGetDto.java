@@ -13,6 +13,7 @@ public class PostGetDto {
     private String loginId;
     private String postName;
     private String content;
+    private String category;
 
     public PostGetDto(Post p) {
         this.id = p.getId();
@@ -21,6 +22,7 @@ public class PostGetDto {
         this.loginId = p.getMember().getLoginId();
         this.postName = p.getPostName();
         this.content = p.getContent();
+        this.category = p.getCategory().getValue();
     }
 
     public PostGetDto(Long id, Long postNum, String memberName, String postName, String content) {
