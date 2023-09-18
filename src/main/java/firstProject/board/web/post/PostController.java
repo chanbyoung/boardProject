@@ -53,6 +53,7 @@ public class PostController {
     public String posts(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault Pageable pageable) {
         Page<PostsGetDto> posts = boardService.getPosts(postSearch, pageable);
         PageInfo pageInfo = new PageInfo(pageable.getPageNumber(), posts.getTotalPages());
+        log.info("postSearchCond ={}",postSearch);
         model.addAttribute("posts", posts);
         model.addAttribute("pageInfo", pageInfo);
         return "posts/posts";

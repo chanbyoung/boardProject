@@ -59,6 +59,7 @@ public class JpaPostRepository implements PostRepository {
     public Page<PostsGetDto> findAll(PostSearchCond cond, Pageable pageable) {
         String type = cond.getType();
         String searchContent = cond.getSearchContent();
+        String category = cond.getCategory();
         BooleanBuilder builder = new BooleanBuilder();
         if (StringUtils.hasText(type)) {
             if (type.equals("name")) {
@@ -76,6 +77,9 @@ public class JpaPostRepository implements PostRepository {
                     builder.and(post.content.contains(searchContent));
                 }
             }
+        }
+        if (StringUtils.hasText(category)) {
+            builder.and(post.category.stringValue().eq(category));
         }
         List<Post> posts = query
                 .select(post)
