@@ -60,7 +60,7 @@ public class MemberService {
     }
 
     public Member saveMember(MemberAddDto memberAddDto) {
-        Member member = new Member(memberAddDto.getLoginId(), memberAddDto.getPassword(),passwordEncoder, memberAddDto.getEmail(),memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
+        Member member = new Member(memberAddDto.getLoginId(), passwordEncoder.encode(memberAddDto.getPassword()), memberAddDto.getEmail(),memberAddDto.getName(), memberAddDto.getBirth(), memberAddDto.getGender(), memberAddDto.getAddress());
         memberRepository.save(member);
         return member;
     }
@@ -90,9 +90,17 @@ public class MemberService {
         return loginId;
     }
 
-    public String findPassWord(MemberFindPasswordDto memberFindPasswordDto) {
-        String password = jpaMemberRepository.findPasswordByMemberInfo(memberFindPasswordDto.getName(), memberFindPasswordDto.getLoginId(), memberFindPasswordDto.getEmail());
-        return password;
+    public Long findPassWordDtoByMemberId(MemberFindPasswordDto memberFindPasswordDto) {
+        Optional<Member> findMember = jpaMemberRepository.findMemberByMemberPasswordDto(memberFindPasswordDto.getName(), memberFindPasswordDto.getLoginId(), memberFindPasswordDto.getEmail());
+        if (findMember.isEmpty()) {
+            return null;
+        }
+        else return findMember.get().getId();
+    }
+
+    public void changePassword(Long id, String password) {
+        Member member = memberRepository.findById(id);
+        member.updatePassword(passwordEncoder.encode(password));
     }
 
     public Optional<Member> findEmail(String email) {

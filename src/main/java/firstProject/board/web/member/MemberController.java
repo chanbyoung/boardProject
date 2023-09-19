@@ -41,12 +41,12 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/add")
-    public String addForm(Model model)
-    {
+    public String addForm(Model model) {
 
         model.addAttribute("memberAddDto", new MemberAddDto());
         return "members/addMemberForm";
     }
+
     /**
      * enum
      */
@@ -59,7 +59,7 @@ public class MemberController {
     public String save(@Validated @ModelAttribute MemberAddDto memberAddDto, BindingResult bindingResult) {
         Optional<Member> email = memberService.findEmail(memberAddDto.getEmail());
         if (!email.isEmpty()) {
-            bindingResult.reject("email","이메일이 중복되었습니다");
+            bindingResult.reject("email", "이메일이 중복되었습니다");
         }
         Optional<Member> findLoginId = memberRepository.findByLoginId(memberAddDto.getLoginId());
         if (!findLoginId.isEmpty()) {
@@ -74,14 +74,14 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}")
-    public String member(@PathVariable("memberId") Long id,Authentication authentication, @Qualifier("post") @PageableDefault(size = 5) Pageable postsPageable, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable,Model model) {
+    public String member(@PathVariable("memberId") Long id, Authentication authentication, @Qualifier("post") @PageableDefault(size = 5) Pageable postsPageable, @Qualifier("comment") @PageableDefault(size = 5) Pageable commentsPageable, Model model) {
         MemberGetDto member = memberService.getMember(id);
         model.addAttribute("member", member);
         Page<PostsGetDto> posts = memberService.findPosts(id, postsPageable);
         Page<CommentDto> comments = memberService.findComments(id, commentsPageable);
-        log.info("getTotalPages = {}" , posts.getTotalPages());
+        log.info("getTotalPages = {}", posts.getTotalPages());
         if (member.getLoginId().equals(authentication.getName()) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-            model.addAttribute("flag",true);
+            model.addAttribute("flag", true);
         }
         model.addAttribute("postsPageable", postsPageable);
         model.addAttribute("commentsPageable", commentsPageable);
@@ -91,10 +91,10 @@ public class MemberController {
     }
 
     @GetMapping("/{memberId}/delete")
-    public String deleteMember(@PathVariable("memberId") Long id, Authentication authentication, HttpServletRequest request,RedirectAttributes redirectAttributes) {
+    public String deleteMember(@PathVariable("memberId") Long id, Authentication authentication, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String deleteMemberName = authentication.getName();
         Member member = memberRepository.findByLoginId(deleteMemberName).get();
-        if(memberService.equalMember(member,id) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+        if (memberService.equalMember(member, id) || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             memberService.deleteMember(id);
             HttpSession session = request.getSession();
             if (session != null) {
@@ -103,10 +103,11 @@ public class MemberController {
             return "redirect:/";
         }
         redirectAttributes.addFlashAttribute("status", Boolean.TRUE);
-        return "redirect:/members/{memberId}";}
+        return "redirect:/members/{memberId}";
+    }
 
     @GetMapping("/find")
-    public String findMember(@PageableDefault(size = 5) Pageable pageable, @RequestParam(value = "username",defaultValue = "") String username, Model model,Authentication authentication) {
+    public String findMember(@PageableDefault(size = 5) Pageable pageable, @RequestParam(value = "username", defaultValue = "") String username, Model model, Authentication authentication) {
         log.info("username = {} ", username);
         Page<MemberGetDto> members = memberService.getMemberName(username, pageable);
         log.info("members={} ", members);
@@ -115,7 +116,7 @@ public class MemberController {
             model.addAttribute("admin_flag", true);
         }
         model.addAttribute("members", members);
-        model.addAttribute("username",username);
+        model.addAttribute("username", username);
         model.addAttribute("pageable", pageable);
         model.addAttribute("id", originMember.getId());
         return "members/members";
@@ -134,7 +135,7 @@ public class MemberController {
     }
 
     @PostMapping("/{memberId}/update")
-    private String update(@PathVariable("memberId") Long id, @Validated @ModelAttribute("member") MemberUpdateDto memberUpdateDto,BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    private String update(@PathVariable("memberId") Long id, @Validated @ModelAttribute("member") MemberUpdateDto memberUpdateDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "members/editForm";
@@ -145,7 +146,6 @@ public class MemberController {
     }
 
 
-
     @GetMapping("/findMember")
     public String findIdAndPassword(Model model) {
         model.addAttribute("memberFindLoginIdDto", new MemberFindLoginIdDto());
@@ -153,32 +153,41 @@ public class MemberController {
         return "members/findForm";
     }
 
-    @PostMapping("/find/loginId")
-    public String findLoginId(@ModelAttribute MemberFindLoginIdDto memberFindDto,RedirectAttributes redirectAttributes) {
+    @PostMapping("/findMember/loginId")
+    public String findLoginId(@ModelAttribute MemberFindLoginIdDto memberFindDto, RedirectAttributes redirectAttributes) {
         log.info("memberFindDto = {} ", memberFindDto);
         String loginId = memberService.findLoginId(memberFindDto);
         log.info("loginId = {} ", loginId);
         if (loginId != null) {
             redirectAttributes.addFlashAttribute("status1", loginId);
-        }
-        else {
+        } else {
             redirectAttributes.addFlashAttribute("status3", "이름 또는 이메일이 잘못 입력되었습니다.");
 
         }
-        return "redirect:/members/find";
+        return "redirect:/members/findMember";
     }
 
-    @PostMapping("/find/password")
-    public String findPassword(@ModelAttribute MemberFindPasswordDto memberFindPasswordDto, RedirectAttributes redirectAttributes) {
-        String passWord = memberService.findPassWord(memberFindPasswordDto);
-        log.info("password={}", passWord);
-        if (passWord != null) {
-            redirectAttributes.addFlashAttribute("status2", passWord);
-
-        } else {
+    @PostMapping("/findMember/password")
+    public String changePasswordCheck(@ModelAttribute MemberFindPasswordDto memberFindPasswordDto, RedirectAttributes redirectAttributes) {
+        Long findMemberId = memberService.findPassWordDtoByMemberId(memberFindPasswordDto);
+        if (findMemberId == null) {
             redirectAttributes.addFlashAttribute("status3", "ID 또는 이름 또는 이메일이 잘못 입력되었습니다.");
-
+            return "redirect:/members/findMember";
+        } else {
+            redirectAttributes.addAttribute("memberId", findMemberId);
+            return "redirect:/members/findMember/password/{memberId}";
         }
-        return "redirect:/members/find";
+    }
+
+    @GetMapping("/findMember/password/{memberId}")
+    public String changePasswordForm(@PathVariable Long memberId, Model model) {
+        String password = "";
+        model.addAttribute("password", password);
+        return "/members/changePasswordForm";
+    }
+    @PostMapping("/findMember/password/{memberId}")
+    public String changePassword(@PathVariable Long memberId, @RequestParam("password") String password) {
+        memberService.changePassword(memberId, password);
+        return "redirect:/";
     }
 }

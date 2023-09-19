@@ -17,8 +17,8 @@ public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Lon
     @Query("select m.loginId from Member m where m.name=:name and m.email=:email")
     String findLoginIdByMemberInfo(@Param("name") String name,@Param("email") String email);
 
-    @Query("select m.password from Member m where m.name=:name and m.email=:email and m.loginId =:loginId ")
-    String findPasswordByMemberInfo(@Param("name") String name,@Param("loginId") String loginId, @Param("email") String email);
+    @Query("select m from Member m where m.name=:name and m.email=:email and m.loginId =:loginId ")
+    Optional<Member> findMemberByMemberPasswordDto(@Param("name") String name,@Param("loginId") String loginId, @Param("email") String email);
     @Query("select m from Member m where m.email = :email")
     Optional<Member> findEmailExist(@Param("email") String email);
 }

@@ -23,7 +23,7 @@
     <h4 th:if="${status1}" th:style="'color:blue'" th:text="'회원님의 Id는 '+${status1}+'입니다.'"></h4>
     <h4 th:if="${status2}" th:style="'color:blue'" th:text="'회원님의 Password는 '+${status2}+'입니다.'"></h4>
     <h4 th:if="${status3}" th:style="'color:red'" th:text="${status3}"></h4>
-    <form th:action="@{/members/find/loginId}" th:object="${memberFindLoginIdDto}" method="post">
+    <form th:action="@{/members/findMember/loginId}" th:object="${memberFindLoginIdDto}" method="post">
         <div>
             <label for="name_l">이름</label>
             <input type="text" id="name_l" th:field="*{name}" class="formcontrol"
@@ -48,7 +48,7 @@
         <button class="w-100 btn btn-primary btn-lg" id="id_submit" type="submit" disabled>ID 찾기</button>
     </form>
 
-    <form th:action="@{/members/find/password}" th:object="${memberFindPasswordDto}" method="post">
+    <form th:action="@{/members/findMember/password}" th:object="${memberFindPasswordDto}" method="post">
         <div>
             <label for="loginId_p">아이디</label>
             <input type="text" id="loginId_p" th:field="*{loginId}" class="formcontrol"

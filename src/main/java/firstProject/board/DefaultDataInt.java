@@ -21,7 +21,7 @@ public class DefaultDataInt {
     public void init(){
         List<Member> members = memberRepository.findAll();
         if (members.isEmpty()) {
-            Member member = new Member("admin", "123", passwordEncoder, "admin@admin", "admin", "00000000", Gender.MALE, new Address("admin","admin","admin","admin"));
+            Member member = new Member("admin", passwordEncoder.encode("123"), "admin@admin", "admin", "00000000", Gender.MALE, new Address("admin","admin","admin","admin"));
             member.updateRole();
             memberRepository.save(member);
         }
