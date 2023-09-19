@@ -156,10 +156,24 @@
 <script>
   var isPasswordMatch = false;
   var isEmailVerified = false;
+  var isGenderSelected = false;
   var code = "";
+  // 성별 선택이 변경될 때마다 handleGenderSelection 함수를 호출하도록 이벤트 리스너를 추가합니다.
+  $("#gender").change(function () {
+    var selectedGender = $("#gender").val();
+
+    if (selectedGender !== "") {
+      isGenderSelected = true;
+    } else {
+      isGenderSelected = false;
+    }
+
+    updateSubmitButton();
+  });
+
 
   function updateSubmitButton() {
-    if (isPasswordMatch && isEmailVerified) {
+    if (isPasswordMatch && isEmailVerified && isGenderSelected) {
       $("#submit_button").prop("disabled", false);
     } else {
       $("#submit_button").prop("disabled", true);

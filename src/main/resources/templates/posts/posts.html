@@ -17,7 +17,7 @@
         <div class="col">
             <select id="categorySelect" class="form-select">
                 <option value="">==카테고리==</option>
-                <option th:each="category: ${categories}" th:value="${category}" th:text="${category.getValue()}" th:selected="${category == category.ALL}"></option>
+                <option th:each="category: ${categories}" th:value="${category}" th:text="${category.getValue()}" ></option>
             </select>
         </div>
         <div class="col">
@@ -83,12 +83,13 @@
         </form>
     </div>
 </div> <!-- /container -->
+
 <script>
     // 카테고리 선택이 변경될 때 실행되는 함수
     document.getElementById('categorySelect').addEventListener('change', function() {
         var selectedCategory = this.value;
         // 서버에 AJAX 요청을 보냅니다.
-        if (selectedCategory == "ALL") {
+        if (selectedCategory === "ALL") {
             selectedCategory = "";
         }
         // 선택된 카테고리를 서버에 요청합니다.
