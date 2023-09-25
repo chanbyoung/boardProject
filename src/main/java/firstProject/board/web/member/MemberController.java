@@ -168,26 +168,34 @@ public class MemberController {
     }
 
     @PostMapping("/findMember/password")
-    public String changePasswordCheck(@ModelAttribute MemberFindPasswordDto memberFindPasswordDto, RedirectAttributes redirectAttributes) {
+    public String changePasswordCheck(HttpServletRequest request, @ModelAttribute MemberFindPasswordDto memberFindPasswordDto, RedirectAttributes redirectAttributes) {
         Long findMemberId = memberService.findPassWordDtoByMemberId(memberFindPasswordDto);
         if (findMemberId == null) {
             redirectAttributes.addFlashAttribute("status3", "ID 또는 이름 또는 이메일이 잘못 입력되었습니다.");
             return "redirect:/members/findMember";
         } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("member", findMemberId);
             redirectAttributes.addAttribute("memberId", findMemberId);
             return "redirect:/members/findMember/password/{memberId}";
         }
     }
 
     @GetMapping("/findMember/password/{memberId}")
-    public String changePasswordForm(@PathVariable Long memberId, Model model) {
+    public String changePasswordForm(@PathVariable Long memberId,@SessionAttribute(name = "member", required = false) Long member,RedirectAttributes redirectAttributes, Model model) {
+        if (member == null) { //세션을 통헤 인가된 사용자만 접근 가능
+            log.info("비정상적인 접근입니다.");
+            redirectAttributes.addFlashAttribute("status3", "잘못된 접근입니다.");
+            return "redirect:/members/findMember";
+        }
         String password = "";
         model.addAttribute("password", password);
         return "/members/changePasswordForm";
     }
     @PostMapping("/findMember/password/{memberId}")
-    public String changePassword(@PathVariable Long memberId, @RequestParam("password") String password) {
+    public String changePassword(@PathVariable Long memberId,HttpServletRequest request, @RequestParam("password") String password) {
         memberService.changePassword(memberId, password);
+        request.getSession().invalidate();
         return "redirect:/";
     }
 }
